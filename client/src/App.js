@@ -1,48 +1,89 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React from "react";
+import QuickSearch from "./components/QuickSearch";
+import { LangContext } from "./services/context";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Home from "./components/Home.js";
+import Auth from "./components/Auth";
+import { pAuth } from "./services/config";
+import Header from "./components/Header";
+import Studio from "./components/Studio";
+import Footer from "./components/Footer";
 
-function App() {
-  const [keyword, setKeyword] = useState("");
-  const [definition, setDefinition] = useState("");
+class App extends React.Component {
+  constructor() {
+    super();
 
-  function getDefinition(keywordParam) {
-    console.log(keyword);
-    console.log(keywordParam);
-    console.log("getting definition");
-    fetch("/search/" + keywordParam)
-      .then((res) => res.text())
-      .then((data) => {
-        console.log("data is: ", data);
-        console.log(typeof data);
-        const newData = data.replace("m", "l");
-        console.log(newData);
-        setDefinition(newData);
-        document.getElementById("content").innerHTML = data;
-      });
+    this.updateApis = (apis) => {
+      this.setState({ apis: apis });
+    };
+
+    this.updateLanguage = (language) => {
+      this.setState({ language: language });
+    };
+
+    this.updateTextEnd = (textEnd) => {
+      this.setState({ textEnd: textEnd });
+    };
+
+    this.updateIsAuth = (isAuth) => {
+      this.setState({ isAuth: isAuth });
+    };
+
+    this.state = {
+      apis: [
+        {
+          url: "search/{{keyword}}",
+          name: "Whitaker's Words",
+          cssSelector: "whitakers",
+        },
+      ],
+      language: "Latin to English",
+      textEnd: window.innerWidth / 2,
+      isAuth: false,
+      updateApis: this.updateApis,
+      updateLanguage: this.updateLanguage,
+      updateTextEnd: this.updateTextEnd,
+      updateIsAuth: this.updateIsAuth,
+    };
+  }
+  // <Router>
+  //           <Switch>
+  //             <Router path="/" exact component={<Home />} />
+  //             <Router path="/quicktranslate" component={<QuickSearch />} />
+  //           </Switch>
+  //         </Router>
+
+  componentDidMount() {
+    pAuth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({ isAuth: true });
+      } else this.setState({ isAuth: false });
+    });
   }
 
-  return (
-    <div className="App">
-      <h1>Whitaker's words Quick Lookup</h1>
-      <form>
-        <input
-          type="text"
-          placeholder="keyword"
-          onChange={(e) => {
-            setKeyword(e.target.value);
-            console.log(e);
-            console.log(e.target.value);
-          }}
-        ></input>
-        <button type="button" onClick={() => getDefinition(keyword)}>
-          Submit
-        </button>
-      </form>
-      <div>{definition}</div>
-      <div id="content"></div>
-    </div>
-  );
+  render() {
+    return (
+      <LangContext.Provider value={this.state}>
+        <div className="App">
+          <Router>
+            <Header></Header>
+            <Switch>
+              <Route path="/" exact>
+                <Home />
+              </Route>
+              <Route path="/quicktranslate">
+                <QuickSearch />
+              </Route>
+              <Route path="/studio">
+                <Studio />
+              </Route>
+            </Switch>
+            <Footer />
+          </Router>
+        </div>
+      </LangContext.Provider>
+    );
+  }
 }
 
 export default App;
