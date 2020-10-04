@@ -58,7 +58,7 @@ class Home extends React.Component {
           </div>
         </div>
         <section id="home-sec1">
-          <h2>What is Translationeer?</h2>
+          <h2>What is Translationeer?{process.env.FIREBASE_API_KEY}</h2>
           <p>
             Translationeer is a platform for language students to access all
             necessary translation resources in one place. Use our canvas-style

@@ -3,6 +3,9 @@ const cheerio = require("cheerio");
 const express = require("express");
 const path = require("path");
 const translateapi = require("./translateapi.js");
+require("dotenv").config();
+
+console.log(process.env.FIREBASE_API_KEY);
 
 const app = express();
 
