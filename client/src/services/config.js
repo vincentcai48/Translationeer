@@ -5,7 +5,7 @@ import "firebase/auth";
 import "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCrnNBi1ptWYnqXA_cNZ9FXVBpZR1zn_54",
+  apiKey: "NA",
   authDomain: "translationeer.firebaseapp.com",
   databaseURL: "https://translationeer.firebaseio.com",
   projectId: "translationeer",
