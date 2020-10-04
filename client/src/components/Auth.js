@@ -1,5 +1,5 @@
 import React from "react";
-import { pAuth, googleAuthProvider } from "../services/config";
+import { pAuth, googleAuthProvider, pFirestore } from "../services/config";
 import { LangContext } from "../services/context";
 
 class Auth extends React.Component {
@@ -11,18 +11,11 @@ class Auth extends React.Component {
   }
 
   googleLogin = () => {
-    console.log(googleAuthProvider);
-    console.log("Google Sign IN");
     pAuth
       .signInWithPopup(googleAuthProvider)
       .then((result) => {
         var token = result.credential.accessToken;
         var user = result.user;
-        console.log("USER: " + user.email);
-        console.log("Display Name: " + user.displayName);
-        console.log("ID: " + user.uid);
-        console.log("TOKEN: " + token);
-        console.log("CURRENT USER: " + pAuth.currentUser);
         this.setState({ isAuth: true });
       })
       .catch((e) => {

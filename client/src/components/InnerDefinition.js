@@ -38,11 +38,16 @@ class InnerDefinition extends React.Component {
 
   render() {
     console.log("WORD: " + this.props.word);
+    var link = this.props.api.link
+      ? this.props.api.link.replace("{{keyword}}", this.props.word)
+      : false;
     return (
       <div className={"definition " + this.props.api.cssSelector}>
         <h4 className="api-name">{this.props.api.name}</h4>
         {this.state.finalDefinition ? (
-          <div>{ReactHtmlParser(this.state.finalDefinition)}</div>
+          <div className="definition-body">
+            {ReactHtmlParser(this.state.finalDefinition)}
+          </div>
         ) : (
           <Loading />
         )}

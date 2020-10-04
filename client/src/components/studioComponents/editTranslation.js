@@ -1,7 +1,7 @@
 import React from "react";
 import { LangContext } from "../../services/context";
 
-//PROPS: Number section, Function setTranslation, String originalTranslation, Number startingX
+//PROPS: Number section, Function setTranslation, Fuction cancelEdit, String originalTranslation, Number startingX
 
 function dragElement(elmnt) {
   var pos1 = 0,
@@ -74,7 +74,7 @@ class editTranslation extends React.Component {
   constructor(props) {
     super();
     this.state = {
-      translation: "",
+      translation: props.originalTranslation,
     };
   }
 
@@ -101,6 +101,8 @@ class editTranslation extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log(this.context.textEnd);
+
     if (this.props.originalTranslation !== prevProps.originalTranslation) {
       if (document.querySelector("#edit-translation-container textarea")) {
         console.log("Orginal Translation: ", this.props.originalTranslation);
@@ -124,26 +126,49 @@ class editTranslation extends React.Component {
   // }
 
   render() {
-    var xValue = Number(this.context.textEnd) + 10;
+    var percent = Number(this.context.textEnd) / 100;
+    if (percent > 0.7) percent = 0.7;
+    if (percent < 0.3) percent = 0.3;
+    var xValue = percent * window.outerWidth - 2;
+    var widthValue = window.outerWidth - xValue;
     return (
       <div
         id="edit-translation-container"
-        style={{
-          top: this.props.startingY + "px",
-          left: xValue + "px",
-        }}
+        style={
+          this.context.isMobile
+            ? { bottom: "5px", left: "0px", width: "100%" }
+            : {
+                top: this.props.startingY + "px",
+                left: xValue + "px",
+                width: widthValue,
+              }
+        }
       >
-        <div className="editDragSection">
-          <h4>Edit Section {this.props.section + 1}</h4>
+        <div className="edit-translation-header">
+          <h4>Section {this.props.section + 1}</h4>
+          <div className="editDragSection">Click Here to Drag</div>
         </div>
         <textarea
-          rows="3"
-          cols="50"
+          style={
+            this.context.isMobile
+              ? { width: "95%", maxWidth: "95%", minWidth: "95%" }
+              : {
+                  width: widthValue * 0.95,
+                  maxWidth: widthValue * 0.95,
+                  minWidth: widthValue * 0.95,
+                }
+          }
           onChange={this.changeState}
           name="translation"
+          className="edit-translation-textarea"
         ></textarea>
         <div></div>
-        <button onClick={this.saveText}>Save Changes</button>
+        <button onClick={this.saveText} className="confirm-button">
+          Save Changes
+        </button>
+        <button onClick={this.props.cancelEdit} className="cancel-button">
+          Cancel
+        </button>
       </div>
     );
   }

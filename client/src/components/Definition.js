@@ -13,12 +13,12 @@ var rect;
 
 window.addEventListener("mousemove", (e) => {
   // e = Mouse click event.
-  if (document.querySelector("#docContainer") && !rect) {
-    rect = document.querySelector("#docContainer").getBoundingClientRect();
+  if (document.querySelector("body") && !rect) {
+    rect = document.querySelector("body").getBoundingClientRect();
   }
   if (rect) {
     x = e.pageX - rect.left; //x position within the element.
-    y = e.pageY + 250 - rect.top; //y position within the element.
+    y = e.pageY - rect.top; //y position within the element.
   }
 });
 
@@ -127,6 +127,7 @@ class Definition extends React.Component {
   }
 
   newDefinition = () => {
+    console.log(this.context.apis);
     const xVar = x;
     const yVar = y;
     if (document.getElementById("definition-container")) {
@@ -217,9 +218,11 @@ class Definition extends React.Component {
             X
           </button>
         </div>
-        {this.state.apis.map((e) => (
-          <InnerDefinition word={this.props.word} api={e} />
-        ))}
+        {this.context.apis
+          .filter((e) => e.enabled)
+          .map((e) => (
+            <InnerDefinition word={this.props.word} api={e} />
+          ))}
       </div>
     );
   }
