@@ -47,15 +47,21 @@ class QuickSearch extends React.Component {
     }
     return (
       <div id="quickSearch-container">
-        <button onClick={() => this.props.unSearch()} id="search-again-button">
-          <span>{"<<<"} </span>Search Again
-        </button>
         <div id="quickSearch-title">
-          <h3>Translationeer QuickSearch</h3>
-          <p>
-            A Quick Way to Get Started Translating. For full translation
-            capability, use the Translationeer Studio
-          </p>
+          <button
+            onClick={() => this.props.unSearch()}
+            id="search-again-button"
+          >
+            <span>{"<<<"} </span>Search Again
+          </button>
+          <div>
+            <h3>Translationeer QuickSearch</h3>
+            <p>
+              A quick way to get started translating using our interactive
+              canvas. For full translation capability, use the Translationeer
+              Studio
+            </p>
+          </div>
         </div>
         {!this.state.isSubmitted && (
           <form>
@@ -72,7 +78,11 @@ class QuickSearch extends React.Component {
             </button>
           </form>
         )}
-        {this.state.isSubmitted && <DocContainer query={this.state.query} />}
+        {this.state.isSubmitted && (
+          <div id="quickSearch-main">
+            <DocContainer query={this.state.query} />
+          </div>
+        )}
       </div>
     );
   }

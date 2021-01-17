@@ -50,6 +50,7 @@ class Home extends React.Component {
                 type="text"
                 onChange={this.changeState}
                 name="query"
+                placeholder="Type something ..."
               ></input>
               <button type="button" onClick={this.submit}>
                 Translate<span>{""}</span>
