@@ -127,6 +127,13 @@ class Definition extends React.Component {
   componentDidMount() {
     this.setState({ word: this.props.word, inputWord: this.props.word });
     this.newDefinition();
+
+    //IMPORTANT TO PREVENT GLITCHES
+    //An Extra check, just in case the mouse comes up and its not on the element
+    window.addEventListener("mouseup", (e) => {
+      this.setState({ dragging: false });
+    });
+
     // if (document.getElementById("definition-container")) {
     //   console.log(document.getElementById("definition-container"));
     //   const defElement = document.getElementById("definition-container");
@@ -171,8 +178,12 @@ class Definition extends React.Component {
   dragStart = (e) => {
     console.log(e);
     this.setState({
-      diffX: e.screenX - e.currentTarget.getBoundingClientRect().left,
-      diffY: e.screenY - e.currentTarget.getBoundingClientRect().top,
+      diffX:
+        e.screenX -
+        (e.currentTarget.getBoundingClientRect().left + window.scrollX),
+      diffY:
+        e.screenY -
+        (e.currentTarget.getBoundingClientRect().top + window.scrollY),
       dragging: true,
     });
   };
