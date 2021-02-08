@@ -1333,12 +1333,12 @@ button.add-a-section div {
 
 button.break-off-text {
   background-color: var(--scd);
-  margin-left: 15px;
+  margin: 8px 15px;
   border: 2px solid var(--scd);
   border-radius: 5px;
   color: white;
   font-weight: bold;
-  padding: 3px 10px;
+  padding: 6px 10px;
   transition: all 0.3s;
 }
 
@@ -1350,7 +1350,9 @@ button.break-off-text:hover {
 
 #break-off-text-container {
   display: flex;
-  margin-top: 10px;
+  margin: 0px;
+  align-items: center;
+  min-height: 7px; /*the region below the slider's height*/
 }
 
 #account-container {
