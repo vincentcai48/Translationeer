@@ -126,6 +126,7 @@ class Definition extends React.Component {
 
   componentDidMount() {
     this.setState({ word: this.props.word, inputWord: this.props.word });
+    this.newDefinition();
     // if (document.getElementById("definition-container")) {
     //   console.log(document.getElementById("definition-container"));
     //   const defElement = document.getElementById("definition-container");
