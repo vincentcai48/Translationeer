@@ -8,9 +8,7 @@ function dragElement(elmnt) {
     pos2 = 0,
     pos3 = 0,
     pos4 = 0;
-  if(!document.querySelector(
-    "#" + elmnt.id + " .editDragSection"
-  )) return;
+  if (!document.querySelector("#" + elmnt.id + " .editDragSection")) return;
   document.querySelector(
     "#" + elmnt.id + " .editDragSection"
   ).onmousedown = dragMouseDown;
@@ -73,7 +71,7 @@ function dragElement(elmnt) {
   }
 }
 
-var startingY = 0;//this is just here so it will ONLY be set when the componenet mounts, not everytime it updates. Make it var because the component can mount multiple times
+var startingY = 0; //this is just here so it will ONLY be set when the componenet mounts, not everytime it updates. Make it var because the component can mount multiple times
 
 class editTranslation extends React.Component {
   constructor(props) {
@@ -92,7 +90,7 @@ class editTranslation extends React.Component {
   changeTranslationProxy = (e) => {
     const t = e.target.value;
     this.props.changeTranslation(t);
-  }
+  };
 
   componentDidMount() {
     this.props.changeTranslation(this.props.originalTranslation);
@@ -110,18 +108,17 @@ class editTranslation extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if(this.props.section !== prevProps.section){
-      this.props.changeTranslation(this.props.originalTranslation)
+    if (this.props.section !== prevProps.section) {
+      this.props.changeTranslation(this.props.originalTranslation);
       startingY = this.props.startingY;
       if (document.querySelector("#edit-translation-container textarea")) {
         console.log("Orginal Translation: ", this.props.originalTranslation);
         document.querySelector(
           "#edit-translation-container textarea"
         ).value = this.props.originalTranslation;
-    }
+      }
 
-    if (this.props.originalTranslation !== prevProps.originalTranslation) {
-      
+      if (this.props.originalTranslation !== prevProps.originalTranslation) {
       }
     }
   }
@@ -144,12 +141,10 @@ class editTranslation extends React.Component {
     if (percent < 0.3) percent = 0.3;
     var xValue = percent * window.innerWidth;
     var widthValue = window.innerWidth - xValue;
-    console.log(window.innerWidth);
-    console.log("Edit Position:",xValue,widthValue)
     return (
       <div
         id="edit-translation-container"
-        className={this.context.isMobile?"fixed-mobile":""}
+        className={this.context.isMobile ? "fixed-mobile" : ""}
         style={
           this.context.isMobile
             ? { bottom: "5px", left: "0px", width: "100%" }
@@ -162,30 +157,42 @@ class editTranslation extends React.Component {
       >
         <div className="edit-translation-header">
           <h4>Section {this.props.section + 1}</h4>
-          {!this.context.isMobile&&<div className="editDragSection">Click Here to Drag</div>}
+          {!this.context.isMobile && (
+            <div className="editDragSection">Click Here to Drag</div>
+          )}
         </div>
         <textarea
           style={
             this.context.isMobile
-              ? { width: "95%", maxWidth: "95%", minWidth: "95%", maxHeight:"20vh" }
+              ? {
+                  width: "95%",
+                  maxWidth: "95%",
+                  minWidth: "95%",
+                  maxHeight: "20vh",
+                }
               : {
-                  width: widthValue * 0.95,
-                  maxWidth: widthValue * 0.95,
-                  minWidth: widthValue * 0.95,
+                  // width: widthValue * 0.95,
+                  // maxWidth: widthValue * 0.95,
+                  // minWidth: widthValue * 0.95,
                 }
           }
+          value={this.props.translation.replaceAll(
+            this.context.linebreakCode,
+            "\n"
+          )}
           onChange={this.changeTranslationProxy}
           name="translation"
           className="edit-translation-textarea"
           placeholder="No Translation Here"
         ></textarea>
-        <div></div>
-        <button onClick={this.saveText} className="confirm-button">
-          Save Changes
-        </button>
-        <button onClick={this.props.cancelEdit} className="cancel-button">
-          Cancel
-        </button>
+        <div className="edit-translation-footer">
+          <button onClick={this.saveText} className="confirm-button">
+            Save Changes
+          </button>
+          <button onClick={this.props.cancelEdit} className="cancel-button">
+            Cancel
+          </button>
+        </div>
       </div>
     );
   }

@@ -114,20 +114,36 @@ class Definition extends React.Component {
     super();
     this.state = {
       apis: props.apis,
+      isEditing: false,
+      inputWord: "",
+      word: "",
+      diffX: 0,
+      diffY: 0,
+      styles: {},
+      dragging: false,
     };
   }
 
   componentDidMount() {
-    if (document.getElementById("definition-container")) {
-      console.log(document.getElementById("definition-container"));
-      const defElement = document.getElementById("definition-container");
-      dragElement(defElement);
-      this.newDefinition();
-    }
+    this.setState({ word: this.props.word, inputWord: this.props.word });
+    this.newDefinition();
+
+    //IMPORTANT TO PREVENT GLITCHES
+    //An Extra check, just in case the mouse comes up and its not on the element
+    window.addEventListener("mouseup", (e) => {
+      this.setState({ dragging: false });
+    });
+
+    // if (document.getElementById("definition-container")) {
+    //   console.log(document.getElementById("definition-container"));
+    //   const defElement = document.getElementById("definition-container");
+    //   dragElement(defElement);
+    //   this.newDefinition();
+    // }
   }
 
   newDefinition = () => {
-    console.log(this.context.apis);
+    //console.log(this.context.apis);
     const xVar = x;
     const yVar = y;
     if (document.getElementById("definition-container")) {
@@ -148,11 +164,52 @@ class Definition extends React.Component {
   };
 
   componentDidUpdate(prevProps) {
-    if(prevProps.word != this.props.word) this.newDefinition();
+    //Only do this when the props change
+    if (prevProps.word != this.props.word) {
+      this.newDefinition();
+      this.setState({ word: this.props.word, inputWord: this.props.word });
+    }
   }
 
   crossOut = () => {
     this.props.crossOut();
+  };
+
+  dragStart = (e) => {
+    console.log(e);
+    this.setState({
+      diffX:
+        e.screenX -
+        (e.currentTarget.getBoundingClientRect().left + window.scrollX),
+      diffY:
+        e.screenY -
+        (e.currentTarget.getBoundingClientRect().top + window.scrollY),
+      dragging: true,
+    });
+  };
+
+  dragging = (e) => {
+    if (this.state.dragging && !this.state.isEditing) {
+      var x = e.screenX - this.state.diffX;
+      console.log(x);
+      var y = e.screenY - this.state.diffY;
+      console.log(y);
+      this.setState({
+        styles: {
+          top: y,
+          left: x,
+        },
+      });
+    }
+  };
+
+  dragEnd = (e) => {
+    this.setState({ dragging: false });
+  };
+
+  changeState = (e) => {
+    const { name, value } = e.target;
+    this.setState({ [name]: value });
   };
 
   // getDefinition = async (api) => {
@@ -209,19 +266,59 @@ class Definition extends React.Component {
   //       this.context.textEnd - justCreatedEl.clientWidth * 0.5 - 20 + "px";
   // };
 
+  changeSearch = () => {
+    this.setState((p) => {
+      var nextWord = p.inputWord;
+      console.log(nextWord);
+      return {
+        word: nextWord,
+        isEditing: false,
+      };
+    });
+  };
+
   render() {
     return (
-      <div id="definition-container">
+      <div
+        id="definition-container"
+        onMouseDown={this.dragStart}
+        onMouseMove={this.dragging}
+        onMouseUp={this.dragEnd}
+        style={this.state.styles}
+      >
         <div id="definition-title">
-          {this.props.word}
-          <button type="button" onClick={this.crossOut}>
-            X
+          {this.state.isEditing ? (
+            <input
+              className="edit-searchWord"
+              value={this.state.inputWord}
+              onChange={this.changeState}
+              name="inputWord"
+              placeholder="Enter Query"
+              autoComplete="off"
+            ></input>
+          ) : (
+            this.state.word
+          )}
+          {!this.state.isEditing ? (
+            <button
+              className="fas fa-pen"
+              onClick={() => {
+                this.setState({ isEditing: true });
+              }}
+            ></button>
+          ) : (
+            <button className="submit-newWord" onClick={this.changeSearch}>
+              <i className="fas fa-search"></i>
+            </button>
+          )}
+          <button type="button" className="x-out" onClick={this.crossOut}>
+            <i className="fas fa-times"></i>
           </button>
         </div>
         {this.context.apis
           .filter((e) => e.enabled)
           .map((e) => (
-            <InnerDefinition word={this.props.word} api={e} />
+            <InnerDefinition word={this.state.word} api={e} />
           ))}
       </div>
     );

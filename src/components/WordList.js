@@ -15,7 +15,6 @@ class WordList extends React.Component {
   componentDidMount() {
     this.setAllWords();
 
-
     // this.setState({
     //   allWords: this.state.query.split(/ |\n/).map((e) => {
     //     if(e==this.context.linebreakCode) return <br></br>
@@ -38,7 +37,7 @@ class WordList extends React.Component {
   setAllWords = () => {
     var allWords = [];
     //console.log(this.state.query)
-    this.props.query.split(/ |\n/).forEach(e => {
+    this.props.query.split(/ |\n/).forEach((e) => {
       // console.log(this.context.linebreakCode);
       // if(e.includes(this.context.linebreakCode)){
       //   var splitByLinebreak = e.split(this.context.linebreakCode);
@@ -53,14 +52,18 @@ class WordList extends React.Component {
       // allWords.push(<SingleWord word={e} setWord={this.props.setWord} />)
       // }
       // if(allWords[allWords.length-1]=="") allWords.pop();
-      allWords.push(<SingleWord word={e} setWord={this.props.setWord} />)
+      var arr = e.split(this.context.linebreakCode);
+      console.log(arr);
+      arr.forEach((w) => {
+        allWords.push(<SingleWord word={w} setWord={this.props.setWord} />);
+        allWords.push(<div className="break"></div>);
+      });
+      allWords.pop();
     });
 
-    this.setState({allWords: allWords})
+    this.setState({ allWords: allWords });
     //console.log("NEWWORDS:",this.state.allWords);
-  }
-
-
+  };
 
   render() {
     return <div id="alltext-container">{this.state.allWords}</div>;

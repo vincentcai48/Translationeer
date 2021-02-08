@@ -140,9 +140,52 @@ textarea:focus {
   display: grid;
   grid-template-columns: 1fr 30px;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
-#definition-title button {
+#definition-title button.fas {
+  margin-left: 10px;
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  color: white;
+  transition: all 0.2s;
+}
+
+#definition-title button.fas:hover {
+  text-shadow: 1px 1px 3px white;
+  opacity: 0.6;
+}
+
+#definition-title button.submit-newWord {
+  border: 3px solid white;
+  border-radius: 5px;
+  background-color: white;
+  padding: 1px 7px;
+  transition: all 0.3s;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+#definition-title button.submit-newWord:hover {
+  opacity: 0.7;
+}
+
+#definition-title input {
+  border-radius: 0px;
+  background-color: #303030;
+  color: white;
+  margin: 0px 10px 0px 0px;
+  padding: 2px;
+  border-radius: 2px;
+}
+
+#definition-title input:focus {
+  background-color: #444444;
+}
+
+#definition-title button.x-out {
   margin-left: auto;
   border: 2px solid red;
   color: red;
@@ -281,15 +324,16 @@ textarea:focus {
   padding: 0px;
   border-radius: 4px;
   background-color: black;
-  border: 5px solid black;
+  border: 1px solid black;
   z-index: 3;
   box-sizing: border-box;
-  box-shadow: 5px 5px 5px black;
+  box-shadow: 5px 5px 5px rgb(128, 128, 128);
 }
 
 #edit-translation-container textarea {
   position: relative;
   z-index: 4;
+  margin: 0px;
 }
 
 #slidecontainer {
@@ -344,7 +388,7 @@ textarea:focus {
   z-index: 6;
   position: sticky;
   width: 100%;
-  padding: 10px 0;
+  padding: 10px 0px 0px 0px;
   top: 46px;
   background-color: black;
   box-shadow: 0px 2px 3px black;
@@ -842,6 +886,10 @@ footer div {
   background-color: white;
 }
 
+#addDoc-popup-container .predivide-linebreak {
+  margin: -10px 0px 20px 0px;
+}
+
 .single-doc {
   width: 310px;
   padding: 15px;
@@ -1194,8 +1242,11 @@ button#back-to-documents {
 
 .edit-translation-header {
   display: flex;
+  margin-right: auto;
   align-items: center;
-  padding: 3px 5px 8px 5px;
+  padding: 7px 10px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   background-color: black;
   color: white;
 }
@@ -1217,14 +1268,28 @@ button#back-to-documents {
 .edit-translation-textarea {
   height: 40vh;
   font-size: 18px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
   padding: 10px;
   background-color: #eee;
   font-family: var(--primary-font);
+  border-radius: 0px;
+  margin: 0px;
 }
 
 .edit-translation-textarea:focus {
   background-color: white;
   outline: none;
+}
+
+.edit-translation-footer {
+  margin: 0px;
+  margin-top: -5px;
+  background-color: black;
+  padding: 5px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 .section-number {
@@ -1268,12 +1333,12 @@ button.add-a-section div {
 
 button.break-off-text {
   background-color: var(--scd);
-  margin-left: 15px;
+  margin: 8px 15px;
   border: 2px solid var(--scd);
   border-radius: 5px;
   color: white;
   font-weight: bold;
-  padding: 3px 10px;
+  padding: 6px 10px;
   transition: all 0.3s;
 }
 
@@ -1285,7 +1350,9 @@ button.break-off-text:hover {
 
 #break-off-text-container {
   display: flex;
-  margin-top: 10px;
+  margin: 0px;
+  align-items: center;
+  min-height: 7px; /*the region below the slider's height*/
 }
 
 #account-container {
@@ -1771,6 +1838,16 @@ section.studioDefault-section p {
 #tcNewUser p {
   margin: 5px 0;
   font-size: 14px;
+}
+
+.edit-searchWord {
+  position: relative;
+  z-index: 1000;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
 }
 
 @media (max-width: 992px) {

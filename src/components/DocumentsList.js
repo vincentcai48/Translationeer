@@ -19,6 +19,7 @@ class DocumentsList extends React.Component {
       showAddPopup: false,
       showDeletePopup: false,
       textBody: "",
+      inputDivideByLB: false,
     };
   }
 
@@ -36,9 +37,13 @@ class DocumentsList extends React.Component {
   };
 
   changeState = (e) => {
-    console.log(e.target.value);
     const { name, value } = e.target;
     this.setState({ [name]: value });
+  };
+
+  changeCheckboxState = (e) => {
+    const { name, checked } = e.target;
+    this.setState({ [name]: checked });
   };
 
   //note here that the "name" property on e.target is the whole document OBJECT, so there is another "name" property on that, hence name.name
@@ -75,8 +80,13 @@ class DocumentsList extends React.Component {
 
     if (name.length < 1 || name.length == undefined)
       name = "Untitled" + d.getTime();
-    console.log("NAME",name);
-    this.props.addDoc(name, this.state.color, this.state.textBody);
+    console.log("NAME", name);
+    this.props.addDoc(
+      name,
+      this.state.color,
+      this.state.textBody,
+      this.state.inputDivideByLB
+    );
   };
 
   deleteDocProxy = (name) => {
@@ -241,6 +251,15 @@ class DocumentsList extends React.Component {
                   maxHeight: "50vh",
                 }}
               ></textarea>
+              <div className="predivide-linebreak">
+                <input
+                  type="checkbox"
+                  checked={this.state.inputDivideByLB}
+                  onChange={this.changeCheckboxState}
+                  name="inputDivideByLB"
+                ></input>
+                <label>Pre-divide sections by line break</label>
+              </div>
               <button
                 type="button"
                 className="submit-doc-changes confirm-button"

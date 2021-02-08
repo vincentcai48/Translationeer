@@ -129,7 +129,7 @@ class Header extends React.Component {
           <div id="menu-options">
             <div id="services-dropdown">
               <div id="services-header-text">
-                Services
+                Translators
                 <i style={{ marginLeft: "5px" }} class="fas fa-caret-down"></i>
               </div>
               <ul id="serviceList">{this.renderServiceOptions()}</ul>
