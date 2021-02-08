@@ -11,7 +11,7 @@ import Loading from "./Loading";
 import DocumentsList from "./DocumentsList";
 import StudioDefault from "./studioComponents/studioDefault";
 import { Redirect, browserHistory, Link } from "react-router-dom";
-import {Beforeunload} from "react-beforeunload";
+import { Beforeunload } from "react-beforeunload";
 
 var x, y;
 var rect;
@@ -62,7 +62,8 @@ class Studio extends React.Component {
         pFirestore
           .collection("users")
           .doc(pAuth.currentUser.uid)
-          .collection("documents").orderBy("timestamp", "desc")
+          .collection("documents")
+          .orderBy("timestamp", "desc")
           .onSnapshot((docs) => {
             var arr = [];
 
@@ -74,18 +75,20 @@ class Studio extends React.Component {
             this.setState({ documents: arr });
             //make sure to check URL Params
             this.checkURLParams();
-            
           });
       }
     });
 
-
-    window.addEventListener('beforeunload', function (e) {
-      if(!newThis.state.isSaved){
-        e.preventDefault();
-        e.returnValue = '';
-      } 
-  },false);
+    window.addEventListener(
+      "beforeunload",
+      function (e) {
+        if (!newThis.state.isSaved) {
+          e.preventDefault();
+          e.returnValue = "";
+        }
+      },
+      false
+    );
   }
 
   checkURLParams = () => {
@@ -94,7 +97,7 @@ class Studio extends React.Component {
     if (urlParams.has("document")) {
       this.setCurrentDoc(urlParams.get("document"));
     }
-  }
+  };
 
   setCurrentDoc = (name) => {
     var rightDoc = null;
@@ -110,7 +113,7 @@ class Studio extends React.Component {
   };
 
   promptEdit = (section) => {
-    if(this.state.currentSection>-1) this.setTranslation();
+    if (this.state.currentSection > -1) this.setTranslation();
     this.setState({ currentSection: section });
   };
 
@@ -120,65 +123,149 @@ class Studio extends React.Component {
     // docs[section].translation = translation;
     console.log("DOC BEFORE TRANSLATION", this.state.currentDoc);
     var thisDoc = this.state.currentDoc;
-    thisDoc.body[this.state.currentSection].translation = this.state.translation;
+    thisDoc.body[
+      this.state.currentSection
+    ].translation = this.state.translation;
     console.log("DOC with NEW TRANSLATION:", thisDoc);
     this.setState({ currentSection: -1, currentDoc: thisDoc });
     this.saveAll();
   };
 
   breakOffText = (text, section) => {
-    if (this.state.currentDoc.body[section].text.indexOf(text) > -1) {
-      const sectionObj = this.state.currentDoc.body[section];
+    console.log("TEXT:" + text, "Section:" + section);
+    // if (this.state.currentDoc.body[section].text.indexOf(text) > -1) {
+    const sectionObj = this.state.currentDoc.body[section];
+    const textWithLB = sectionObj.text;
+    var textNoLB = "";
+    console.log("Section Text:" + textWithLB);
+    console.log("NO LB:" + textNoLB);
 
-      const startingIndex = this.state.currentDoc.body[section].text.indexOf(
-        text
-      );
+    //Step 1: split doc by linebreak, into an array.
+    var linebrakeDivides = textWithLB.split(this.context.linebreakCode);
 
-      const endingIndex = startingIndex + text.length;
+    //Step 2: make an array of linebreak indices, and fill out a No-linebreak-text (textNoLB)
+    var linebreakIndices = []; //indices with a linebreak BEFORE
+    var indexCount = 0;
+    console.log("Linebreak divided:" + linebrakeDivides);
+    linebrakeDivides.forEach((a) => {
+      indexCount += a.length + 1; //because of the space
+      textNoLB += a + " ";
+      linebreakIndices.push(indexCount);
+    });
+    linebreakIndices.sort();
+    console.log("Linebreak Indices" + linebreakIndices);
+    console.log("NO LB:" + textNoLB);
 
-      var newArr = [
-        {
-          text: sectionObj.text.substr(0, startingIndex),
-          translation: this.context.defaultText,
-        },
-        {
-          text: text,
-          translation: this.context.defaultText,
-        },
-        {
-          text: sectionObj.text.substr(endingIndex),
-          translation: this.context.defaultText,
-        },
-      ];
-      newArr = newArr.filter((e) => {
-        if (e.text.length < 2) return false;
-        var newEl = e.text;
-        newEl
-          .replaceAll("\t", "")
-          .replaceAll(" ", "")
-          .replaceAll("")
-          .replaceAll(/(\r\n|\n|\r)/gm, "")
-          .replaceAll(/[\s\u00A0]/gm, "");
-        if (newEl.length < 2) return false;
-        return true;
-      });
+    //Step 3: find start and end index in the no linebreak text
+    var startingIndex = textNoLB.indexOf(text);
+    var endingIndex = startingIndex + text.length;
+    console.log("Start: " + startingIndex + " End: " + endingIndex);
 
-      //add to FIRST section.
-      newArr[0].translation = sectionObj.translation;
-      var newDoc = this.state.currentDoc;
+    //Step 4: then modify these start and end indices based on how many linebreaks come before it.
+    var countBeforeStart = 0; //# of linebreaks before starting index
+    var countBeforeEnd = 0; //and before ending index
+    linebreakIndices.forEach((i) => {
+      //use less than or equal to because the linebreak indices are where a linebreak comes BEFORE THAT INDEX
+      if (i <= startingIndex) countBeforeStart++;
+      if (i <= endingIndex) countBeforeEnd++;
+    });
+    console.log(
+      "BeforeStart: " + countBeforeStart + " BeforeEnd: " + countBeforeEnd
+    );
 
-      //the splice method modifies by reference, important. Do NOT try newDoc.body = newDoc.body.splice(...);
-      newDoc.body.splice(section, 1, ...newArr);
+    const linebreakCodeLength = this.context.linebreakCode.length - 1; //IMPORTANT: Minus one because in the text, a linebreak is represented by a space " " character, so it only adds more characters if the sequence is more than 1 character long.
+    console.log("libreakCodeLnegth" + linebreakCodeLength);
 
-      this.setState({ currentDoc: newDoc });
-      clearSelection();
-      this.saveAll();
+    startingIndex += countBeforeStart * linebreakCodeLength;
+    endingIndex += countBeforeEnd * linebreakCodeLength;
+    console.log("New Start: " + startingIndex + " New End:" + endingIndex);
+    console.log(endingIndex, sectionObj.text.length);
+
+    //Step 5: Proceed by splitting the section up, now that you have the starting and ending indices, taking linebreak escape sequences into account.
+    var newArr = [
+      {
+        text: textWithLB.substring(0, startingIndex),
+        translation: this.context.defaultText,
+      },
+      {
+        text: textWithLB.substring(startingIndex, endingIndex),
+        translation: this.context.defaultText,
+      },
+      {
+        text: textWithLB.substring(endingIndex),
+        translation: this.context.defaultText,
+      },
+    ];
+
+    //Step 6: Handling "Degenerate" sections (aka. if it is just a space or two) Instead of deleting entire sections if they are just a space, merge them into another section
+
+    //Case 1: the middle section is degenerate (merge into last)
+    if (this.isDegenerate(newArr[1].text)) {
+      console.log("Middle is degnerate, merging");
+      var holdText = newArr[1].text;
+      newArr[newArr.length - 1].text =
+        holdText + newArr[newArr.length - 1].text;
+      newArr.splice(1, 1);
     }
+
+    //Case 2: the first section is degenerate (merge into second)
+    if (this.isDegenerate(newArr[0].text)) {
+      console.log("First is degenerate, merging");
+      var holdText = newArr[0].text;
+      newArr[1].text = holdText + newArr[1].text;
+      newArr.splice(0, 1);
+    }
+
+    //Case 3: the last section is degenerate AND there is still a section to merge into
+    if (
+      this.isDegenerate(newArr[newArr.length - 1].text) &&
+      newArr.length >= 2
+    ) {
+      console.log("last is degenerate, merging");
+      var holdText = newArr[newArr.length - 1].text;
+      newArr[newArr.length - 2].text =
+        holdText + newArr[newArr.length - 2].text;
+      newArr.pop();
+    }
+
+    // newArr = newArr.filter((e) => {
+    //   if (e.text.length < 2) return false;
+    //   var newEl = e.text;
+    //   newEl
+    //     .replaceAll("\t", "")
+    //     .replaceAll(" ", "")
+    //     .replaceAll("")
+    //     .replaceAll(/(\r\n|\n|\r)/gm, "")
+    //     .replaceAll(/[\s\u00A0]/gm, "");
+    //   if (newEl.length < 2) return false;
+    //   return true;
+    // });
+
+    //Step 7: add original translation to FIRST section.
+    newArr[0].translation = sectionObj.translation;
+    var newDoc = this.state.currentDoc;
+
+    //Step 8: put this new array into the doc, and save everything
+    //the splice method modifies by reference, important. Do NOT try newDoc.body = newDoc.body.splice(...);
+    newDoc.body.splice(section, 1, ...newArr);
+
+    this.setState({ currentDoc: newDoc });
+    clearSelection();
+    this.saveAll();
+    //}
+  };
+
+  isDegenerate = (str) => {
+    if (str.length < 1) return true;
+    for (var i = 0; i < str.length; i++) {
+      if (str.substring(i, i + 1) !== " ") return false;
+    }
+    return true;
   };
 
   addSection = (insertAt, text) => {
     if (this.state.currentDoc) {
-      text = text.replaceAll("\n"," ");
+      text = text.replaceAll("\n", " ");
       var newDoc = this.state.currentDoc;
       newDoc.body.splice(insertAt, 0, {
         text: text,
@@ -193,7 +280,7 @@ class Studio extends React.Component {
     if (this.state.currentDoc) {
       var newDoc = this.state.currentDoc;
       newDoc.body.splice(section, 1);
-      console.log("NEWDOC---------------------",newDoc);
+      console.log("NEWDOC---------------------", newDoc);
       this.setState({ currentDoc: newDoc });
       this.saveAll();
     }
@@ -348,25 +435,26 @@ class Studio extends React.Component {
   };
 
   render() {
-    if(this.state.redirect) return <Redirect to={this.state.redirect}/>
+    if (this.state.redirect) return <Redirect to={this.state.redirect} />;
     var currentDocBody = this.state.currentDoc
       ? this.state.currentDoc.body
       : [];
     return this.state.currentDoc ? (
       <div id="studio">
-
-        <Beforeunload onBeforeunload={(event) => {
-          if(!this.state.isSaved)event.preventDefault()}}/>
+        <Beforeunload
+          onBeforeunload={(event) => {
+            if (!this.state.isSaved) event.preventDefault();
+          }}
+        />
         <h1 id="studio-h1">
-        <i
-              className="fas fa-file-alt doc-icon"
-              style={{
-                color: this.state.currentDoc.color || "var(--pc)",
-              }}
-            ></i>
-            {this.state.currentDoc.name}
+          <i
+            className="fas fa-file-alt doc-icon"
+            style={{
+              color: this.state.currentDoc.color || "var(--pc)",
+            }}
+          ></i>
+          {this.state.currentDoc.name}
         </h1>
-        
 
         {this.state.loading ? (
           <div className="grayed-out-background">
@@ -379,31 +467,30 @@ class Studio extends React.Component {
           ""
         )}
         <StudioHeader
-            backToDocsFunction={() => (this.setState({currentDoc: null}))}
-            document={this.state.currentDoc || {}}
-            breakOffFunction={this.breakOffText}
-            copyTranslation={this.copyTranslation}
-          />
-        
+          backToDocsFunction={() => this.setState({ currentDoc: null })}
+          document={this.state.currentDoc || {}}
+          breakOffFunction={this.breakOffText}
+          copyTranslation={this.copyTranslation}
+        />
+
         <div id="studio-container">
-         
-            <div id="studio-grid">
-              <LeftStudio
-                queryArray={
-                  this.state.currentDoc ? this.state.currentDoc.body : []
-                }
-                promptEdit={this.promptEdit}
-                mergeUp={this.mergeUp}
-                mergeDown={this.mergeDown}
-                deleteSection={this.deleteSection}
-                addSection={this.addSection}
-              />
-              <RightStudio
-                translations={currentDocBody}
-                currentSection={this.state.currentSection}
-              />
-            </div>
-          
+          <div id="studio-grid">
+            <LeftStudio
+              queryArray={
+                this.state.currentDoc ? this.state.currentDoc.body : []
+              }
+              promptEdit={this.promptEdit}
+              mergeUp={this.mergeUp}
+              mergeDown={this.mergeDown}
+              deleteSection={this.deleteSection}
+              addSection={this.addSection}
+            />
+            <RightStudio
+              translations={currentDocBody}
+              currentSection={this.state.currentSection}
+            />
+          </div>
+
           {this.state.currentSection > -1 ? (
             <div id="translation-container">
               <EditTranslation
@@ -411,7 +498,10 @@ class Studio extends React.Component {
                 section={this.state.currentSection}
                 setTranslation={this.setTranslation}
                 cancelEdit={() => this.setState({ currentSection: -1 })}
-                changeTranslation={(t)=>{this.setState({translation: t, isSaved: false}); console.log(this.state.translation);}}
+                changeTranslation={(t) => {
+                  this.setState({ translation: t, isSaved: false });
+                  console.log(this.state.translation);
+                }}
                 originalTranslation={
                   this.state.currentDoc.body[this.state.currentSection]
                     ? this.state.currentDoc.body[this.state.currentSection]
@@ -426,15 +516,13 @@ class Studio extends React.Component {
         </div>
       </div>
     ) : (
-      <StudioDefault/>
+      <StudioDefault />
     );
   }
 }
 Studio.contextType = LangContext;
 
 export default Studio;
-
-
 
 /**<h1
           id="studio-h1"

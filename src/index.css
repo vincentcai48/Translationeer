@@ -140,9 +140,52 @@ textarea:focus {
   display: grid;
   grid-template-columns: 1fr 30px;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
-#definition-title button {
+#definition-title button.fas {
+  margin-left: 10px;
+  background-color: transparent;
+  padding: 0px;
+  border: none;
+  color: white;
+  transition: all 0.2s;
+}
+
+#definition-title button.fas:hover {
+  text-shadow: 1px 1px 3px white;
+  opacity: 0.6;
+}
+
+#definition-title button.submit-newWord {
+  border: 3px solid white;
+  border-radius: 5px;
+  background-color: white;
+  padding: 1px 7px;
+  transition: all 0.3s;
+  font-size: 20px;
+  font-weight: bolder;
+}
+
+#definition-title button.submit-newWord:hover {
+  opacity: 0.7;
+}
+
+#definition-title input {
+  border-radius: 0px;
+  background-color: #303030;
+  color: white;
+  margin: 0px 10px 0px 0px;
+  padding: 2px;
+  border-radius: 2px;
+}
+
+#definition-title input:focus {
+  background-color: #444444;
+}
+
+#definition-title button.x-out {
   margin-left: auto;
   border: 2px solid red;
   color: red;
@@ -344,7 +387,7 @@ textarea:focus {
   z-index: 6;
   position: sticky;
   width: 100%;
-  padding: 10px 0;
+  padding: 10px 0px 0px 0px;
   top: 46px;
   background-color: black;
   box-shadow: 0px 2px 3px black;
@@ -840,6 +883,10 @@ footer div {
   padding: 15px;
   border-radius: 15px;
   background-color: white;
+}
+
+#addDoc-popup-container .predivide-linebreak {
+  margin: -10px 0px 20px 0px;
 }
 
 .single-doc {
@@ -1771,6 +1818,16 @@ section.studioDefault-section p {
 #tcNewUser p {
   margin: 5px 0;
   font-size: 14px;
+}
+
+.edit-searchWord {
+  position: relative;
+  z-index: 1000;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
 }
 
 @media (max-width: 992px) {

@@ -45,7 +45,7 @@ class StudioHeader extends React.Component {
     var num = 0;
     this.setState({ breakOffText: text });
     this.state.sectionTexts.forEach((e) => {
-      
+      e = e.replaceAll(this.context.linebreakCode, " ");
       if (e.includes(text)) {
         index = num;
       }
@@ -56,7 +56,7 @@ class StudioHeader extends React.Component {
 
     //check with last character removed, IF IT is a SPACE
     num = 0;
-    if(text.substr(text.length-1,text.length)==" "){
+    if (text.substr(text.length - 1, text.length) == " ") {
       text = text.substr(0, text.length - 1);
     }
     console.log(text);
@@ -69,10 +69,10 @@ class StudioHeader extends React.Component {
       num++;
     });
 
-
     if (index != -1) {
       this.setState({ breakOffText: text });
     }
+
     return index;
   };
 
@@ -91,6 +91,7 @@ class StudioHeader extends React.Component {
     this.props.document.body.forEach((e) => arr.push(e.text));
     this.setState({ sectionTexts: arr });
 
+    //HERE IS WHERE YOU ANALYZE HIGHLIGHTED TEXT.
     window.onmouseup = () => {
       console.log("Selection: ", window.getSelection().toString());
 
@@ -101,7 +102,6 @@ class StudioHeader extends React.Component {
         .toString()
         .replaceAll(/(\r\n|\n|\r)/gm, "")
         .replaceAll(/[\s\u00A0]/gm, " ");
-      console.log(selectedText ? "true" : "false");
       if (this.state.breakOffText !== selectedText) {
         if (!selectedText) {
           console.log(selectedText);
@@ -154,27 +154,28 @@ class StudioHeader extends React.Component {
     }
   };
 
-  backToDashboard = () =>{
-    this.setState({redirect: "/dashboard"})
-  }
+  backToDashboard = () => {
+    this.setState({ redirect: "/dashboard" });
+  };
 
   render() {
-    if(this.state.redirect) return <Redirect to={this.state.redirect}/>
+    if (this.state.redirect) return <Redirect to={this.state.redirect} />;
     return (
       <div id="studioHeader-container">
-        <section id="studioHeader-topRow"><button
-          type="button"
-          class="arrow-button"
-          id="back-to-documents"
-          onClick={this.backToDashboard}
-        >
-          <span>{"<<<"}</span>Back to Dashboard
-        </button>
-        <button onClick={this.props.copyTranslation} id="copyTranslation">
+        <section id="studioHeader-topRow">
+          <button
+            type="button"
+            class="arrow-button"
+            id="back-to-documents"
+            onClick={this.backToDashboard}
+          >
+            <span>{"<<<"}</span>Back to Dashboard
+          </button>
+          <button onClick={this.props.copyTranslation} id="copyTranslation">
             Copy Translation
           </button>
         </section>
-        
+
         <div id="slidecontainer">
           <input
             type="range"
@@ -212,7 +213,6 @@ class StudioHeader extends React.Component {
           <button onClick={this.mobileToggleTranslation} id="show-translation">
             Show Full Translation
           </button>
-          
         </section>
       </div>
     );

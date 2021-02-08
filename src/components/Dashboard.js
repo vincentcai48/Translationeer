@@ -104,17 +104,28 @@ class Dashboard extends React.Component {
     }
   };
 
-  addDoc = (name, color, text) => {
+  addDoc = (name, color, text, divideByLB) => {
     console.log("ADDING DOCS!!!!");
-    var bodyDividedByLineBreak = text.split("\n").map(t=>{
-      return {
-        text: t,
-        translation: this.context.defaultText
-      }
-    })
-    bodyDividedByLineBreak = bodyDividedByLineBreak.filter(e=>{
-      return e.text!="";
-    })
+    var body = {};
+    if (divideByLB) {
+      var bodyDividedByLineBreak = text.split("\n").map((t) => {
+        return {
+          text: t,
+          translation: this.context.defaultText,
+        };
+      });
+      bodyDividedByLineBreak = bodyDividedByLineBreak.filter((e) => {
+        return e.text != "";
+      });
+      body = bodyDividedByLineBreak;
+    } else {
+      body = [
+        {
+          text: text.replaceAll("\n", this.context.linebreakCode),
+          translation: this.context.defaultText,
+        },
+      ];
+    }
     pFirestore
       .collection("users")
       .doc(pAuth.currentUser.uid)
@@ -122,7 +133,7 @@ class Dashboard extends React.Component {
       .add({
         name: name,
         color: color,
-        body: bodyDividedByLineBreak,
+        body: body,
         timestamp: fbFieldValue.serverTimestamp(),
       })
       .then(() => {
@@ -158,11 +169,11 @@ class Dashboard extends React.Component {
 
   openInStudio = (name) => {
     var url = "/studio?document=" + name;
-    this.setState({redirect: url});
+    this.setState({ redirect: url });
   };
 
   render() {
-    if(this.state.redirect) return <Redirect to={this.state.redirect}/>
+    if (this.state.redirect) return <Redirect to={this.state.redirect} />;
     return this.state.isAuth ? (
       <div id="dashboard-container">
         <div id="dashboard-background"></div>
