@@ -141,8 +141,6 @@ class editTranslation extends React.Component {
     if (percent < 0.3) percent = 0.3;
     var xValue = percent * window.innerWidth;
     var widthValue = window.innerWidth - xValue;
-    console.log(window.innerWidth);
-    console.log("Edit Position:", xValue, widthValue);
     return (
       <div
         id="edit-translation-container"

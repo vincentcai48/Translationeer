@@ -324,7 +324,7 @@ textarea:focus {
   padding: 0px;
   border-radius: 4px;
   background-color: black;
-  border: 2px solid black;
+  border: 1px solid black;
   z-index: 3;
   box-sizing: border-box;
   box-shadow: 5px 5px 5px rgb(128, 128, 128);
@@ -1244,9 +1244,9 @@ button#back-to-documents {
   display: flex;
   margin-right: auto;
   align-items: center;
-  padding: 5px 10px;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  padding: 7px 10px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
   background-color: black;
   color: white;
 }
@@ -1288,8 +1288,8 @@ button#back-to-documents {
   margin-top: -5px;
   background-color: black;
   padding: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
 }
 
 .section-number {
