@@ -324,15 +324,16 @@ textarea:focus {
   padding: 0px;
   border-radius: 4px;
   background-color: black;
-  border: 5px solid black;
+  border: 2px solid black;
   z-index: 3;
   box-sizing: border-box;
-  box-shadow: 5px 5px 5px black;
+  box-shadow: 5px 5px 5px rgb(128, 128, 128);
 }
 
 #edit-translation-container textarea {
   position: relative;
   z-index: 4;
+  margin: 0px;
 }
 
 #slidecontainer {
@@ -1241,8 +1242,11 @@ button#back-to-documents {
 
 .edit-translation-header {
   display: flex;
+  margin-right: auto;
   align-items: center;
-  padding: 3px 5px 8px 5px;
+  padding: 5px 10px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   background-color: black;
   color: white;
 }
@@ -1264,14 +1268,28 @@ button#back-to-documents {
 .edit-translation-textarea {
   height: 40vh;
   font-size: 18px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 100%;
   padding: 10px;
   background-color: #eee;
   font-family: var(--primary-font);
+  border-radius: 0px;
+  margin: 0px;
 }
 
 .edit-translation-textarea:focus {
   background-color: white;
   outline: none;
+}
+
+.edit-translation-footer {
+  margin: 0px;
+  margin-top: -5px;
+  background-color: black;
+  padding: 5px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .section-number {

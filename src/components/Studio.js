@@ -43,7 +43,7 @@ class Studio extends React.Component {
       currentSection: -1,
       loading: false,
       redirect: false,
-      translation: "", //what is in the edit translation text area4
+      translation: "", //what is in the edit translation text area
       isSaved: true,
     };
   }
@@ -125,7 +125,10 @@ class Studio extends React.Component {
     var thisDoc = this.state.currentDoc;
     thisDoc.body[
       this.state.currentSection
-    ].translation = this.state.translation;
+    ].translation = this.state.translation.replace(
+      /\n/g,
+      this.context.linebreakCode
+    );
     console.log("DOC with NEW TRANSLATION:", thisDoc);
     this.setState({ currentSection: -1, currentDoc: thisDoc });
     this.saveAll();
@@ -502,6 +505,7 @@ class Studio extends React.Component {
                   this.setState({ translation: t, isSaved: false });
                   console.log(this.state.translation);
                 }}
+                translation={this.state.translation}
                 originalTranslation={
                   this.state.currentDoc.body[this.state.currentSection]
                     ? this.state.currentDoc.body[this.state.currentSection]

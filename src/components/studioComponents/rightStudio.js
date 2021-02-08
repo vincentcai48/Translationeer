@@ -25,10 +25,17 @@ class RightStudio extends React.Component {
     var arr = [];
     if (!this.props.translations) return;
     this.props.translations.forEach((e) => {
+      var splitByLinebreak = e.translation.split(this.context.linebreakCode);
+      var arr2 = [];
+      splitByLinebreak.forEach((p) => {
+        arr2.push(<span>{p}</span>);
+        arr2.push(<br></br>);
+      });
+      arr2.pop();
       arr.push(
         <span className="section-translation">
           <span className="section-number"> {num + 1} </span>
-          {e.translation}
+          {arr2}
         </span>
       );
       num++;
@@ -38,15 +45,22 @@ class RightStudio extends React.Component {
 
   closeTranslationMobile = () => {
     document.getElementById("right-studio").style.display = "none";
-  }
+  };
 
   render() {
     return (
       <div
         id="right-studio"
-        style={{ opacity: this.props.currentSection > -1&&!this.context.isMobile ? 0.3 : 1 }}
+        style={{
+          opacity:
+            this.props.currentSection > -1 && !this.context.isMobile ? 0.3 : 1,
+        }}
       >
-        {this.context.isMobile&&<button className="x-out-ft" onClick={this.closeTranslationMobile}><i class="fas fa-times"></i></button>}
+        {this.context.isMobile && (
+          <button className="x-out-ft" onClick={this.closeTranslationMobile}>
+            <i class="fas fa-times"></i>
+          </button>
+        )}
         {this.renderSections()}
       </div>
     );
