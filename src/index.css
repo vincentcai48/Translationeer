@@ -1865,6 +1865,73 @@ section.studioDefault-section p {
   margin: 0px;
 }
 
+#docs-container {
+  display: grid;
+  grid-template-columns: 15vw 1fr;
+  width: 100%;
+  background-color: white;
+  box-shadow: 0px -2px 5px darkgrey;
+}
+
+#docs-container .docs-col1 {
+  height: 100%;
+}
+
+.docs-col2 {
+  box-sizing: border-box;
+  padding: 20px 3%;
+}
+
+.docs-options {
+  padding: 0px;
+  margin: 0px;
+  list-style: none;
+}
+
+.docs-options li {
+  width: 100%;
+}
+
+.docs-option-primary {
+  width: 100%;
+  text-align: left;
+
+  padding: 10px 20px;
+
+  font-size: 20px;
+  font-weight: bolder;
+  border: none;
+  border-radius: 0px;
+  background-color: white;
+  transition: all 0.2s;
+  /*box-shadow: 1px 1px 3px black;*/
+}
+
+.docs-option-primary.focused,
+.docs-option-secondary.focused {
+  background-color: var(--scl);
+}
+
+.docs-option-secondary {
+  width: 100%;
+
+  margin: 0px;
+  padding: 5px 0px 5px 30px;
+
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+
+  background-color: transparent;
+  border: none;
+  transition: all 0.2s;
+}
+
+.docs-option-primary:hover,
+.docs-option-secondary:hover {
+  opacity: 0.7;
+}
+
 @media (max-width: 992px) {
   header#header {
     display: flex;
