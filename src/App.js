@@ -6,7 +6,7 @@ import Home from "./components/Home.js";
 import Auth from "./components/Auth";
 import { fbFieldValue, pAuth, pFirestore } from "./services/config";
 import Header from "./components/Header";
-import Studio from "./components/Studio";
+import Studio from "./components/studioComponents/Studio";
 import Footer from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import Account from "./components/Account";

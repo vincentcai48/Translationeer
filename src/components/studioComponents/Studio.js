@@ -1,15 +1,15 @@
 import React from "react";
-import { pAuth, pFirestore, fbFieldValue } from "../services/config";
-import Auth from "./Auth";
-import { LangContext } from "../services/context";
-import Slider from "./studioComponents/slider";
-import LeftStudio from "./studioComponents/leftStudio";
-import RightStudio from "./studioComponents/rightStudio";
-import EditTranslation from "./studioComponents/editTranslation";
-import StudioHeader from "./studioComponents/studioHeader";
-import Loading from "./Loading";
-import DocumentsList from "./DocumentsList";
-import StudioDefault from "./studioComponents/studioDefault";
+import { pAuth, pFirestore, fbFieldValue } from "../../services/config";
+import Auth from "../Auth";
+import { LangContext } from "../../services/context";
+import Slider from "./slider";
+import LeftStudio from "./leftStudio";
+import RightStudio from "./rightStudio";
+import EditTranslation from "./editTranslation";
+import StudioHeader from "./studioHeader";
+import Loading from "../Loading";
+import DocumentsList from "../DocumentsList";
+import StudioDefault from "./studioDefault";
 import { Redirect, browserHistory, Link } from "react-router-dom";
 import { Beforeunload } from "react-beforeunload";
 

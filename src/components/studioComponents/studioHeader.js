@@ -1,5 +1,4 @@
 import React from "react";
-import Studio from "../Studio";
 import { LangContext } from "../../services/context";
 import { Redirect } from "react-router-dom";
 
