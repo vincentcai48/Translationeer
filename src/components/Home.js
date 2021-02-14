@@ -3,6 +3,7 @@ import QuickSearch from "./QuickSearch";
 import jumbotronImage from "../images/jumbotron.png";
 import phoneJumbotronImage from "../images/phone-jumbotron.PNG";
 import { Link } from "react-router-dom";
+import { parser } from "../services/react-custom-markdown/mdparser";
 
 class Home extends React.Component {
   constructor(props) {
@@ -28,13 +29,14 @@ class Home extends React.Component {
 
   render() {
     console.log(window.outerWidth);
+    var markdown = parser("# Hello")
     return this.state.isSearched ? (
       <QuickSearch
         query={this.state.query || "No Text Supplied"}
         unSearch={this.unSearch}
       />
     ) : (
-      <div>
+      <div>   
         <div id="jumbotron">
           <img
             src={window.outerWidth > 600 ? jumbotronImage : phoneJumbotronImage}

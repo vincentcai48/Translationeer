@@ -139,7 +139,7 @@ class Header extends React.Component {
               <ul id="languageList">{this.renderLanguageOptions()}</ul>
             </div>
             <div className="header-item">
-              <Link to="/docs" className="header-item-link">
+              <Link to="/howto" className="header-item-link">
                 How to
               </Link>
             </div>

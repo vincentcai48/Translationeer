@@ -26,6 +26,10 @@ code {
     monospace;
 }
 
+main {
+  min-height: 90vh;
+}
+
 button {
   font-family: "Signika Negative", sans-serif;
 }
@@ -1848,6 +1852,17 @@ section.studioDefault-section p {
 .break {
   flex-basis: 100%;
   height: 0;
+}
+
+.docs-header-container {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 4vh 3vw;
+  background-color: lightgrey;
+}
+
+.docs-header {
+  margin: 0px;
 }
 
 @media (max-width: 992px) {

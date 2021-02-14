@@ -10,9 +10,10 @@ import Studio from "./components/Studio";
 import Footer from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import Account from "./components/Account";
-import Docs from "./components/Docs";
+import Howto from "./components/documentation/Howto";
 import StudioDefault from "./components/studioComponents/studioDefault";
 import NewUser from "./components/NewUser";
+import DocsRoot from "./components/documentation/DocsRoot";
 
 class App extends React.Component {
   constructor() {
@@ -204,30 +205,34 @@ class App extends React.Component {
         <div className="App">
           <Router>
             <Header></Header>
-            <Switch>
-              <Route path="/" exact>
-                <Home />
-              </Route>
-              <Route path="/quicktranslate">
-                <QuickSearch />
-              </Route>
-
-              <Route path="/studio">
-                <Studio />
-              </Route>
-              <Route path="/dashboard">
-                <Dashboard />
-              </Route>
-              <Route path="/account">
-                <Account />
-              </Route>
-              <Route path="/docs">
-                <Docs />
-              </Route>
-              <Route path="/studiodefault">
-                <StudioDefault />
-              </Route>
-            </Switch>
+            <main>
+              <Switch>
+                <Route path="/" exact>
+                  <Home />
+                </Route>
+                <Route path="/quicktranslate">
+                  <QuickSearch />
+                </Route>
+                <Route path="/studio">
+                  <Studio />
+                </Route>
+                <Route path="/dashboard">
+                  <Dashboard />
+                </Route>
+                <Route path="/account">
+                  <Account />
+                </Route>
+                <Route path="/howto">
+                  <Howto />
+                </Route>
+                <Route path="/docs">
+                  <DocsRoot />
+                </Route>
+                <Route path="/studiodefault">
+                  <StudioDefault />
+                </Route>
+              </Switch>
+            </main>
             <Footer />
           </Router>
         </div>
