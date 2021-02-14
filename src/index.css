@@ -1933,6 +1933,7 @@ section.studioDefault-section p {
   z-index: 100;
   bottom: 35px;
   right: 20px;
+  display: flex;
 
   padding: 10px 20px;
   border-radius: 5px;
@@ -1955,6 +1956,43 @@ section.studioDefault-section p {
   100% {
     transform: translateX(0px);
   }
+}
+
+.brp button {
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  border-radius: 50%;
+  border: none;
+  font-size: 14px;
+  font-weight: bolder;
+  color: red;
+  background-color: white;
+  transition: all 0.3s;
+}
+
+.brp button:hover {
+  transform: rotate(270deg);
+}
+
+.paginate-button {
+  background-color: transparent;
+  border: none;
+  font-size: 26px;
+  font-weight: bolder;
+  margin: 20px 0px;
+  transition: all 0.2s;
+}
+
+.paginate-button i {
+  margin-right: 7px;
+}
+
+.paginate-button:hover {
+  opacity: 0.7;
 }
 
 @media (max-width: 992px) {

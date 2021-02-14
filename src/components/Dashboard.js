@@ -24,28 +24,34 @@ class Dashboard extends React.Component {
     pAuth.onAuthStateChanged((user) => {
       this.setState({ isAuth: true });
       if (user) {
-        pFirestore
-          .collection("users")
-          .doc(pAuth.currentUser.uid)
-          .collection("documents")
-          .orderBy("timestamp", "desc")
-          .limit(this.state.limit)
-          .get()
-          .then((res) => {
-            var arr = [];
-            res.forEach((d) => {
-              arr.push({ ...d.data(), uid: d.id });
-            });
-            this.setState({
-              documents: arr,
-              lastDoc: res.docs[res.docs.length - 1],
-            });
-          });
+        this.getNewDocs();
       } else {
         this.setState({ isAuth: false });
       }
     });
   }
+
+  //Used on the first time, or when refreshed
+  getNewDocs = () => {
+    pFirestore
+      .collection("users")
+      .doc(pAuth.currentUser.uid)
+      .collection("documents")
+      .orderBy("timestamp", "desc")
+      .limit(this.state.limit)
+      .get()
+      .then((res) => {
+        var arr = [];
+        res.forEach((d) => {
+          arr.push({ ...d.data(), uid: d.id });
+        });
+        this.setState({
+          documents: arr,
+          lastDoc: res.docs[res.docs.length - 1],
+          isNeedRefresh: false,
+        });
+      });
+  };
 
   //Firebase Pagination
   getMoreDocs = async () => {
@@ -106,7 +112,8 @@ class Dashboard extends React.Component {
     var rightDoc = {};
     this.state.documents.forEach((doc) => {
       if (doc.name == name) {
-        rightDoc = doc;
+        /*IMPORTANT: This line changes whether the doc gets updated by value or reference, if you set it directly equal, it will still update realtime, even without a live snapshot from firestore. However, if you make a clone with this spread syntax, it will not update. This behavior is more "consistent", but less "live"*/
+        rightDoc = { ...doc };
       }
     });
     //Make sure name is unique, otherwise just use the original name.
@@ -123,14 +130,10 @@ class Dashboard extends React.Component {
     // if (!isUnique) return;
 
     //then set the new properties
-    console.log(newColor);
     rightDoc.name = newName;
     rightDoc.color = newColor;
     rightDoc.timestamp = fbFieldValue.serverTimestamp();
-    console.log(rightDoc.timestamp);
-    console.log(typeof rightDoc.timestamp);
     var docid = rightDoc.uid;
-    console.log("Going Into Firestore:", rightDoc);
     if (pAuth.currentUser) {
       pFirestore
         .collection("users")
@@ -273,7 +276,13 @@ class Dashboard extends React.Component {
           </div>
         </div>
         {this.state.isNeedRefresh && (
-          <div className="brp">Reload Dashboard to See Changes</div>
+          <div className="brp">
+            Reload Dashboard to See Changes
+            <button
+              onClick={this.getNewDocs}
+              className="fas fa-redo-alt"
+            ></button>
+          </div>
         )}
       </div>
     ) : (

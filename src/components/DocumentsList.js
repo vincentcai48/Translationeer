@@ -104,7 +104,7 @@ class DocumentsList extends React.Component {
         onClick={this.addDocPopup}
       >
         <div className="inside-text-container">
-          <i class="fas fa-plus-circle"></i>
+          <i className="fas fa-plus-circle"></i>
           <h5>Add A Document</h5>
         </div>
       </button>
@@ -158,7 +158,11 @@ class DocumentsList extends React.Component {
         </div>
       );
     }
-    arr.push(<button onClick={this.props.getMoreDocs}>Add More Docs</button>);
+    arr.push(
+      <button className="paginate-button" onClick={this.props.getMoreDocs}>
+        <i className="fas fa-plus-circle"></i>More Documents
+      </button>
+    );
     return arr;
   };
 
