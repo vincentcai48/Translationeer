@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from "react";
 import ReactHtmlParser from "react-html-parser";
 import { parser } from "../../services/react-custom-markdown/mdparser";
-import Docs1 from "./markdownfiles/docs.md";
-import Docs2 from "./markdownfiles/docs2.md";
+
+/*
+MARKDOWN FILES IMPORTED
+
+File Naming convention: (Menu#)Name (ex: (0)Overview)
+import variable naming convention: Docs# 
+
+*/
+import Docs0 from "./markdownfiles/(0)Overview.md";
+import Docs1 from "./markdownfiles/(1)General Usage.md";
 
 const DocsRoot = () => {
   //All Docs options, IN ORDER (starting from 0)
   const docOptions = [
-    { text: "Overview", isPrimary: true, file: Docs1 },
-    { text: "General Usage", isPrimary: false, file: Docs2 },
-    { text: "Header 1", isPrimary: false, file: Docs2 },
-    { text: "Header 2", isPrimary: false, file: Docs2 },
+    { text: "Overview", isPrimary: true, file: Docs0 },
+    { text: "General Usage", isPrimary: false, file: Docs1 },
   ];
 
   const [page, setPage] = useState(0);

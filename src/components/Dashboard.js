@@ -13,6 +13,10 @@ class Dashboard extends React.Component {
       selection: 0, //a number for what to view, 0: documents
       documents: [], //all the documents that user has. Same as in the "Studio.js" component
       redirect: false,
+      limit: 15, //the amount of documents you can get at one time
+      lastDoc: {},
+      isLoading: false,
+      isNeedRefresh: false,
     };
   }
 
@@ -25,19 +29,50 @@ class Dashboard extends React.Component {
           .doc(pAuth.currentUser.uid)
           .collection("documents")
           .orderBy("timestamp", "desc")
-          .onSnapshot((docs) => {
+          .limit(this.state.limit)
+          .get()
+          .then((res) => {
             var arr = [];
-            docs.forEach((d) => {
+            res.forEach((d) => {
               arr.push({ ...d.data(), uid: d.id });
             });
-            console.log(arr);
-            this.setState({ documents: arr });
+            this.setState({
+              documents: arr,
+              lastDoc: res.docs[res.docs.length - 1],
+            });
           });
       } else {
         this.setState({ isAuth: false });
       }
     });
   }
+
+  //Firebase Pagination
+  getMoreDocs = async () => {
+    this.setState({ isLoading: true });
+    if (!this.state.lastDoc) return;
+    var query = pFirestore
+      .collection("users")
+      .doc(pAuth.currentUser.uid)
+      .collection("documents")
+      .orderBy("timestamp", "desc")
+      .startAfter(this.state.lastDoc)
+      .limit(this.state.limit);
+    try {
+      var res = await query.get();
+      var arr = [];
+      res.forEach((d) => arr.push({ ...d.data(), uid: d.id }));
+      this.setState((p) => {
+        return {
+          documents: [...p.documents, ...arr],
+          lastDoc: res.docs[res.docs.length - 1],
+          isLoading: false,
+        };
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   componentDidUpdate() {
     if (this.context.isJustCreatedUser) {
@@ -49,7 +84,9 @@ class Dashboard extends React.Component {
             .doc(pAuth.currentUser.uid)
             .collection("documents")
             .orderBy("timestamp", "desc")
-            .onSnapshot((docs) => {
+            .limit(this.state.limit)
+            .get()
+            .then((docs) => {
               var arr = [];
               docs.forEach((d) => {
                 arr.push({ ...d.data(), uid: d.id });
@@ -100,7 +137,11 @@ class Dashboard extends React.Component {
         .doc(pAuth.currentUser.uid)
         .collection("documents")
         .doc(docid)
-        .update(rightDoc);
+        .update(rightDoc)
+        .then(() => {
+          this.setState({ isNeedRefresh: true });
+        })
+        .catch((e) => console.error(e));
     }
   };
 
@@ -137,8 +178,10 @@ class Dashboard extends React.Component {
         timestamp: fbFieldValue.serverTimestamp(),
       })
       .then(() => {
+        this.setState({ isNeedRefresh: true });
         this.openInStudio(name);
-      });
+      })
+      .catch((e) => console.error(e));
   };
 
   deleteDoc = (name) => {
@@ -161,15 +204,19 @@ class Dashboard extends React.Component {
         .doc(rightDoc.uid)
         .delete()
         .then(() => {
-          console.log("Deleted");
+          this.setState({ isNeedRefresh: true });
         })
-        .catch((e) => console.log("error deleting", e));
+        .catch((e) => console.error(e));
     }
   };
 
   openInStudio = (name) => {
     var url = "/studio?document=" + name;
     this.setState({ redirect: url });
+  };
+
+  changeIsNeedRefresh = (value) => {
+    this.setState({ isNeedRefresh: value });
   };
 
   render() {
@@ -216,6 +263,8 @@ class Dashboard extends React.Component {
           <div id="dashboard-documents">
             <DocumentsList
               documents={this.state.documents}
+              changeIsNeedRefresh={this.changeIsNeedRefresh}
+              getMoreDocs={this.getMoreDocs}
               saveDocSettings={this.saveDocSettings}
               addDoc={this.addDoc}
               openInStudio={this.openInStudio}
@@ -223,6 +272,9 @@ class Dashboard extends React.Component {
             />
           </div>
         </div>
+        {this.state.isNeedRefresh && (
+          <div className="brp">Reload Dashboard to See Changes</div>
+        )}
       </div>
     ) : (
       <Auth />

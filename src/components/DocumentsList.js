@@ -104,9 +104,7 @@ class DocumentsList extends React.Component {
         onClick={this.addDocPopup}
       >
         <div className="inside-text-container">
-          <div>
-            <span>+</span>
-          </div>
+          <i class="fas fa-plus-circle"></i>
           <h5>Add A Document</h5>
         </div>
       </button>
@@ -160,6 +158,7 @@ class DocumentsList extends React.Component {
         </div>
       );
     }
+    arr.push(<button onClick={this.props.getMoreDocs}>Add More Docs</button>);
     return arr;
   };
 
@@ -168,7 +167,10 @@ class DocumentsList extends React.Component {
     const defaultName = "Untitled" + d.getTime();
     return (
       <div>
+        {/* List of Documents */}
         <div id="documents-list">{this.renderDocs()}</div>
+
+        {/* Edit Documents Popup */}
         {this.state.showEditPopup && (
           <div className="grayed-out-background">
             <div id="edit-document-popup">
@@ -213,6 +215,8 @@ class DocumentsList extends React.Component {
             </div>
           </div>
         )}
+
+        {/* Add Document Popup */}
         {this.state.showAddPopup && (
           <div className="grayed-out-background">
             <div id="addDoc-popup-container">
@@ -278,6 +282,8 @@ class DocumentsList extends React.Component {
             </div>
           </div>
         )}
+
+        {/* Delete Document Popup */}
         {this.state.showDeletePopup && (
           <div className="grayed-out-background">
             <div id="delete-doc-popup">

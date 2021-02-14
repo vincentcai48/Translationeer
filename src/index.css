@@ -848,16 +848,12 @@ footer div {
   align-items: center;
 }
 
-.add-doc-button .inside-text-container div {
-  transition: all 0.2s;
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: grey;
-  position: relative;
+.add-doc-button .inside-text-container i {
+  font-size: 18px;
   margin-right: 10px;
 }
 
+/* 
 .add-doc-button span {
   position: absolute;
   top: 50%;
@@ -870,7 +866,7 @@ footer div {
   display: flex;
   align-items: center;
   justify-content: center;
-}
+} */
 
 .add-doc-button h5 {
   padding: 0;
@@ -1879,7 +1875,7 @@ section.studioDefault-section p {
 
 .docs-col2 {
   box-sizing: border-box;
-  padding: 20px 3%;
+  padding: 20px 5%;
 }
 
 .docs-options {
@@ -1930,6 +1926,35 @@ section.studioDefault-section p {
 .docs-option-primary:hover,
 .docs-option-secondary:hover {
   opacity: 0.7;
+}
+
+.brp {
+  position: fixed;
+  z-index: 100;
+  bottom: 35px;
+  right: 20px;
+
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px black;
+
+  font-size: 20px;
+  color: white;
+  background-color: red;
+  font-weight: bolder;
+
+  transition: all 0.2s;
+  animation: brpAnimate 0.3s;
+}
+
+@keyframes brpAnimate {
+  0% {
+    transform: translateX(-150%);
+  }
+
+  100% {
+    transform: translateX(0px);
+  }
 }
 
 @media (max-width: 992px) {
