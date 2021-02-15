@@ -6,13 +6,14 @@ import Home from "./components/Home.js";
 import Auth from "./components/Auth";
 import { fbFieldValue, pAuth, pFirestore } from "./services/config";
 import Header from "./components/Header";
-import Studio from "./components/Studio";
+import Studio from "./components/studioComponents/Studio";
 import Footer from "./components/Footer";
 import Dashboard from "./components/Dashboard";
 import Account from "./components/Account";
-import Docs from "./components/Docs";
+import Howto from "./components/documentation/Howto";
 import StudioDefault from "./components/studioComponents/studioDefault";
 import NewUser from "./components/NewUser";
+import DocsRoot from "./components/documentation/DocsRoot";
 
 class App extends React.Component {
   constructor() {
@@ -24,18 +25,16 @@ class App extends React.Component {
 
     this.updateLanguage = async (language) => {
       if (!this.state.allApis) await this.getAllApisFromDB();
-      console.log(language);
+
       var arr = []; //array of api objects
       pFirestore
         .collection("languages")
         .doc(language)
         .get()
         .then((doc) => {
-          console.log(this.state.allApis);
           doc.data().apis.forEach((e) => {
             var currentApi = this.state.allApis[e];
             if (currentApi) {
-              console.log(currentApi.enabled);
               if (!currentApi.enabled) currentApi.enabled = false; //for the case that "enabled" is not set, default to disabled
               arr.push(this.state.allApis[e]);
             }
@@ -91,7 +90,6 @@ class App extends React.Component {
       .doc("termsandconditions")
       .get()
       .then((doc) => {
-        console.log(doc.data()["paragraphs"]);
         var newTCArr = [];
         doc.data()["paragraphs"].forEach((element) => {
           newTCArr.push(element);
@@ -103,7 +101,6 @@ class App extends React.Component {
         this.setState({ isAuth: true });
         const thisUserRef = pFirestore.collection("users").doc(user.uid);
         thisUserRef.get().then((doc) => {
-          console.log("GOTDOC", doc.exists);
           //THIS IS JUST TO ADD STARTING DOCUMENT IF USER IS NEW
           if (!doc.exists) {
             this.setState({ newUser: user });
@@ -156,7 +153,7 @@ class App extends React.Component {
     pAuth.currentUser
       .delete()
       .then(this.setState({ newUser: null }))
-      .catch((e) => console.log(e));
+      .catch((e) => console.error(e));
   };
 
   getAllLanguagesFromDB = () => {
@@ -204,30 +201,34 @@ class App extends React.Component {
         <div className="App">
           <Router>
             <Header></Header>
-            <Switch>
-              <Route path="/" exact>
-                <Home />
-              </Route>
-              <Route path="/quicktranslate">
-                <QuickSearch />
-              </Route>
-
-              <Route path="/studio">
-                <Studio />
-              </Route>
-              <Route path="/dashboard">
-                <Dashboard />
-              </Route>
-              <Route path="/account">
-                <Account />
-              </Route>
-              <Route path="/docs">
-                <Docs />
-              </Route>
-              <Route path="/studiodefault">
-                <StudioDefault />
-              </Route>
-            </Switch>
+            <main>
+              <Switch>
+                <Route path="/" exact>
+                  <Home />
+                </Route>
+                <Route path="/quicktranslate">
+                  <QuickSearch />
+                </Route>
+                <Route path="/studio">
+                  <Studio />
+                </Route>
+                <Route path="/dashboard">
+                  <Dashboard />
+                </Route>
+                <Route path="/account">
+                  <Account />
+                </Route>
+                <Route path="/howto">
+                  <Howto />
+                </Route>
+                <Route path="/docs">
+                  <DocsRoot />
+                </Route>
+                <Route path="/studiodefault">
+                  <StudioDefault />
+                </Route>
+              </Switch>
+            </main>
             <Footer />
           </Router>
         </div>

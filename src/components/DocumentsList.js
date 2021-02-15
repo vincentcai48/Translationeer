@@ -23,13 +23,6 @@ class DocumentsList extends React.Component {
     };
   }
 
-  componentDidUpdate() {
-    console.log(this.props.documents);
-  }
-  componentDidMount() {
-    console.log(this.props.documents);
-  }
-
   openInStudio = (e) => {
     if (e.target.name == undefined)
       return this.openInStudio({ target: e.target.parentElement });
@@ -48,7 +41,6 @@ class DocumentsList extends React.Component {
 
   //note here that the "name" property on e.target is the whole document OBJECT, so there is another "name" property on that, hence name.name
   editPopup = (name, color) => {
-    console.log(name, color);
     this.setState({
       showEditPopup: true,
       originalName: name,
@@ -68,7 +60,7 @@ class DocumentsList extends React.Component {
   saveDocSettingsProxy = (defaultName) => {
     var name = this.state.newName;
     if (this.state.newName.length < 1) name = defaultName;
-    console.log(this.state.color);
+
     this.props.saveDocSettings(this.state.originalName, name, this.state.color);
     this.setState({ showEditPopup: false });
   };
@@ -80,7 +72,7 @@ class DocumentsList extends React.Component {
 
     if (name.length < 1 || name.length == undefined)
       name = "Untitled" + d.getTime();
-    console.log("NAME", name);
+
     this.props.addDoc(
       name,
       this.state.color,
@@ -104,9 +96,7 @@ class DocumentsList extends React.Component {
         onClick={this.addDocPopup}
       >
         <div className="inside-text-container">
-          <div>
-            <span>+</span>
-          </div>
+          <i className="fas fa-plus-circle"></i>
           <h5>Add A Document</h5>
         </div>
       </button>
@@ -160,6 +150,11 @@ class DocumentsList extends React.Component {
         </div>
       );
     }
+    arr.push(
+      <button className="paginate-button" onClick={this.props.getMoreDocs}>
+        <i className="fas fa-plus-circle"></i>More Documents
+      </button>
+    );
     return arr;
   };
 
@@ -168,7 +163,10 @@ class DocumentsList extends React.Component {
     const defaultName = "Untitled" + d.getTime();
     return (
       <div>
+        {/* List of Documents */}
         <div id="documents-list">{this.renderDocs()}</div>
+
+        {/* Edit Documents Popup */}
         {this.state.showEditPopup && (
           <div className="grayed-out-background">
             <div id="edit-document-popup">
@@ -213,6 +211,8 @@ class DocumentsList extends React.Component {
             </div>
           </div>
         )}
+
+        {/* Add Document Popup */}
         {this.state.showAddPopup && (
           <div className="grayed-out-background">
             <div id="addDoc-popup-container">
@@ -278,6 +278,8 @@ class DocumentsList extends React.Component {
             </div>
           </div>
         )}
+
+        {/* Delete Document Popup */}
         {this.state.showDeletePopup && (
           <div className="grayed-out-background">
             <div id="delete-doc-popup">

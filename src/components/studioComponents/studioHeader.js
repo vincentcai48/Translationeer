@@ -1,5 +1,4 @@
 import React from "react";
-import Studio from "../Studio";
 import { LangContext } from "../../services/context";
 import { Redirect } from "react-router-dom";
 
@@ -21,7 +20,7 @@ class StudioHeader extends React.Component {
     const rightStudioDOM = document.getElementById("right-studio");
     const min = 30;
     const max = 70;
-    console.log("ismobile", this.context.isMobile);
+
     if (this.context.isMobile) {
       leftStudioDOM.style.width = "100%";
       rightStudioDOM.style.width = "100%";
@@ -54,15 +53,12 @@ class StudioHeader extends React.Component {
 
     if (index != -1) return index;
 
-    //check with last character removed, IF IT is a SPACE
+    //check with last characters removed, if they are excess spaces
+    text = text.replace(/[ |\n]*$/gi, "");
+
     num = 0;
-    if (text.substr(text.length - 1, text.length) == " ") {
-      text = text.substr(0, text.length - 1);
-    }
-    console.log(text);
     this.state.sectionTexts.forEach((e) => {
-      // text = text.replaceAll("\n",this.context.linebreakCode).replaceAll(" \n",this.context.linebreakCode)
-      // console.log(e,text)
+      e = e.replaceAll(this.context.linebreakCode, " ");
       if (e.includes(text)) {
         index = num;
       }
@@ -93,7 +89,7 @@ class StudioHeader extends React.Component {
 
     //HERE IS WHERE YOU ANALYZE HIGHLIGHTED TEXT.
     window.onmouseup = () => {
-      console.log("Selection: ", window.getSelection().toString());
+      // console.log("Selection: ", window.getSelection().toString());
 
       //IMPORTANT: replace all types of line breaks (including carriage) with nothing and all non breaking space &nbsp; with a whitespace. &nbsp; is NOT the same as a whitespace
 
@@ -104,12 +100,10 @@ class StudioHeader extends React.Component {
         .replaceAll(/[\s\u00A0]/gm, " ");
       if (this.state.breakOffText !== selectedText) {
         if (!selectedText) {
-          console.log(selectedText);
           this.setState({
             breakOffText: "",
             breakOffIndex: -1,
           });
-          console.log(this.state.breakOffIndex);
         } else {
           this.setState({
             breakOffIndex: this.breakOffIndex(selectedText),
@@ -133,7 +127,6 @@ class StudioHeader extends React.Component {
   }
 
   breakOff = () => {
-    console.log(this.state.breakOffIndex, this.state.breakOffText);
     this.props.breakOffFunction(
       this.state.breakOffText,
       this.state.breakOffIndex

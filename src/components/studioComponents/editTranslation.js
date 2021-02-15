@@ -36,9 +36,7 @@ function dragElement(elmnt) {
     const docContainer = document.querySelector("#studio-container");
     const docContainerBottom =
       docContainer.offsetTop + docContainer.offsetHeight;
-    console.log(docContainer.offsetTop);
-    console.log(docContainer.offsetHeight);
-    console.log(docContainerBottom);
+
     //+/- 40 because of the 20px translate y
     // if (elmnt.offsetTop - pos2 + elmnt.offsetHeight + 40 > docContainerBottom) {
     //   elmnt.style.top = docContainerBottom - elmnt.offsetHeight - 40 + "px";
@@ -52,12 +50,10 @@ function dragElement(elmnt) {
       elmnt.offsetTop - pos2 + elmnt.offsetHeight >
       document.querySelector("body").offsetHeight
     ) {
-      console.log(elmnt.offsetTop - pos2);
       const lowerBound =
         document.querySelector("body").offsetHeight - elmnt.offsetHeight;
-      console.log("Lower Bounds", lowerBound);
+
       elmnt.style.top = lowerBound + "px";
-      console.log("Then set to: ", elmnt.style.top);
     } else {
       elmnt.style.top = elmnt.offsetTop - pos2 + "px";
     }
@@ -99,7 +95,6 @@ class editTranslation extends React.Component {
       "#edit-translation-container textarea"
     );
     if (document.querySelector("#edit-translation-container textarea")) {
-      console.log("Orginal Translation: ", this.props.originalTranslation);
       document.querySelector(
         "#edit-translation-container textarea"
       ).value = this.props.originalTranslation;
@@ -112,7 +107,6 @@ class editTranslation extends React.Component {
       this.props.changeTranslation(this.props.originalTranslation);
       startingY = this.props.startingY;
       if (document.querySelector("#edit-translation-container textarea")) {
-        console.log("Orginal Translation: ", this.props.originalTranslation);
         document.querySelector(
           "#edit-translation-container textarea"
         ).value = this.props.originalTranslation;
@@ -128,7 +122,7 @@ class editTranslation extends React.Component {
   //     "#edit-translation-container textarea"
   //   );
   //   if (document.querySelector("#edit-translation-container textarea")) {
-  //     console.log("Orginal Translation: ", this.props.originalTranslation);
+  //
   //     document.querySelector(
   //       "#edit-translation-container textarea"
   //     ).value = this.props.originalTranslation;

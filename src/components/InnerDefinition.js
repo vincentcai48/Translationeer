@@ -13,7 +13,6 @@ class InnerDefinition extends React.Component {
   }
 
   componentDidMount() {
-    console.log("Mounting");
     this.fetchDefinition();
   }
 
@@ -29,23 +28,20 @@ class InnerDefinition extends React.Component {
 
   fetchDefinition = async () => {
     var word = validate.replaceChars(this.props.word);
-    var url = 'https://us-central1-translationeer.cloudfunctions.net/app';
+    var url = "https://us-central1-translationeer.cloudfunctions.net/app";
     url += this.props.api.url.replace("{{keyword}}", word);
-    console.log(url);
-    try{
+    try {
       const a = await fetch(url);
-    console.log("***SERVER RETURN***",a);
-    const b = await a.text();
-    console.log("Final Definition" + b);
-    this.setState({ finalDefinition: b });
-    }catch(e){
-      this.setState({finalDefinition: "Error"})
+
+      const b = await a.text();
+
+      this.setState({ finalDefinition: b });
+    } catch (e) {
+      this.setState({ finalDefinition: "Error" });
     }
-    
   };
 
   render() {
-    console.log("WORD: " + this.props.word);
     var link = this.props.api.link
       ? this.props.api.link.replace("{{keyword}}", this.props.word)
       : false;

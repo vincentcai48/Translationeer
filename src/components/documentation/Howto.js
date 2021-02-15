@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { pFirestore } from "../services/config";
+import { pFirestore } from "../../services/config";
 
 function Docs() {
   const [sections, changeSections] = useState([]);
@@ -33,6 +33,7 @@ function Docs() {
   return (
     <div id="how-to-container">
       <h1>Translationeer How To Guide</h1>
+      <div></div>
       <p id="h1-subtext">
         Here is the guide on how to use the Translationeer Platform{" "}
       </p>

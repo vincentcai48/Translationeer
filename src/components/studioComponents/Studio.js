@@ -1,15 +1,15 @@
 import React from "react";
-import { pAuth, pFirestore, fbFieldValue } from "../services/config";
-import Auth from "./Auth";
-import { LangContext } from "../services/context";
-import Slider from "./studioComponents/slider";
-import LeftStudio from "./studioComponents/leftStudio";
-import RightStudio from "./studioComponents/rightStudio";
-import EditTranslation from "./studioComponents/editTranslation";
-import StudioHeader from "./studioComponents/studioHeader";
-import Loading from "./Loading";
-import DocumentsList from "./DocumentsList";
-import StudioDefault from "./studioComponents/studioDefault";
+import { pAuth, pFirestore, fbFieldValue } from "../../services/config";
+import Auth from "../Auth";
+import { LangContext } from "../../services/context";
+import Slider from "./slider";
+import LeftStudio from "./leftStudio";
+import RightStudio from "./rightStudio";
+import EditTranslation from "./editTranslation";
+import StudioHeader from "./studioHeader";
+import Loading from "../Loading";
+import DocumentsList from "../DocumentsList";
+import StudioDefault from "./studioDefault";
 import { Redirect, browserHistory, Link } from "react-router-dom";
 import { Beforeunload } from "react-beforeunload";
 
@@ -68,7 +68,6 @@ class Studio extends React.Component {
             var arr = [];
 
             docs.forEach((d) => {
-              //console.log(d.data());
               arr.push({ ...d.data(), uid: d.id });
             });
 
@@ -121,7 +120,7 @@ class Studio extends React.Component {
   setTranslation = () => {
     // var docs = this.state.documents;
     // docs[section].translation = translation;
-    console.log("DOC BEFORE TRANSLATION", this.state.currentDoc);
+
     var thisDoc = this.state.currentDoc;
     thisDoc.body[
       this.state.currentSection
@@ -129,19 +128,16 @@ class Studio extends React.Component {
       /\n/g,
       this.context.linebreakCode
     );
-    console.log("DOC with NEW TRANSLATION:", thisDoc);
+
     this.setState({ currentSection: -1, currentDoc: thisDoc });
     this.saveAll();
   };
 
   breakOffText = (text, section) => {
-    console.log("TEXT:" + text, "Section:" + section);
     // if (this.state.currentDoc.body[section].text.indexOf(text) > -1) {
     const sectionObj = this.state.currentDoc.body[section];
     const textWithLB = sectionObj.text;
     var textNoLB = "";
-    console.log("Section Text:" + textWithLB);
-    console.log("NO LB:" + textNoLB);
 
     //Step 1: split doc by linebreak, into an array.
     var linebrakeDivides = textWithLB.split(this.context.linebreakCode);
@@ -149,20 +145,17 @@ class Studio extends React.Component {
     //Step 2: make an array of linebreak indices, and fill out a No-linebreak-text (textNoLB)
     var linebreakIndices = []; //indices with a linebreak BEFORE
     var indexCount = 0;
-    console.log("Linebreak divided:" + linebrakeDivides);
+
     linebrakeDivides.forEach((a) => {
       indexCount += a.length + 1; //because of the space
       textNoLB += a + " ";
       linebreakIndices.push(indexCount);
     });
     linebreakIndices.sort();
-    console.log("Linebreak Indices" + linebreakIndices);
-    console.log("NO LB:" + textNoLB);
 
     //Step 3: find start and end index in the no linebreak text
     var startingIndex = textNoLB.indexOf(text);
     var endingIndex = startingIndex + text.length;
-    console.log("Start: " + startingIndex + " End: " + endingIndex);
 
     //Step 4: then modify these start and end indices based on how many linebreaks come before it.
     var countBeforeStart = 0; //# of linebreaks before starting index
@@ -172,17 +165,11 @@ class Studio extends React.Component {
       if (i <= startingIndex) countBeforeStart++;
       if (i <= endingIndex) countBeforeEnd++;
     });
-    console.log(
-      "BeforeStart: " + countBeforeStart + " BeforeEnd: " + countBeforeEnd
-    );
 
     const linebreakCodeLength = this.context.linebreakCode.length - 1; //IMPORTANT: Minus one because in the text, a linebreak is represented by a space " " character, so it only adds more characters if the sequence is more than 1 character long.
-    console.log("libreakCodeLnegth" + linebreakCodeLength);
 
     startingIndex += countBeforeStart * linebreakCodeLength;
     endingIndex += countBeforeEnd * linebreakCodeLength;
-    console.log("New Start: " + startingIndex + " New End:" + endingIndex);
-    console.log(endingIndex, sectionObj.text.length);
 
     //Step 5: Proceed by splitting the section up, now that you have the starting and ending indices, taking linebreak escape sequences into account.
     var newArr = [
@@ -204,7 +191,6 @@ class Studio extends React.Component {
 
     //Case 1: the middle section is degenerate (merge into last)
     if (this.isDegenerate(newArr[1].text)) {
-      console.log("Middle is degnerate, merging");
       var holdText = newArr[1].text;
       newArr[newArr.length - 1].text =
         holdText + newArr[newArr.length - 1].text;
@@ -213,7 +199,6 @@ class Studio extends React.Component {
 
     //Case 2: the first section is degenerate (merge into second)
     if (this.isDegenerate(newArr[0].text)) {
-      console.log("First is degenerate, merging");
       var holdText = newArr[0].text;
       newArr[1].text = holdText + newArr[1].text;
       newArr.splice(0, 1);
@@ -224,7 +209,6 @@ class Studio extends React.Component {
       this.isDegenerate(newArr[newArr.length - 1].text) &&
       newArr.length >= 2
     ) {
-      console.log("last is degenerate, merging");
       var holdText = newArr[newArr.length - 1].text;
       newArr[newArr.length - 2].text =
         holdText + newArr[newArr.length - 2].text;
@@ -283,7 +267,7 @@ class Studio extends React.Component {
     if (this.state.currentDoc) {
       var newDoc = this.state.currentDoc;
       newDoc.body.splice(section, 1);
-      console.log("NEWDOC---------------------", newDoc);
+
       this.setState({ currentDoc: newDoc });
       this.saveAll();
     }
@@ -377,7 +361,6 @@ class Studio extends React.Component {
   };
 
   addDoc = (name, color, text) => {
-    console.log("ADDING DOCS!!!!");
     pFirestore
       .collection("users")
       .doc(pAuth.currentUser.uid)
@@ -412,7 +395,7 @@ class Studio extends React.Component {
         .then(() => {
           console.log("Deleted");
         })
-        .catch((e) => console.log("error deleting", e));
+        .catch((e) => console.error("error deleting", e));
     }
   };
 
@@ -503,7 +486,6 @@ class Studio extends React.Component {
                 cancelEdit={() => this.setState({ currentSection: -1 })}
                 changeTranslation={(t) => {
                   this.setState({ translation: t, isSaved: false });
-                  console.log(this.state.translation);
                 }}
                 translation={this.state.translation}
                 originalTranslation={

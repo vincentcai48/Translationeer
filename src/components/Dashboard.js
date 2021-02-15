@@ -13,6 +13,10 @@ class Dashboard extends React.Component {
       selection: 0, //a number for what to view, 0: documents
       documents: [], //all the documents that user has. Same as in the "Studio.js" component
       redirect: false,
+      limit: 15, //the amount of documents you can get at one time
+      lastDoc: {},
+      isLoading: false,
+      isNeedRefresh: false,
     };
   }
 
@@ -20,24 +24,61 @@ class Dashboard extends React.Component {
     pAuth.onAuthStateChanged((user) => {
       this.setState({ isAuth: true });
       if (user) {
-        pFirestore
-          .collection("users")
-          .doc(pAuth.currentUser.uid)
-          .collection("documents")
-          .orderBy("timestamp", "desc")
-          .onSnapshot((docs) => {
-            var arr = [];
-            docs.forEach((d) => {
-              arr.push({ ...d.data(), uid: d.id });
-            });
-            console.log(arr);
-            this.setState({ documents: arr });
-          });
+        this.getNewDocs();
       } else {
         this.setState({ isAuth: false });
       }
     });
   }
+
+  //Used on the first time, or when refreshed
+  getNewDocs = () => {
+    pFirestore
+      .collection("users")
+      .doc(pAuth.currentUser.uid)
+      .collection("documents")
+      .orderBy("timestamp", "desc")
+      .limit(this.state.limit)
+      .get()
+      .then((res) => {
+        var arr = [];
+        res.forEach((d) => {
+          arr.push({ ...d.data(), uid: d.id });
+        });
+        this.setState({
+          documents: arr,
+          lastDoc: res.docs[res.docs.length - 1],
+          isNeedRefresh: false,
+        });
+      });
+  };
+
+  //Firebase Pagination
+  getMoreDocs = async () => {
+    this.setState({ isLoading: true });
+    if (!this.state.lastDoc) return;
+    var query = pFirestore
+      .collection("users")
+      .doc(pAuth.currentUser.uid)
+      .collection("documents")
+      .orderBy("timestamp", "desc")
+      .startAfter(this.state.lastDoc)
+      .limit(this.state.limit);
+    try {
+      var res = await query.get();
+      var arr = [];
+      res.forEach((d) => arr.push({ ...d.data(), uid: d.id }));
+      this.setState((p) => {
+        return {
+          documents: [...p.documents, ...arr],
+          lastDoc: res.docs[res.docs.length - 1],
+          isLoading: false,
+        };
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   componentDidUpdate() {
     if (this.context.isJustCreatedUser) {
@@ -49,12 +90,14 @@ class Dashboard extends React.Component {
             .doc(pAuth.currentUser.uid)
             .collection("documents")
             .orderBy("timestamp", "desc")
-            .onSnapshot((docs) => {
+            .limit(this.state.limit)
+            .get()
+            .then((docs) => {
               var arr = [];
               docs.forEach((d) => {
                 arr.push({ ...d.data(), uid: d.id });
               });
-              console.log(arr);
+
               this.setState({ documents: arr });
             });
         } else {
@@ -69,7 +112,8 @@ class Dashboard extends React.Component {
     var rightDoc = {};
     this.state.documents.forEach((doc) => {
       if (doc.name == name) {
-        rightDoc = doc;
+        /*IMPORTANT: This line changes whether the doc gets updated by value or reference, if you set it directly equal, it will still update realtime, even without a live snapshot from firestore. However, if you make a clone with this spread syntax, it will not update. This behavior is more "consistent", but less "live"*/
+        rightDoc = { ...doc };
       }
     });
     //Make sure name is unique, otherwise just use the original name.
@@ -86,26 +130,25 @@ class Dashboard extends React.Component {
     // if (!isUnique) return;
 
     //then set the new properties
-    console.log(newColor);
     rightDoc.name = newName;
     rightDoc.color = newColor;
     rightDoc.timestamp = fbFieldValue.serverTimestamp();
-    console.log(rightDoc.timestamp);
-    console.log(typeof rightDoc.timestamp);
     var docid = rightDoc.uid;
-    console.log("Going Into Firestore:", rightDoc);
     if (pAuth.currentUser) {
       pFirestore
         .collection("users")
         .doc(pAuth.currentUser.uid)
         .collection("documents")
         .doc(docid)
-        .update(rightDoc);
+        .update(rightDoc)
+        .then(() => {
+          this.setState({ isNeedRefresh: true });
+        })
+        .catch((e) => console.error(e));
     }
   };
 
   addDoc = (name, color, text, divideByLB) => {
-    console.log("ADDING DOCS!!!!");
     var body = {};
     if (divideByLB) {
       var bodyDividedByLineBreak = text.split("\n").map((t) => {
@@ -137,20 +180,22 @@ class Dashboard extends React.Component {
         timestamp: fbFieldValue.serverTimestamp(),
       })
       .then(() => {
+        this.setState({ isNeedRefresh: true });
         this.openInStudio(name);
-      });
+      })
+      .catch((e) => console.error(e));
   };
 
   deleteDoc = (name) => {
     //get the right doc based on name,
-    console.log(name);
+
     var rightDoc = null;
     this.state.documents.forEach((doc) => {
       if (doc.name == name) {
         rightDoc = doc;
       }
     });
-    console.log(rightDoc);
+
     if (rightDoc == null) return;
     //then do the delete. Note: don't worry about the uid not being there, although it is not created in addDoc(), it will be added in this.state.documents in componentDidMount().
     if (pAuth.currentUser) {
@@ -161,15 +206,19 @@ class Dashboard extends React.Component {
         .doc(rightDoc.uid)
         .delete()
         .then(() => {
-          console.log("Deleted");
+          this.setState({ isNeedRefresh: true });
         })
-        .catch((e) => console.log("error deleting", e));
+        .catch((e) => console.error(e));
     }
   };
 
   openInStudio = (name) => {
     var url = "/studio?document=" + name;
     this.setState({ redirect: url });
+  };
+
+  changeIsNeedRefresh = (value) => {
+    this.setState({ isNeedRefresh: value });
   };
 
   render() {
@@ -216,6 +265,8 @@ class Dashboard extends React.Component {
           <div id="dashboard-documents">
             <DocumentsList
               documents={this.state.documents}
+              changeIsNeedRefresh={this.changeIsNeedRefresh}
+              getMoreDocs={this.getMoreDocs}
               saveDocSettings={this.saveDocSettings}
               addDoc={this.addDoc}
               openInStudio={this.openInStudio}
@@ -223,6 +274,15 @@ class Dashboard extends React.Component {
             />
           </div>
         </div>
+        {this.state.isNeedRefresh && (
+          <div className="brp">
+            Reload Dashboard to See Changes
+            <button
+              onClick={this.getNewDocs}
+              className="fas fa-redo-alt"
+            ></button>
+          </div>
+        )}
       </div>
     ) : (
       <Auth />

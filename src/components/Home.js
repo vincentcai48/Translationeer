@@ -3,6 +3,7 @@ import QuickSearch from "./QuickSearch";
 import jumbotronImage from "../images/jumbotron.png";
 import phoneJumbotronImage from "../images/phone-jumbotron.PNG";
 import { Link } from "react-router-dom";
+import { parser } from "../services/react-custom-markdown/mdparser";
 
 class Home extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class Home extends React.Component {
 
   render() {
     console.log(window.outerWidth);
+    var markdown = parser("# Hello");
     return this.state.isSearched ? (
       <QuickSearch
         query={this.state.query || "No Text Supplied"}
@@ -76,7 +78,7 @@ class Home extends React.Component {
             <Link to="/studiodefault" className="arrow-button home-link">
               Go to Studio<span>{">>>"}</span>
             </Link>
-            <Link to="/docs" className="arrow-button home-link">
+            <Link to="/howto" className="arrow-button home-link">
               How To Guide<span>{">>>"}</span>
             </Link>
           </div>

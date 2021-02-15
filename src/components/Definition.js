@@ -52,9 +52,6 @@ function dragElement(elmnt) {
     const docContainer = document.querySelector("#docContainer");
     const docContainerBottom =
       docContainer.offsetTop + docContainer.offsetHeight;
-    console.log(docContainer.offsetTop);
-    console.log(docContainer.offsetHeight);
-    console.log(docContainerBottom);
     //+/- 40 because of the 20px translate y
     // if (elmnt.offsetTop - pos2 + elmnt.offsetHeight + 40 > docContainerBottom) {
     //   elmnt.style.top = docContainerBottom - elmnt.offsetHeight - 40 + "px";
@@ -68,12 +65,10 @@ function dragElement(elmnt) {
       elmnt.offsetTop - pos2 + elmnt.offsetHeight >
       document.querySelector("body").offsetHeight
     ) {
-      console.log(elmnt.offsetTop - pos2);
       const lowerBound =
         document.querySelector("body").offsetHeight - elmnt.offsetHeight;
-      console.log("Lower Bounds", lowerBound);
+
       elmnt.style.top = lowerBound + "px";
-      console.log("Then set to: ", elmnt.style.top);
     } else {
       elmnt.style.top = elmnt.offsetTop - pos2 + "px";
     }
@@ -90,7 +85,6 @@ function dragElement(elmnt) {
 var isOutOfViewport = function (elem, textEnd) {
   // Get element's bounding
   var bounding = elem.getBoundingClientRect();
-  console.log(bounding);
 
   // Check if it's out of the viewport on each side
   var out = {};
@@ -101,8 +95,6 @@ var isOutOfViewport = function (elem, textEnd) {
     (window.innerHeight || document.documentElement.clientHeight);
   out.right =
     bounding.right > (textEnd || document.documentElement.clientWidth);
-  console.log(bounding.right);
-  console.log(window.innerWidth);
   out.any = out.top || out.left || out.bottom || out.right;
   out.all = out.top && out.left && out.bottom && out.right;
 
@@ -147,7 +139,6 @@ class Definition extends React.Component {
     const xVar = x;
     const yVar = y;
     if (document.getElementById("definition-container")) {
-      console.log(document.getElementById("definition-container"));
       const defElement = document.getElementById("definition-container");
       defElement.style.top = yVar + 20 + "px";
       defElement.style.left = xVar - defElement.offsetWidth * 0.5 + "px";
@@ -155,11 +146,9 @@ class Definition extends React.Component {
         document.querySelector("body").offsetHeight - defElement.offsetHeight;
       if (defElement.offsetTop > lowerBound) {
         defElement.style.top = lowerBound + "px";
-        console.log("Then set to: ", defElement.style.top);
       }
       var isOut = isOutOfViewport(defElement, this.context.textEnd);
       if (isOut.left) defElement.style.left = "0px";
-      console.log(isOut);
     }
   };
 
@@ -176,7 +165,6 @@ class Definition extends React.Component {
   };
 
   dragStart = (e) => {
-    console.log(e);
     this.setState({
       diffX:
         e.screenX -
@@ -191,9 +179,7 @@ class Definition extends React.Component {
   dragging = (e) => {
     if (this.state.dragging && !this.state.isEditing) {
       var x = e.screenX - this.state.diffX;
-      console.log(x);
       var y = e.screenY - this.state.diffY;
-      console.log(y);
       this.setState({
         styles: {
           top: y,
@@ -269,7 +255,7 @@ class Definition extends React.Component {
   changeSearch = () => {
     this.setState((p) => {
       var nextWord = p.inputWord;
-      console.log(nextWord);
+
       return {
         word: nextWord,
         isEditing: false,
