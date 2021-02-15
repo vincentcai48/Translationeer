@@ -8,7 +8,7 @@ class Account extends React.Component {
     pAuth
       .signOut()
       .then(console.log("Logout Success"))
-      .catch((e) => console.log("Logout Error", e));
+      .catch((e) => console.error("Logout Error", e));
   };
 
   render() {

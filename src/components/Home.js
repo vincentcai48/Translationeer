@@ -29,14 +29,14 @@ class Home extends React.Component {
 
   render() {
     console.log(window.outerWidth);
-    var markdown = parser("# Hello")
+    var markdown = parser("# Hello");
     return this.state.isSearched ? (
       <QuickSearch
         query={this.state.query || "No Text Supplied"}
         unSearch={this.unSearch}
       />
     ) : (
-      <div>   
+      <div>
         <div id="jumbotron">
           <img
             src={window.outerWidth > 600 ? jumbotronImage : phoneJumbotronImage}
@@ -78,7 +78,7 @@ class Home extends React.Component {
             <Link to="/studiodefault" className="arrow-button home-link">
               Go to Studio<span>{">>>"}</span>
             </Link>
-            <Link to="/docs" className="arrow-button home-link">
+            <Link to="/howto" className="arrow-button home-link">
               How To Guide<span>{">>>"}</span>
             </Link>
           </div>

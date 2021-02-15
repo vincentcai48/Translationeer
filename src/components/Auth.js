@@ -20,19 +20,18 @@ class Auth extends React.Component {
       })
       .catch((e) => {
         console.log("!!!------ERROR AUTHENTICATING------!!!");
-        console.log(e);
+        console.error(e);
       });
   };
 
   logout = () => {
-    console.log("Logout");
     pAuth
       .signOut()
       .then(() => {
         console.log("Sign Out Successful");
         this.setState({ isAuth: true });
       })
-      .catch((e) => console.log("Sign Out Error"));
+      .catch((e) => console.error("Sign Out Error"));
   };
 
   // <form id="login-form">

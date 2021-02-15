@@ -53,7 +53,6 @@ class WordList extends React.Component {
       // }
       // if(allWords[allWords.length-1]=="") allWords.pop();
       var arr = e.split(this.context.linebreakCode);
-      console.log(arr);
       arr.forEach((w) => {
         allWords.push(<SingleWord word={w} setWord={this.props.setWord} />);
         allWords.push(<div className="break"></div>);

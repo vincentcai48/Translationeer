@@ -13,7 +13,6 @@ class DocContainer extends React.Component {
   }
 
   setWord = (word) => {
-    console.log("SetWord()");
     this.setState({ currentWord: word });
   };
 
@@ -26,7 +25,6 @@ class DocContainer extends React.Component {
   };
 
   render() {
-    console.log(this.state.currentWord);
     // if(this.state.currentWord == null){
     //     this.setState({currentWord: })
     // }

@@ -16,7 +16,6 @@ class QuickSearch extends React.Component {
   }
 
   componentDidMount() {
-    console.log(this.props.query);
     if (this.props.query) {
       this.setState({ query: this.props.query });
       this.submit();

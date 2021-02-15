@@ -41,8 +41,7 @@ class Header extends React.Component {
       .signInWithPopup(googleAuthProvider)
       .then((result) => {})
       .catch((e) => {
-        console.log("!!!------ERROR AUTHENTICATING------!!!");
-        console.log(e);
+        console.error(e);
       });
   };
 
@@ -56,7 +55,6 @@ class Header extends React.Component {
       e.target.tagName == "BUTTON"
         ? e.target.name
         : e.target.parentElement.name;
-    console.log(originalApis);
     var index = 0;
     var rightIndex = 0;
     originalApis.forEach((element) => {
@@ -95,7 +93,6 @@ class Header extends React.Component {
   renderServiceOptions = () => {
     var arr = [];
     var allServices = this.context.apis;
-    console.log(allServices);
     for (var i = 0; i < allServices.length; i++) {
       arr.push(
         <li>
@@ -110,7 +107,6 @@ class Header extends React.Component {
         </li>
       );
     }
-    console.log(arr);
     return arr;
   };
 

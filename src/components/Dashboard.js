@@ -97,7 +97,7 @@ class Dashboard extends React.Component {
               docs.forEach((d) => {
                 arr.push({ ...d.data(), uid: d.id });
               });
-              console.log(arr);
+
               this.setState({ documents: arr });
             });
         } else {
@@ -149,7 +149,6 @@ class Dashboard extends React.Component {
   };
 
   addDoc = (name, color, text, divideByLB) => {
-    console.log("ADDING DOCS!!!!");
     var body = {};
     if (divideByLB) {
       var bodyDividedByLineBreak = text.split("\n").map((t) => {
@@ -189,14 +188,14 @@ class Dashboard extends React.Component {
 
   deleteDoc = (name) => {
     //get the right doc based on name,
-    console.log(name);
+
     var rightDoc = null;
     this.state.documents.forEach((doc) => {
       if (doc.name == name) {
         rightDoc = doc;
       }
     });
-    console.log(rightDoc);
+
     if (rightDoc == null) return;
     //then do the delete. Note: don't worry about the uid not being there, although it is not created in addDoc(), it will be added in this.state.documents in componentDidMount().
     if (pAuth.currentUser) {

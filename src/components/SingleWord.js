@@ -8,9 +8,9 @@ class SingleWord extends React.Component {
     this.state = {};
   }
 
-  componentDidUpdate(prevProps){
-    if(prevProps.word!=this.props.word){
-      console.log(prevProps.word,this.props.word)
+  componentDidUpdate(prevProps) {
+    if (prevProps.word != this.props.word) {
+      // console.log(prevProps.word,this.props.word)
     }
   }
 
@@ -20,7 +20,6 @@ class SingleWord extends React.Component {
         <span
           className="singleWord"
           onClick={() => {
-            console.log("Clicked");
             this.props.setWord(this.props.word);
           }}
         >
