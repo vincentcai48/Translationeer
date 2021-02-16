@@ -181,7 +181,7 @@ class Dashboard extends React.Component {
       })
       .then(() => {
         this.setState({ isNeedRefresh: true });
-        this.openInStudio(name);
+        this.openInStudio(name, pAuth.currentUser.uid);
       })
       .catch((e) => console.error(e));
   };
@@ -212,8 +212,8 @@ class Dashboard extends React.Component {
     }
   };
 
-  openInStudio = (name) => {
-    var url = "/studio?document=" + name;
+  openInStudio = (docID, userID) => {
+    var url = "/studio?document=" + docID + "&user=" + userID;
     this.setState({ redirect: url });
   };
 

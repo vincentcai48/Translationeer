@@ -39,42 +39,45 @@ class Studio extends React.Component {
     super();
     this.state = {
       documents: [],
-      currentDoc: null,
+      currentDoc: null, //the full object of the document, from firebase (aka doc.data())
       currentSection: -1,
       loading: false,
       redirect: false,
       translation: "", //what is in the edit translation text area
       isSaved: true,
+      docId: "", //the document ID in firebase
+      userId: "", //the user ID's collection in which it is in firebase.
     };
   }
 
   componentWillMount() {
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("document")) {
-      this.setCurrentDoc(urlParams.get("document"));
-    }
+    // const urlParams = new URLSearchParams(window.location.search);
+    // if (urlParams.has("document")) {
+    //   this.setCurrentDoc(urlParams.get("document"));
+    // }
   }
 
   componentDidMount() {
     var newThis = this;
     pAuth.onAuthStateChanged((user) => {
       if (user) {
-        pFirestore
-          .collection("users")
-          .doc(pAuth.currentUser.uid)
-          .collection("documents")
-          .orderBy("timestamp", "desc")
-          .onSnapshot((docs) => {
-            var arr = [];
+        this.checkURLParams();
+        // pFirestore
+        //   .collection("users")
+        //   .doc(pAuth.currentUser.uid)
+        //   .collection("documents")
+        //   .orderBy("timestamp", "desc")
+        //   .onSnapshot((docs) => {
+        //     var arr = [];
 
-            docs.forEach((d) => {
-              arr.push({ ...d.data(), uid: d.id });
-            });
+        //     docs.forEach((d) => {
+        //       arr.push({ ...d.data(), uid: d.id });
+        //     });
 
-            this.setState({ documents: arr });
-            //make sure to check URL Params
-            this.checkURLParams();
-          });
+        //     this.setState({ documents: arr });
+        //     //make sure to check URL Params
+
+        //   });
       }
     });
 
@@ -93,21 +96,26 @@ class Studio extends React.Component {
   checkURLParams = () => {
     //checking if there is url param. if so, then automatically open a specific document.
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has("document")) {
-      this.setCurrentDoc(urlParams.get("document"));
+    if (urlParams.has("document") && urlParams.has("user")) {
+      var userId = urlParams.get("user");
+      var docId = urlParams.get("document");
+      this.setCurrentDoc(docId, userId);
+      this.setState({
+        userId: userId,
+        docId: docId,
+      });
     }
   };
 
-  setCurrentDoc = (name) => {
-    var rightDoc = null;
-    this.state.documents.forEach((doc) => {
-      if (doc.name == name) {
-        rightDoc = doc;
-      }
-    });
-
+  setCurrentDoc = async (docId, userId) => {
+    var query = pFirestore
+      .collection("users")
+      .doc(userId)
+      .collection("documents")
+      .doc(docId);
+    var res = await query.get();
     this.setState({
-      currentDoc: rightDoc,
+      currentDoc: { ...res.data(), uid: res.id },
     });
   };
 
@@ -118,9 +126,6 @@ class Studio extends React.Component {
 
   //changes the translation of "currentSection" to that of "translation" (both in state)
   setTranslation = () => {
-    // var docs = this.state.documents;
-    // docs[section].translation = translation;
-
     var thisDoc = this.state.currentDoc;
     thisDoc.body[
       this.state.currentSection
@@ -307,97 +312,99 @@ class Studio extends React.Component {
 
   saveAll = async () => {
     this.setState({ loading: true });
-    var thisDoc = this.state.currentDoc;
+    var thisDoc = { ...this.state.currentDoc };
     thisDoc.timestamp = fbFieldValue.serverTimestamp();
-    var docid = this.state.currentDoc.uid;
-
     if (pAuth.currentUser) {
       await pFirestore
         .collection("users")
-        .doc(pAuth.currentUser.uid)
+        .doc(this.state.userId)
         .collection("documents")
-        .doc(docid)
+        .doc(this.state.docId)
         .update(thisDoc);
     }
     this.setState({ loading: false, isSaved: true });
   };
 
   /**These three functions to save doc settings, add a new doc, and delete a doc. are just copy and pasted from the dashbaord, and do the exact same thing. */
-  saveDocSettings = (name, newName, newColor) => {
-    //get the right doc based on name,
-    var rightDoc = {};
-    this.state.documents.forEach((doc) => {
-      if (doc.name == name) {
-        rightDoc = doc;
-      }
-    });
-    //Make sure name is unique, otherwise just use the original name.
-    // var isUnique = true;
-    this.state.documents.forEach((doc) => {
-      if (doc.name == newName) {
-        newName = name;
-        // var d = new Date();
-        // var uniqueName = newName + " " + d.getTime();
-        // isUnique = false;
-        // this.saveDocSettings(name, uniqueName, newColor);
-      }
-    });
-    // if (!isUnique) return;
 
-    //then set the new properties
-    rightDoc.name = newName;
-    rightDoc.color = newColor;
-    rightDoc.timestamp = fbFieldValue.serverTimestamp();
+  // saveDocSettings = (name, newName, newColor) => {
+  //   //get the right doc based on name,
+  //   // var rightDoc = {};
+  //   // this.state.documents.forEach((doc) => {
+  //   //   if (doc.name == name) {
+  //   //     rightDoc = doc;
+  //   //   }
+  //   // });
+  //   // //Make sure name is unique, otherwise just use the original name.
+  //   // // var isUnique = true;
+  //   // this.state.documents.forEach((doc) => {
+  //   //   if (doc.name == newName) {
+  //   //     newName = name;
+  //   //     // var d = new Date();
+  //   //     // var uniqueName = newName + " " + d.getTime();
+  //   //     // isUnique = false;
+  //   //     // this.saveDocSettings(name, uniqueName, newColor);
+  //   //   }
+  //   // });
+  //   // if (!isUnique) return;
 
-    var docid = rightDoc.uid;
-    if (pAuth.currentUser) {
-      pFirestore
-        .collection("users")
-        .doc(pAuth.currentUser.uid)
-        .collection("documents")
-        .doc(docid)
-        .update(rightDoc);
-    }
-  };
+  //   var rightDoc = this.state.currentDoc;
 
-  addDoc = (name, color, text) => {
-    pFirestore
-      .collection("users")
-      .doc(pAuth.currentUser.uid)
-      .collection("documents")
-      .add({
-        name: name,
-        color: color,
-        body: [{ text: text, translation: this.context.defaultText }],
-        timestamp: fbFieldValue.serverTimestamp(),
-      })
-      .then(() => {
-        this.openInStudio(name);
-      });
-  };
+  //   //then set the new properties
+  //   rightDoc.name = newName;
+  //   rightDoc.color = newColor;
+  //   rightDoc.timestamp = fbFieldValue.serverTimestamp();
 
-  deleteDoc = (name) => {
-    //get the right doc based on name,
-    var rightDoc = {};
-    this.state.documents.forEach((doc) => {
-      if (doc.name == name) {
-        rightDoc = doc;
-      }
-    });
-    //then do the delete. Note: don't worry about the uid not being there, although it is not created in addDoc(), it will be added in this.state.documents in componentDidMount().
-    if (pAuth.currentUser) {
-      pFirestore
-        .collection("users")
-        .doc(pAuth.currentUser.uid)
-        .collection("documents")
-        .doc(rightDoc.uid)
-        .delete()
-        .then(() => {
-          console.log("Deleted");
-        })
-        .catch((e) => console.error("error deleting", e));
-    }
-  };
+  //   var docid = rightDoc.uid;
+  //   if (pAuth.currentUser) {
+  //     pFirestore
+  //       .collection("users")
+  //       .doc(pAuth.currentUser.uid)
+  //       .collection("documents")
+  //       .doc(docid)
+  //       .update(rightDoc);
+  //   }
+  // };
+
+  // addDoc = (name, color, text) => {
+  //   pFirestore
+  //     .collection("users")
+  //     .doc(pAuth.currentUser.uid)
+  //     .collection("documents")
+  //     .add({
+  //       name: name,
+  //       color: color,
+  //       body: [{ text: text, translation: this.context.defaultText }],
+  //       timestamp: fbFieldValue.serverTimestamp(),
+  //     })
+  //     .then(() => {
+  //       this.openInStudio(name);
+  //     });
+  // };
+
+  // deleteDoc = (name) => {
+  //   // //get the right doc based on name,
+  //   // var rightDoc = {};
+  //   // this.state.documents.forEach((doc) => {
+  //   //   if (doc.name == name) {
+  //   //     rightDoc = doc;
+  //   //   }
+  //   // });
+  //   var rightDoc = this.state.currentDoc;
+  //   //then do the delete. Note: don't worry about the uid not being there, although it is not created in addDoc(), it will be added in this.state.documents in componentDidMount().
+  //   if (pAuth.currentUser) {
+  //     pFirestore
+  //       .collection("users")
+  //       .doc(pAuth.currentUser.uid)
+  //       .collection("documents")
+  //       .doc(rightDoc.uid)
+  //       .delete()
+  //       .then(() => {
+  //         console.log("Deleted");
+  //       })
+  //       .catch((e) => console.error("error deleting", e));
+  //   }
+  // };
 
   openInStudio = (name) => {
     this.setCurrentDoc(name);
@@ -509,75 +516,3 @@ class Studio extends React.Component {
 Studio.contextType = LangContext;
 
 export default Studio;
-
-/**<h1
-          id="studio-h1"
-          style={
-            !this.state.currentDoc
-              ? {
-                  backgroundColor: "var(--scd)",
-                  fontSize: "50px",
-                  boxShadow: "0px 3px 5px #121212",
-                }
-              : {}
-          }
-        >
-          {this.state.currentDoc && (
-            <i
-              className="fas fa-file-alt doc-icon"
-              style={{
-                color: this.state.currentDoc.color || "var(--pc)",
-              }}
-            ></i>
-          )}
-          {this.state.currentDoc ? this.state.currentDoc.name : "Studio"}
-          {!this.state.currentDoc && (
-            <div>
-              <p>
-                All of Translationeer's powerful learning tools in one place
-              </p>
-              <Link to="/docs" className="studio-manual-link arrow-button">
-                Learn how to use Translationeer Studio<span>{">>>"}</span>
-              </Link>
-            </div>
-          )}
-        </h1> 
-        
-        
-        ) : (
-            <div>
-              <h3 className="choose-doc">
-                Choose a Document to Open in Translationeer Studio:{" "}
-              </h3>
-              <DocumentsList
-                documents={this.state.documents}
-                addDoc={this.addDoc}
-                saveDocSettings={this.saveDocSettings}
-                openInStudio={this.openInStudio}
-                deleteDoc={this.deleteDoc}
-              />
-            </div>
-          )}
-        
-        */
-
-/**<ul>
-              {this.state.documents.map((e) => (
-                <li>
-                  <button
-                    type="button"
-                    onClick={this.setCurrentDoc}
-                    name={e.name}
-                  >
-                    {e.name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-
-
-            {this.state.currentSection > -1 && (
-          <h2>Section{this.state.currentSection + 1}</h2>
-        )}
-            
-            */

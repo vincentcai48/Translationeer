@@ -1,4 +1,5 @@
 import React from "react";
+import { pAuth } from "../services/config";
 import { LangContext } from "../services/context";
 
 /*PROPS: 
@@ -26,7 +27,7 @@ class DocumentsList extends React.Component {
   openInStudio = (e) => {
     if (e.target.name == undefined)
       return this.openInStudio({ target: e.target.parentElement });
-    this.props.openInStudio(e.target.name); // the uid of the document is e.target.name
+    this.props.openInStudio(e.target.name,pAuth.currentUser.uid); // the uid of the document is e.target.name
   };
 
   changeState = (e) => {
