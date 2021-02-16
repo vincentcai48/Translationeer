@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
       selection: 0, //a number for what to view, 0: documents
       documents: [], //all the documents that user has. Same as in the "Studio.js" component
       redirect: false,
-      limit: 15, //the amount of documents you can get at one time
+      limit: 10, //the amount of documents you can get at one time
       lastDoc: {},
       isLoading: false,
       isNeedRefresh: false,

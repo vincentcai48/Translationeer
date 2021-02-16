@@ -26,7 +26,7 @@ class DocumentsList extends React.Component {
   openInStudio = (e) => {
     if (e.target.name == undefined)
       return this.openInStudio({ target: e.target.parentElement });
-    this.props.openInStudio(e.target.name);
+    this.props.openInStudio(e.target.name); // the uid of the document is e.target.name
   };
 
   changeState = (e) => {
@@ -126,7 +126,8 @@ class DocumentsList extends React.Component {
               type="button"
               className="open-in-studio"
               onClick={this.openInStudio}
-              name={e.name}
+              // SET IT TO THE UID
+              name={e.uid}
             >
               Open In Studio <span>{">>>"}</span>
             </button>
