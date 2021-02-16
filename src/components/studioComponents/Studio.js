@@ -127,8 +127,18 @@ class Studio extends React.Component {
   //changes the translation of "currentSection" to that of "translation" (both in state)
   setTranslation = () => {
     var thisDoc = this.state.currentDoc;
+    var length = this.body.length;
+    var section = this.state.currentSection
+    //if array index is too large:
+    if(this.state.currentSection>=length){
+      section = length -1;
+    }
+    //if array index is 0
+    if(this.state.currentDoc<0){
+      section = 0;
+    }
     thisDoc.body[
-      this.state.currentSection
+      section
     ].translation = this.state.translation.replace(
       /\n/g,
       this.context.linebreakCode
