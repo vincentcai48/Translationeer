@@ -265,7 +265,7 @@ class Studio extends React.Component {
 
   addSection = (insertAt, text) => {
     if (this.state.currentDoc) {
-      text = text.replaceAll("\n", " ");
+      text = text.replaceAll("\n", this.context.linebreakCode);
       var newDoc = this.state.currentDoc;
       newDoc.body.splice(insertAt, 0, {
         text: text,
