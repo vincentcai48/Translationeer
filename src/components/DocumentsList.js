@@ -74,7 +74,7 @@ class DocumentsList extends React.Component {
     var name = this.state.newName;
 
     if (name.length < 1 || name.length == undefined)
-      name = "Untitled" + d.getTime();
+      name = "Untitled " + (d.getTime() % 10000);
 
     this.props.addDoc(
       name,
