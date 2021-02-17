@@ -13,7 +13,7 @@ class Dashboard extends React.Component {
       selection: 0, //a number for what to view, 0: documents
       documents: [], //all the documents that user has. Same as in the "Studio.js" component
       redirect: false,
-      limit: 15, //the amount of documents you can get at one time
+      limit: 10, //the amount of documents you can get at one time
       lastDoc: {},
       isLoading: false,
       isNeedRefresh: false,
@@ -179,31 +179,23 @@ class Dashboard extends React.Component {
         body: body,
         timestamp: fbFieldValue.serverTimestamp(),
       })
-      .then(() => {
+      .then((doc) => {
         this.setState({ isNeedRefresh: true });
-        this.openInStudio(name);
+        this.openInStudio(doc.id, pAuth.currentUser.uid);
       })
       .catch((e) => console.error(e));
   };
 
-  deleteDoc = (name) => {
+  deleteDoc = (docId, userId) => {
     //get the right doc based on name,
-
-    var rightDoc = null;
-    this.state.documents.forEach((doc) => {
-      if (doc.name == name) {
-        rightDoc = doc;
-      }
-    });
-
-    if (rightDoc == null) return;
+    if (!docId || !userId) return;
     //then do the delete. Note: don't worry about the uid not being there, although it is not created in addDoc(), it will be added in this.state.documents in componentDidMount().
     if (pAuth.currentUser) {
       pFirestore
         .collection("users")
-        .doc(pAuth.currentUser.uid)
+        .doc(userId)
         .collection("documents")
-        .doc(rightDoc.uid)
+        .doc(docId)
         .delete()
         .then(() => {
           this.setState({ isNeedRefresh: true });
@@ -212,8 +204,8 @@ class Dashboard extends React.Component {
     }
   };
 
-  openInStudio = (name) => {
-    var url = "/studio?document=" + name;
+  openInStudio = (docID, userID) => {
+    var url = "/studio?document=" + docID + "&user=" + userID;
     this.setState({ redirect: url });
   };
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { pAuth } from "../services/config";
 import { LangContext } from "../services/context";
 
 /*PROPS: 
@@ -20,13 +21,14 @@ class DocumentsList extends React.Component {
       showDeletePopup: false,
       textBody: "",
       inputDivideByLB: false,
+      currentDocId: "", //the ID of the doc being shown in the edit doc popup
     };
   }
 
   openInStudio = (e) => {
     if (e.target.name == undefined)
       return this.openInStudio({ target: e.target.parentElement });
-    this.props.openInStudio(e.target.name);
+    this.props.openInStudio(e.target.name, pAuth.currentUser.uid); // the uid of the document is e.target.name
   };
 
   changeState = (e) => {
@@ -40,10 +42,11 @@ class DocumentsList extends React.Component {
   };
 
   //note here that the "name" property on e.target is the whole document OBJECT, so there is another "name" property on that, hence name.name
-  editPopup = (name, color) => {
+  editPopup = (name, color, uid) => {
     this.setState({
       showEditPopup: true,
       originalName: name,
+      currentDocId: uid,
       newName: name,
       color: color || "var(--pc)",
     });
@@ -71,7 +74,7 @@ class DocumentsList extends React.Component {
     var name = this.state.newName;
 
     if (name.length < 1 || name.length == undefined)
-      name = "Untitled" + d.getTime();
+      name = "Untitled " + (d.getTime() % 10000);
 
     this.props.addDoc(
       name,
@@ -81,8 +84,8 @@ class DocumentsList extends React.Component {
     );
   };
 
-  deleteDocProxy = (name) => {
-    this.props.deleteDoc(name);
+  deleteDocProxy = (docID) => {
+    this.props.deleteDoc(docID, pAuth.currentUser.uid);
     this.setState({ showDeletePopup: false });
   };
 
@@ -126,14 +129,15 @@ class DocumentsList extends React.Component {
               type="button"
               className="open-in-studio"
               onClick={this.openInStudio}
-              name={e.name}
+              // SET IT TO THE UID
+              name={e.uid}
             >
               Open In Studio <span>{">>>"}</span>
             </button>
             <button
               type="button"
               className="edit-document"
-              onClick={() => this.editPopup(e.name, e.color)}
+              onClick={() => this.editPopup(e.name, e.color, e.uid)}
               name={e.name}
               originalColor={e.color ? e.color : "var(--pc)"}
             >
@@ -142,7 +146,11 @@ class DocumentsList extends React.Component {
             <button
               className="delete-document fas fa-trash"
               onClick={() =>
-                this.setState({ originalName: e.name, showDeletePopup: true })
+                this.setState({
+                  originalName: e.name,
+                  showDeletePopup: true,
+                  currentDocId: e.uid,
+                })
               }
               name={e.name}
             ></button>
@@ -289,7 +297,7 @@ class DocumentsList extends React.Component {
               </h5>
               <button
                 className="confirm-button"
-                onClick={() => this.deleteDocProxy(this.state.originalName)}
+                onClick={() => this.deleteDocProxy(this.state.currentDocId)}
               >
                 Yes, delete
               </button>
