@@ -68,7 +68,7 @@ class Home extends React.Component {
             translation suite with tons of interactive elements on the screen
             for an immersive experience. We offer many languages and translation
             services that you can toggle on and off to personalize your
-            translation experience. Create an account for free by just signing
+            translation experience. Create an account for free by just logging
             in with your Google Account, and unlock the power of the
             Translationeer Studio, where you can custom split and merge your
             document into understandable pieces, all while using our interactive
