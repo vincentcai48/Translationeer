@@ -1,6 +1,6 @@
 import React from "react";
-import { pAuth, googleAuthProvider, pFirestore } from "../services/config";
-import { LangContext } from "../services/context";
+import { pAuth, googleAuthProvider, pFirestore } from "../services/config.js";
+import { LangContext } from "../services/context.js";
 
 class Auth extends React.Component {
   constructor() {
