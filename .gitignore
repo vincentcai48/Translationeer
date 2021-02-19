@@ -2,7 +2,7 @@
 
 #Added to .gitignore
 
-config.js
+#config.js
 firestore.rules
 storage.rules
 
