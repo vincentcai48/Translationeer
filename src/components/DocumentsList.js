@@ -1,6 +1,7 @@
 import React from "react";
 import { pAuth } from "../services/config";
 import { LangContext } from "../services/context";
+import convertColor from "../services/convertcolor";
 
 /*PROPS: 
 -Array[] documents, this is all the data from firestore of some user's documents
@@ -106,11 +107,9 @@ class DocumentsList extends React.Component {
     );
     for (var i = 0; i < docs.length; i++) {
       const e = docs[i];
+      const color = convertColor(e.color);
       arr.push(
-        <div
-          className="single-doc"
-          style={{ backgroundColor: e.color ? e.color : "var(--pc)" }}
-        >
+        <div className="single-doc" style={{ backgroundColor: color }}>
           <h6>{e.name}</h6>
           {e.body.length > 0 && (
             <p className="doc-excerpt">
@@ -194,11 +193,11 @@ class DocumentsList extends React.Component {
                 value={this.state.color}
               >
                 <option value="var(--pc)">Blue (default)</option>
-                <option value="#84378B">Purple</option>
-                <option value="#FF5252">Red</option>
-                <option value="#ECA047">Orange</option>
-                <option value="#48F598">Green</option>
-                <option value="#FFB4E5">Pink</option>
+                <option value="var(--dc-purple)">Purple</option>
+                <option value="var(--dc-red)">Red</option>
+                <option value="var(--dc-orange)">Orange</option>
+                <option value="var(--dc-green)">Green</option>
+                <option value="var(--dc-pink)">Pink</option>
               </select>
               <br></br>
               <br></br>

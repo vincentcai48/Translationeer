@@ -7,6 +7,15 @@
   --scd: #b400b8;
   --ptc: black;
   --ltc: white;
+
+  /*DOCUMENT COLORS:*/
+  --dc-blue: #3498db; /*Not necessarily var(--pc), because later add change color functionality  */
+  --dc-purple: purple;
+  --dc-green: rgb(0, 165, 0);
+  --dc-pink: rgb(255, 103, 166);
+  --dc-orange: rgb(255, 166, 0);
+  --dc-red: red;
+
   --primary-font: "Signika Negative", sans-serif;
 }
 
@@ -320,7 +329,7 @@ textarea:focus {
   font-size: 20px;
   color: black;
   box-sizing: border-box;
-  background-color: var(--pc);
+  background-color: lightgrey;
 }
 
 #edit-translation-container {
@@ -913,7 +922,7 @@ footer div {
 }
 
 .single-doc p.lastModified {
-  color: lightgray;
+  color: lightgrey;
 }
 
 .single-doc .document-buttons .open-in-studio {

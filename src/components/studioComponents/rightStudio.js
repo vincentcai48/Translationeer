@@ -1,7 +1,7 @@
 import React from "react";
 import { LangContext } from "../../services/context";
 
-//PROPS: Array[Map()] translations, the body of a document, Number currentSection
+//PROPS: Array[Map()] translations, the body of a document, Number currentSection, String docColor
 class RightStudio extends React.Component {
   constructor(props) {
     super();

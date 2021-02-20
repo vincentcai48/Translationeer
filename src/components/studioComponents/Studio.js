@@ -12,6 +12,7 @@ import DocumentsList from "../DocumentsList";
 import StudioDefault from "./studioDefault";
 import { Redirect, browserHistory, Link } from "react-router-dom";
 import { Beforeunload } from "react-beforeunload";
+import convertColor from "../../services/convertcolor";
 
 var x, y;
 var rect;
@@ -440,6 +441,9 @@ class Studio extends React.Component {
     var currentDocBody = this.state.currentDoc
       ? this.state.currentDoc.body
       : [];
+    const docColor = this.state.currentDoc
+      ? convertColor(this.state.currentDoc.color)
+      : "black"; //convert colors <v0.1.5
     return this.state.currentDoc ? (
       <div id="studio">
         <Beforeunload
@@ -451,7 +455,7 @@ class Studio extends React.Component {
           <i
             className="fas fa-file-alt doc-icon"
             style={{
-              color: this.state.currentDoc.color || "var(--pc)",
+              color: docColor,
             }}
           ></i>
           {this.state.currentDoc.name}
@@ -489,6 +493,7 @@ class Studio extends React.Component {
             <RightStudio
               translations={currentDocBody}
               currentSection={this.state.currentSection}
+              docColor={docColor}
             />
           </div>
 
