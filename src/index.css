@@ -9,6 +9,7 @@
   --ltc: white;
 
   /*DOCUMENT COLORS:*/
+  --dc-blue: #3498db; /*Not necessarily var(--pc), because later add change color functionality  */
   --dc-purple: purple;
   --dc-green: rgb(0, 165, 0);
   --dc-pink: rgb(255, 103, 166);

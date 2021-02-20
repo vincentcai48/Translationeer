@@ -1,6 +1,7 @@
 import React from "react";
 import { pAuth } from "../services/config";
 import { LangContext } from "../services/context";
+import convertColor from "../services/convertcolor";
 
 /*PROPS: 
 -Array[] documents, this is all the data from firestore of some user's documents
@@ -106,11 +107,9 @@ class DocumentsList extends React.Component {
     );
     for (var i = 0; i < docs.length; i++) {
       const e = docs[i];
+      const color = convertColor(e.color);
       arr.push(
-        <div
-          className="single-doc"
-          style={{ backgroundColor: e.color ? e.color : "var(--pc)" }}
-        >
+        <div className="single-doc" style={{ backgroundColor: color }}>
           <h6>{e.name}</h6>
           {e.body.length > 0 && (
             <p className="doc-excerpt">
