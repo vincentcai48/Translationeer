@@ -329,7 +329,7 @@ textarea:focus {
   font-size: 20px;
   color: black;
   box-sizing: border-box;
-  background-color: var(--pc);
+  background-color: lightgrey;
 }
 
 #edit-translation-container {
