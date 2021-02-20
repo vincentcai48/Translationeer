@@ -7,6 +7,14 @@
   --scd: #b400b8;
   --ptc: black;
   --ltc: white;
+
+  /*DOCUMENT COLORS:*/
+  --dc-purple: purple;
+  --dc-green: rgb(0, 165, 0);
+  --dc-pink: rgb(255, 103, 166);
+  --dc-orange: rgb(255, 166, 0);
+  --dc-red: red;
+
   --primary-font: "Signika Negative", sans-serif;
 }
 
@@ -913,7 +921,7 @@ footer div {
 }
 
 .single-doc p.lastModified {
-  color: lightgray;
+  color: lightgrey;
 }
 
 .single-doc .document-buttons .open-in-studio {

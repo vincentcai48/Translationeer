@@ -194,11 +194,11 @@ class DocumentsList extends React.Component {
                 value={this.state.color}
               >
                 <option value="var(--pc)">Blue (default)</option>
-                <option value="#84378B">Purple</option>
-                <option value="#FF5252">Red</option>
-                <option value="#ECA047">Orange</option>
-                <option value="#48F598">Green</option>
-                <option value="#FFB4E5">Pink</option>
+                <option value="var(--dc-purple)">Purple</option>
+                <option value="var(--dc-red)">Red</option>
+                <option value="var(--dc-orange)">Orange</option>
+                <option value="var(--dc-green)">Green</option>
+                <option value="var(--dc-pink)">Pink</option>
               </select>
               <br></br>
               <br></br>
