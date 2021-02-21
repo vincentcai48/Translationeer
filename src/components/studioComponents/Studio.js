@@ -423,7 +423,8 @@ class Studio extends React.Component {
     if (this.state.currentDoc && this.state.currentDoc.body) {
       var finalTranslation = "";
       this.state.currentDoc.body.forEach((e) => {
-        finalTranslation += e.translation + " ";
+        finalTranslation +=
+          e.translation.replaceAll(this.context.linebreakCode, "\n") + " ";
       });
       navigator.clipboard.writeText(finalTranslation).then(
         () => {
