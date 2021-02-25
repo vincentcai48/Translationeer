@@ -1,17 +1,29 @@
 # Translationeer
 
-URL: https://translationeer.com/
+Powerful tools for language Translation
+
+## Use Translationeer
+
+We offer a hosted web-based software as a service for Translationeer online at https://translationeer.com/
+
+This project on GitHub is open source and free to use
+
+## Current Work
+
+Currently a work in progress, may be subject to breaking changes.
+
+Support for many languages is being worked on. As of now, there is support for Latin to English and English to Latin.
+
+## Contributing
+
+Translationeer welcomes contributions by anyone. Simply open a pull request or an issue on GitHub to make a contribution.
+
+## Development
+
+Built with React and Firebase. Continuous deployment is set up through this repository via GitHub actions. However, there is no guarantee that the code in this repository is the exact code run on the platform. 
+
+### Notes
+
+All open source code from Translationeer is in this repository. Translationeer is maintained by Vincent Cai @vincentcaitech.
 
 Any unauthorized usage of any material from Translationeer is strictly prohibited.
-
-A web app that has powerful tools to help with language translation. Currently has support for Latin to English and English to Latin.
-
-Currently a work in progress, may be subject to breaking changes. Currently is in the process of development and expansion into a web-based Software as a Service application that is open source through GitHub.
-
-Built with React and Firebase
-
-Currently migrating to serverless with Firebase Functions, being moved off of Google App Engine soon.
-
-Continuous deployment is set up through this repository. However, there is no guarantee that the code in this repository is the exact code run on the platform.
-
-All open source code from Translationeer is in this repository. Owned and managed by vincentcaitech.
