@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { pAuth, googleAuthProvider } from "../services/config";
 import { LangContext } from "../services/context";
 
@@ -180,9 +180,3 @@ class Header extends React.Component {
 Header.contextType = LangContext;
 
 export default Header;
-
-/**{pAuth.currentUser && (
-                <button type="button" id="header-logout" onClick={this.logout}>
-                  Logout
-                </button>
-              )} */
