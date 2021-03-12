@@ -1,7 +1,6 @@
 import React from "react";
 import Auth from "../Auth";
 import { pAuth } from "../../services/config";
-import phoneJumbotronImage from "../../public/images/studio-background2.jpg";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +10,10 @@ class StudioDefault extends React.Component {
       <div id="studio-default-container">
         <div id="black-background"></div>
         <section id="studioDefault-jumbotronSection">
-          {/* <Image src={phoneJumbotronImage} id="studio-jumbotron"></Image> */}
+          <div id="studio-jumbotron">
+            <Image src="/images/studio-background2.jpg" layout="fill"></Image>
+          </div>
+
           <div id="studio-jumbotron-text">
             <h2>Try Studio</h2>
             <p>The best way to translate on the web.</p>
