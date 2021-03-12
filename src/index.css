@@ -676,17 +676,35 @@ header#header {
 footer {
   position: relative;
   z-index: 11;
-  height: 7vh;
   background-color: black;
   margin: 0;
   margin-top: -5px;
 }
 
-footer div {
+footer .footer-main {
   margin: 0;
   text-align: center;
   color: white;
   padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+ul.legal-list {
+  list-style: none;
+  padding: 0px 20px;
+  display: flex;
+}
+
+.legal-list .link {
+  opacity: 0.8;
+  transition: all 0.2s;
+  padding: 5px 10px;
+}
+
+.legal-list .link:hover {
+  opacity: 1;
 }
 
 .legal-container {
