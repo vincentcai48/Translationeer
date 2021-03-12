@@ -689,6 +689,11 @@ footer div {
   padding: 10px;
 }
 
+.legal-container {
+  box-sizing: border-box;
+  padding: 5vh 5vw;
+}
+
 #jumbotron-quickSearch input {
   border: 3px solid black;
   margin: 0;
