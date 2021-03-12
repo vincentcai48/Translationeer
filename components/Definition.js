@@ -11,16 +11,16 @@ import Loading from "./Loading";
 var x, y;
 var rect;
 
-window.addEventListener("mousemove", (e) => {
-  // e = Mouse click event.
-  if (document.querySelector("body") && !rect) {
-    rect = document.querySelector("body").getBoundingClientRect();
-  }
-  if (rect) {
-    x = e.pageX - rect.left; //x position within the element.
-    y = e.pageY - rect.top; //y position within the element.
-  }
-});
+// window.addEventListener("mousemove", (e) => {
+//   // e = Mouse click event.
+//   if (document.querySelector("body") && !rect) {
+//     rect = document.querySelector("body").getBoundingClientRect();
+//   }
+//   if (rect) {
+//     x = e.pageX - rect.left; //x position within the element.
+//     y = e.pageY - rect.top; //y position within the element.
+//   }
+// });
 
 function dragElement(elmnt) {
   var pos1 = 0,
@@ -158,6 +158,17 @@ class Definition extends React.Component {
       this.newDefinition();
       this.setState({ word: this.props.word, inputWord: this.props.word });
     }
+
+    window.addEventListener("mousemove", (e) => {
+      // e = Mouse click event.
+      if (document.querySelector("body") && !rect) {
+        rect = document.querySelector("body").getBoundingClientRect();
+      }
+      if (rect) {
+        x = e.pageX - rect.left; //x position within the element.
+        y = e.pageY - rect.top; //y position within the element.
+      }
+    });
   }
 
   crossOut = () => {

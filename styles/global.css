@@ -569,10 +569,10 @@ header#header {
   padding: 0;
 }
 
-#jumbotron img {
+#jumbotron .jImage-container {
   position: relative;
   width: 100%;
-  height: auto;
+  height: 60vw;
   opacity: 1;
   filter: brightness(70%);
 }

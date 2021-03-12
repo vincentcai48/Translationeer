@@ -233,25 +233,27 @@ class Dashboard extends React.Component {
           >
             Documents
           </button>
-          <Link
-            to="/studiodefault"
-            className={
-              this.state.selection == 3
-                ? "dashboard-option selected"
-                : "dashboard-option"
-            }
-          >
-            Studio
+          <Link href="/studiodefault">
+            <span
+              className={
+                this.state.selection == 3
+                  ? "dashboard-option selected"
+                  : "dashboard-option"
+              }
+            >
+              Studio
+            </span>
           </Link>
-          <Link
-            to="/account"
-            className={
-              this.state.selection == 4
-                ? "dashboard-option selected"
-                : "dashboard-option"
-            }
-          >
-            Account
+          <Link href="/account">
+            <span
+              className={
+                this.state.selection == 4
+                  ? "dashboard-option selected"
+                  : "dashboard-option"
+              }
+            >
+              Account
+            </span>
           </Link>
         </div>
         <div id="dashboard-mainContent">

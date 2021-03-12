@@ -1,9 +1,9 @@
 import React from "react";
 import QuickSearch from "./QuickSearch";
-import jumbotronImage from "../images/jumbotron.png";
-import phoneJumbotronImage from "../images/phone-jumbotron.PNG";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import { parser } from "../services/react-custom-markdown/mdparser";
+import Image from "next/image";
+import { LangContext } from "../services/context";
 
 class Home extends React.Component {
   constructor(props) {
@@ -28,8 +28,6 @@ class Home extends React.Component {
   };
 
   render() {
-    console.log(window.outerWidth);
-    var markdown = parser("# Hello");
     return this.state.isSearched ? (
       <QuickSearch
         query={this.state.query || "No Text Supplied"}
@@ -38,9 +36,16 @@ class Home extends React.Component {
     ) : (
       <div>
         <div id="jumbotron">
-          <img
-            src={window.outerWidth > 600 ? jumbotronImage : phoneJumbotronImage}
-          ></img>
+          <div className="jImage-container">
+            <Image
+              src={
+                this.context.isMobile
+                  ? "/images/phone-jumbotron.PNG"
+                  : "/images/jumbotron.png"
+              }
+              layout="fill"
+            />
+          </div>
           <div id="jumbotron-text">
             <h2>A Better Way to Translate</h2>
             <p>
@@ -75,11 +80,15 @@ class Home extends React.Component {
             canvas. Get started Now!
           </p>
           <div id="home-sec1-links">
-            <Link to="/studiodefault" className="arrow-button home-link">
-              Go to Studio<span>{">>>"}</span>
+            <Link href="/studiodefault">
+              <span className="arrow-button home-link">
+                Go to Studio<span>{">>>"}</span>
+              </span>
             </Link>
-            <Link to="/howto" className="arrow-button home-link">
-              How To Guide<span>{">>>"}</span>
+            <Link href="/howto">
+              <span className="arrow-button home-link">
+                How To Guide<span>{">>>"}</span>
+              </span>
             </Link>
           </div>
         </section>
@@ -87,5 +96,6 @@ class Home extends React.Component {
     );
   }
 }
+Home.contextType = LangContext;
 
 export default Home;

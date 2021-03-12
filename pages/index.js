@@ -1,3 +1,5 @@
+import Home from "./../components/Home.js";
+
 export default function Index() {
-  return <div>Hello World</div>;
+  return <Home />;
 }

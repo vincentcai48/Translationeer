@@ -17,13 +17,10 @@ class StudioDefault extends React.Component {
           <div id="studio-jumbotron-text">
             <h2>Try Studio</h2>
             <p>The best way to translate on the web.</p>
-            <Link
-              href="/howto"
-              className="arrow-button studio-jumbotron-button"
-            >
-              <>
+            <Link href="/howto">
+              <span className="arrow-button studio-jumbotron-button">
                 Learn How <span>{">>>"}</span>
-              </>
+              </span>
             </Link>
           </div>
         </section>
@@ -49,13 +46,10 @@ class StudioDefault extends React.Component {
           <section className="studioDefault-section">
             <h2>Use Studio Now:</h2>
 
-            <Link
-              href="/dashboard"
-              className="arrow-button studioDefault-to-dashboard"
-            >
-              <>
+            <Link href="/dashboard">
+              <span className="arrow-button studioDefault-to-dashboard">
                 Go to Dashboard<span>{">>>"}</span>
-              </>
+              </span>
             </Link>
           </section>
         ) : (

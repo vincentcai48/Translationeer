@@ -114,8 +114,8 @@ class Header extends React.Component {
     return (
       <header id="header">
         <h1>
-          <Link href="/" id="h1-link">
-            Translationeer
+          <Link href="/">
+            <span id="h1-link">Translationeer</span>
           </Link>
         </h1>
         <div className="header-space"></div>
@@ -137,32 +137,32 @@ class Header extends React.Component {
               <ul id="languageList">{this.renderLanguageOptions()}</ul>
             </div>
             <div className="header-item">
-              <Link href="/howto" className="header-item-link">
-                How to
+              <Link href="/howto">
+                <span className="header-item-link">How to</span>
               </Link>
             </div>
             <div className="header-item">
-              <Link href="/studiodefault" className="header-item-link">
-                Studio
+              <Link href="/studiodefault">
+                <span className="header-item-link">Studio</span>
               </Link>
             </div>
             <div id="auth-area">
               {this.context.isAuth && pAuth.currentUser ? (
                 <div id="header-user-info">
                   <div className="header-item">
-                    <Link href="/dashboard" className="header-item-link">
-                      Dashboard
+                    <Link href="/dashboard">
+                      <span className="header-item-link">Dashboard</span>
                     </Link>
                   </div>
-                  <Link href="/account" className="user-displayName">
-                    <>
+                  <Link href="/account">
+                    <span className="user-displayName">
                       <img
                         id="header-profile-picture"
                         src={pAuth.currentUser.photoURL}
                       ></img>
 
                       {pAuth.currentUser.displayName.split(" ")[0]}
-                    </>
+                    </span>
                   </Link>
                 </div>
               ) : (
