@@ -2,7 +2,8 @@ import React from "react";
 import { pFirestore, pAuth, fbFieldValue } from "../services/config";
 import { LangContext } from "../services/context";
 import DocumentsList from "./DocumentsList";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
+import Link from "next/link";
 import Auth from "./Auth";
 
 class Dashboard extends React.Component {

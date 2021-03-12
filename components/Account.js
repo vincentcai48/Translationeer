@@ -1,7 +1,7 @@
 import React from "react";
 import { pAuth, pFirestore } from "../services/config";
 import Auth from "./Auth";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 
 class Account extends React.Component {
   logout = () => {

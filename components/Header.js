@@ -50,7 +50,7 @@ class Header extends React.Component {
   };
 
   toggleService = (e) => {
-    const originalApis = this.context.apis;
+    var originalApis = [...this.context.apis];
     const apiName =
       e.target.tagName == "BUTTON"
         ? e.target.name
@@ -64,7 +64,7 @@ class Header extends React.Component {
       index++;
     });
     originalApis[rightIndex].enabled = !originalApis[rightIndex].enabled;
-    this.context.updateApis(originalApis);
+    this.context.setApis(originalApis);
   };
 
   renderLanguageOptions = () => {
@@ -114,10 +114,9 @@ class Header extends React.Component {
     return (
       <header id="header">
         <h1>
-          <Link to="/" id="h1-link">
+          <Link href="/" id="h1-link">
             Translationeer
           </Link>
-          {/* <a href="https://www.w3schools.com">W3SCHOOLS</a> */}
         </h1>
         <div className="header-space"></div>
         <div id="menu-icon" className="fa fa-bars" onClick={toggleMenu}></div>
@@ -138,12 +137,12 @@ class Header extends React.Component {
               <ul id="languageList">{this.renderLanguageOptions()}</ul>
             </div>
             <div className="header-item">
-              <Link to="/howto" className="header-item-link">
+              <Link href="/howto" className="header-item-link">
                 How to
               </Link>
             </div>
             <div className="header-item">
-              <Link to="/studiodefault" className="header-item-link">
+              <Link href="/studiodefault" className="header-item-link">
                 Studio
               </Link>
             </div>
@@ -151,17 +150,19 @@ class Header extends React.Component {
               {this.context.isAuth && pAuth.currentUser ? (
                 <div id="header-user-info">
                   <div className="header-item">
-                    <Link to="/dashboard" className="header-item-link">
+                    <Link href="/dashboard" className="header-item-link">
                       Dashboard
                     </Link>
                   </div>
-                  <Link to="/account" className="user-displayName">
-                    <img
-                      id="header-profile-picture"
-                      src={pAuth.currentUser.photoURL}
-                    ></img>
+                  <Link href="/account" className="user-displayName">
+                    <>
+                      <img
+                        id="header-profile-picture"
+                        src={pAuth.currentUser.photoURL}
+                      ></img>
 
-                    {pAuth.currentUser.displayName.split(" ")[0]}
+                      {pAuth.currentUser.displayName.split(" ")[0]}
+                    </>
                   </Link>
                 </div>
               ) : (

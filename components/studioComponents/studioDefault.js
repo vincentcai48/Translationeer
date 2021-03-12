@@ -1,8 +1,9 @@
 import React from "react";
 import Auth from "../Auth";
 import { pAuth } from "../../services/config";
-import phoneJumbotronImage from "../../images/studio-background2.jpg";
-import { Link } from "react-router-dom";
+import phoneJumbotronImage from "../../public/images/studio-background2.jpg";
+import Image from "next/image";
+import Link from "next/link";
 
 class StudioDefault extends React.Component {
   render() {
@@ -10,12 +11,17 @@ class StudioDefault extends React.Component {
       <div id="studio-default-container">
         <div id="black-background"></div>
         <section id="studioDefault-jumbotronSection">
-          <img src={phoneJumbotronImage} id="studio-jumbotron"></img>
+          {/* <Image src={phoneJumbotronImage} id="studio-jumbotron"></Image> */}
           <div id="studio-jumbotron-text">
             <h2>Try Studio</h2>
             <p>The best way to translate on the web.</p>
-            <Link to="/howto" className="arrow-button studio-jumbotron-button">
-              Learn How <span>{">>>"}</span>
+            <Link
+              href="/howto"
+              className="arrow-button studio-jumbotron-button"
+            >
+              <>
+                Learn How <span>{">>>"}</span>
+              </>
             </Link>
           </div>
         </section>
@@ -42,10 +48,12 @@ class StudioDefault extends React.Component {
             <h2>Use Studio Now:</h2>
 
             <Link
-              to="/dashboard"
+              href="/dashboard"
               className="arrow-button studioDefault-to-dashboard"
             >
-              Go to Dashboard<span>{">>>"}</span>
+              <>
+                Go to Dashboard<span>{">>>"}</span>
+              </>
             </Link>
           </section>
         ) : (

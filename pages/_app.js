@@ -7,7 +7,7 @@ import { pFirestore, pAuth, fbFieldValue } from "../services/config";
 function MyApp({ Component, pageProps }) {
   const [tc, setTc] = useState([]);
   const [newUser, setNewUser] = useState(null); //not in context, and only for use when creating a new user, set this to the new user object
-  const [allApis, setAllApis] = useState([]);
+  const [allApis, setAllApis] = useState(null);
   const [apis, setApis] = useState([]); //these are the current apis for the selected language
   const [languageOptions, setLanguageOptions] = useState([]);
   const [language, setLanguage] = useState(""); //important to NOT initially set a language, so it will set the language WITH all the Apis
@@ -22,7 +22,13 @@ function MyApp({ Component, pageProps }) {
     componentDidMount();
   }, []);
 
+  useEffect(() => {
+    console.log(apis);
+  }, [apis]);
+
   const componentDidMount = async () => {
+    await getAllApisFromDB();
+    await getAllLanguagesFromDB();
     var tcRes = await pFirestore
       .collection("settings")
       .doc("termsandconditions")
@@ -35,6 +41,7 @@ function MyApp({ Component, pageProps }) {
     setTc(newTCArr);
 
     pAuth.onAuthStateChanged(async (user) => {
+      console.log(user);
       if (user) {
         setIsAuth(true);
         const thisUserRef = pFirestore.collection("users").doc(user.uid);
@@ -44,8 +51,9 @@ function MyApp({ Component, pageProps }) {
           if (!doc.exists) {
             setNewUser(user);
           } else {
+            console.log(doc.data().defaultLanguage);
             if (doc.data().defaultLanguage) {
-              setLanguage(doc.data().defaultLanguage);
+              updateLanguage(doc.data().defaultLanguage);
             }
           }
         } catch (e) {
@@ -56,16 +64,19 @@ function MyApp({ Component, pageProps }) {
     getAllApisFromDB();
   };
 
+  //NOTE: different from setLanguage, this gets all apis, doesn't just set state.
   const updateLanguage = async (languageParam) => {
-    if (!allApis) await getAllApisFromDB();
+    var thisAllApis = [];
+    if (!allApis || allApis.length == 0) {
+      thisAllApis = await getAllApisFromDB();
+    } else thisAllApis = allApis;
     var arr = []; //array of api objects
     var doc = await pFirestore.collection("languages").doc(languageParam).get();
-
     doc.data().apis.forEach((e) => {
-      var currentApi = allApis[e];
+      var currentApi = thisAllApis[e];
       if (currentApi) {
         if (!currentApi.enabled) currentApi.enabled = false; //for the case that "enabled" is not set, default to disabled
-        arr.push(allApis[e]);
+        arr.push(currentApi);
       }
     });
     setLanguage(languageParam);
@@ -118,13 +129,15 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
+  //returns allApis[], in addition to setting the state.
   const getAllApisFromDB = async () => {
     try {
       var doc = await pFirestore.collection("apis").doc("allApis").get();
       setAllApis(doc.data()["allApis"]);
-      getAllLanguagesFromDB();
+      return doc.data()["allApis"];
     } catch (e) {
       console.error(e);
+      return [];
     }
   };
 
@@ -141,7 +154,7 @@ function MyApp({ Component, pageProps }) {
     isMobile: isMobile,
     isAuth: isAuth,
     isJustCreatedUser: isJustCreatedUser,
-    updateApis: setApis,
+    setApis: setApis,
     updateLanguage: updateLanguage,
     updateTextEnd: setTextEnd,
     updateIsAuth: setIsAuth,
@@ -149,7 +162,11 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <LangContext.Provider value={contextValue}>
-      <Component {...pageProps} />;
+      <Layout>
+        <>
+          <Component {...pageProps} />
+        </>
+      </Layout>
     </LangContext.Provider>
   );
 }
