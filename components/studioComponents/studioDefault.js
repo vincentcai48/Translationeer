@@ -1,7 +1,6 @@
 import React from "react";
 import Auth from "../Auth";
 import { pAuth } from "../../services/config";
-import Image from "next/image";
 import Link from "next/link";
 
 class StudioDefault extends React.Component {
@@ -10,9 +9,7 @@ class StudioDefault extends React.Component {
       <div id="studio-default-container">
         <div id="black-background"></div>
         <section id="studioDefault-jumbotronSection">
-          <div id="studio-jumbotron">
-            <Image src="/images/studio-background2.jpg" layout="fill"></Image>
-          </div>
+          <div id="studio-jumbotron"></div>
 
           <div id="studio-jumbotron-text">
             <h2>Try Studio</h2>

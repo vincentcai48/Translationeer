@@ -1779,6 +1779,9 @@ h3.choose-doc {
   filter: brightness(0.6);
   position: relative;
   z-index: 1;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../public/images/studio-background2.jpg");
+  background-size: cover;
 }
 
 #studio-jumbotron-text {
