@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import QuickSearch from "./QuickSearch";
 import Link from "next/link";
 import { parser } from "../services/react-custom-markdown/mdparser";
-import Image from "next/image";
+//import Image from "next/image";
 import { LangContext } from "../services/context";
 
 function Home(props) {

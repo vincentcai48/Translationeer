@@ -17,7 +17,7 @@ class Account extends React.Component {
         {pAuth.currentUser ? (
           <div id="account-container">
             <h2>Account</h2>
-            <img src={pAuth.currentUser.photoURL} alt="Profile Photo" />
+            {/* <img src={pAuth.currentUser.photoURL} alt="Profile Photo" /> */}
             <h3>{pAuth.currentUser.displayName}</h3>
             <h4>Email: {pAuth.currentUser.email}</h4>
             <section>
