@@ -36,7 +36,7 @@ class Home extends React.Component {
     ) : (
       <div>
         <div id="jumbotron">
-          <div className="jImage-container">
+          {/* <div className="jImage-container">
             <Image
               src={
                 this.context.isMobile
@@ -45,7 +45,7 @@ class Home extends React.Component {
               }
               layout="fill"
             />
-          </div>
+          </div> */}
           <div id="jumbotron-text">
             <h2>A Better Way to Translate</h2>
             <p>

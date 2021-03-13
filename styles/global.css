@@ -577,10 +577,14 @@ header#header {
   width: 100%;
   margin: 0;
   padding: 0;
-  height: 60vw;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: black;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("../public/images/jumbotron.png");
+  background-size: cover;
 }
 
 #jumbotron .jImage-container {
@@ -743,11 +747,13 @@ ul.legal-list {
   padding: 10px;
   border-top-left-radius: 10px;
   border-bottom-left-radius: 10px;
+  background-color: lightgrey;
+  transition: all 0.1s;
 }
 
 #jumbotron-quickSearch input:focus {
   outline: none;
-  border-bottom: 5px solid black;
+  background-color: white;
 }
 
 #jumbotron-quickSearch button {
@@ -757,12 +763,13 @@ ul.legal-list {
   font-weight: bolder;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
-  background-color: lightgreen;
+  background-color: rgb(0, 236, 0);
   transition: all 0.3s;
 }
 
 #jumbotron-quickSearch button:hover {
-  background-color: lightseagreen;
+  background-color: black;
+  color: white;
 }
 
 #jumbotron-quickSearch button:hover span {
