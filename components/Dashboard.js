@@ -234,7 +234,7 @@ class Dashboard extends React.Component {
             Documents
           </button>
           <Link href="/studiodefault">
-            <span
+            <a
               className={
                 this.state.selection == 3
                   ? "dashboard-option selected"
@@ -242,10 +242,10 @@ class Dashboard extends React.Component {
               }
             >
               Studio
-            </span>
+            </a>
           </Link>
           <Link href="/account">
-            <span
+            <a
               className={
                 this.state.selection == 4
                   ? "dashboard-option selected"
@@ -253,7 +253,7 @@ class Dashboard extends React.Component {
               }
             >
               Account
-            </span>
+            </a>
           </Link>
         </div>
         <div id="dashboard-mainContent">
@@ -264,7 +264,6 @@ class Dashboard extends React.Component {
               getMoreDocs={this.getMoreDocs}
               saveDocSettings={this.saveDocSettings}
               addDoc={this.addDoc}
-              openInStudio={this.openInStudio}
               deleteDoc={this.deleteDoc}
             />
           </div>

@@ -24,8 +24,8 @@ class Account extends React.Component {
               This account on Translationeer is authorized through Google. Login
               and create Translationeer Accounts by using a Google Account
             </section>
-            <Link to="/dashboard" className="go-to-dashboard">
-              Go To My Dashboard
+            <Link href="/dashboard">
+              <a className="go-to-dashboard">Go To My Dashboard</a>
             </Link>
             <button onClick={this.logout}>Logout</button>
           </div>

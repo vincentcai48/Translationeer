@@ -16,16 +16,6 @@ import convertColor from "../../services/convertcolor";
 
 var x, y;
 var rect;
-window.addEventListener("mousemove", (e) => {
-  // e = Mouse click event.
-  if (document.querySelector("body") && !rect) {
-    rect = document.querySelector("body").getBoundingClientRect();
-  }
-  if (rect) {
-    x = e.pageX - rect.left; //x position within the element.
-    y = e.pageY - rect.top; //y position within the element.
-  }
-});
 
 function clearSelection() {
   if (window.getSelection) {
@@ -63,22 +53,6 @@ class Studio extends React.Component {
     pAuth.onAuthStateChanged((user) => {
       if (user) {
         this.checkURLParams();
-        // pFirestore
-        //   .collection("users")
-        //   .doc(pAuth.currentUser.uid)
-        //   .collection("documents")
-        //   .orderBy("timestamp", "desc")
-        //   .onSnapshot((docs) => {
-        //     var arr = [];
-
-        //     docs.forEach((d) => {
-        //       arr.push({ ...d.data(), uid: d.id });
-        //     });
-
-        //     this.setState({ documents: arr });
-        //     //make sure to check URL Params
-
-        //   });
       }
     });
 
@@ -92,6 +66,17 @@ class Studio extends React.Component {
       },
       false
     );
+
+    window.addEventListener("mousemove", (e) => {
+      // e = Mouse click event.
+      if (document.querySelector("body") && !rect) {
+        rect = document.querySelector("body").getBoundingClientRect();
+      }
+      if (rect) {
+        x = e.pageX - rect.left; //x position within the element.
+        y = e.pageY - rect.top; //y position within the element.
+      }
+    });
   }
 
   checkURLParams = () => {

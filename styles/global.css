@@ -955,13 +955,17 @@ ul.legal-list {
 }
 
 .single-doc .document-buttons .open-in-studio {
-  font-family: "Signika Negative", sans-serif;
+  display: inline;
+  margin-right: 15px;
+  margin-top: 5px;
+  border-radius: 10px;
+
   padding: 3px 15px;
   background-color: black;
   border: 3px solid black;
   color: white;
-  margin-right: 15px;
-  border-radius: 10px;
+  text-decoration: none;
+  font-family: "Signika Negative", sans-serif;
   font-weight: bolder;
   font-size: 16px;
   text-align: center;
@@ -1199,7 +1203,7 @@ ul.legal-list {
   letter-spacing: 5px;
 }
 
-button#back-to-documents {
+#back-to-documents {
   color: white;
   margin-left: 3vw;
   font-size: 17px;
@@ -1709,6 +1713,7 @@ h3.choose-doc {
 
 #studioHeader-topRow {
   display: flex;
+  align-items: center;
 }
 
 #copyTranslation {

@@ -1,6 +1,7 @@
 import React from "react";
 import { pAuth } from "../services/config";
 import { LangContext } from "../services/context";
+import Link from "next/link";
 import convertColor from "../services/convertcolor";
 
 /*PROPS: 
@@ -124,15 +125,17 @@ class DocumentsList extends React.Component {
               "Last Modified: " + e.timestamp.toDate().toLocaleString()}
           </p>
           <div className="document-buttons">
-            <button
-              type="button"
-              className="open-in-studio"
-              onClick={this.openInStudio}
-              // SET IT TO THE UID
-              name={e.uid}
+            <Link
+              href={`/studio?document=${e.uid}&user=${pAuth.currentUser.uid}`}
+
+              // onClick={this.openInStudio}
+              // // SET IT TO THE UID
+              // name={e.uid}
             >
-              Open In Studio <span>{">>>"}</span>
-            </button>
+              <a className="open-in-studio">
+                Open In Studio <span>{">>>"}</span>
+              </a>
+            </Link>
             <button
               type="button"
               className="edit-document"

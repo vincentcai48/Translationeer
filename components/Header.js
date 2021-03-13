@@ -115,7 +115,7 @@ class Header extends React.Component {
       <header id="header">
         <h1>
           <Link href="/">
-            <span id="h1-link">Translationeer</span>
+            <a id="h1-link">Translationeer</a>
           </Link>
         </h1>
         <div className="header-space"></div>
@@ -138,12 +138,12 @@ class Header extends React.Component {
             </div>
             <div className="header-item">
               <Link href="/howto">
-                <span className="header-item-link">How to</span>
+                <a className="header-item-link">How to</a>
               </Link>
             </div>
             <div className="header-item">
               <Link href="/studiodefault">
-                <span className="header-item-link">Studio</span>
+                <a className="header-item-link">Studio</a>
               </Link>
             </div>
             <div id="auth-area">
@@ -151,18 +151,18 @@ class Header extends React.Component {
                 <div id="header-user-info">
                   <div className="header-item">
                     <Link href="/dashboard">
-                      <span className="header-item-link">Dashboard</span>
+                      <a className="header-item-link">Dashboard</a>
                     </Link>
                   </div>
                   <Link href="/account">
-                    <span className="user-displayName">
+                    <a className="user-displayName">
                       <img
                         id="header-profile-picture"
                         src={pAuth.currentUser.photoURL}
                       ></img>
 
                       {pAuth.currentUser.displayName.split(" ")[0]}
-                    </span>
+                    </a>
                   </Link>
                 </div>
               ) : (

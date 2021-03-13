@@ -1,6 +1,6 @@
 import React from "react";
 import { LangContext } from "../../services/context";
-import { Redirect } from "react-router-dom";
+import Link from "next/link";
 
 //PROPS: Object() document, the current document, Function() breakOffFunction, Function() copyTranslation.
 class StudioHeader extends React.Component {
@@ -152,18 +152,14 @@ class StudioHeader extends React.Component {
   };
 
   render() {
-    if (this.state.redirect) return <Redirect to={this.state.redirect} />;
     return (
       <div id="studioHeader-container">
         <section id="studioHeader-topRow">
-          <button
-            type="button"
-            class="arrow-button"
-            id="back-to-documents"
-            onClick={this.backToDashboard}
-          >
-            <span>{"<<<"}</span>Back to Dashboard
-          </button>
+          <Link href="/dashboard">
+            <a class="arrow-button" id="back-to-documents">
+              <span>{"<<<"}</span>Back to Dashboard
+            </a>
+          </Link>
           <button onClick={this.props.copyTranslation} id="copyTranslation">
             Copy Translation
           </button>
