@@ -8,16 +8,18 @@ MARKDOWN FILES IMPORTED
 File Naming convention: (Menu#)Name (ex: (0)Overview)
 import variable naming convention: Docs# 
 
-*/
+// */
 // import Docs0 from "./markdownfiles/(0)Overview.md";
 // import Docs1 from "./markdownfiles/(1)General Usage.md";
 
 const DocsRoot = () => {
   //All Docs options, IN ORDER (starting from 0)
   var Docs0, Docs1;
+  Docs0 = require("./markdownfiles/(0)Overview.md").default;
+  Docs1 = require("./markdownfiles/(1)General Usage.md").default;
   const docOptions = [
-    { text: "Overview", isPrimary: true, file: Docs0 },
-    { text: "General Usage", isPrimary: false, file: Docs1 },
+    { name: "Overview", isPrimary: true, text: Docs0 },
+    { name: "General Usage", isPrimary: false, text: Docs1 },
   ];
 
   const [page, setPage] = useState(0);
@@ -25,10 +27,7 @@ const DocsRoot = () => {
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    Docs0 = require("./markdownfiles/(0)Overview.md");
-    Docs1 = require("./markdownfiles/(1)General Usage.md");
-  }, []);
+  useEffect(() => {}, []);
 
   //when switch the page, do two things: 1, get the content of the markdown file to display; 2: reset the button options to highlight the current one
   useEffect(() => {
@@ -54,22 +53,25 @@ const DocsRoot = () => {
             }}
             name={i}
           >
-            {docOptions[i].text}
+            {docOptions[i].name}
           </button>
         </li>
       );
     }
     setOptions(optionsArr);
 
+    setText(parser(docOptions[page].text));
+
     //get markdown file;
-    fetch(docOptions[page].file)
-      .then((res) => res.text())
-      .then((text) => {
-        console.log(text);
-        text = parser(text);
-        setText(text);
-        setIsLoading(false);
-      });
+    // fetch(docOptions[page].file)
+    //   .then((res) => res.text())
+    //   .then((text) => console.log(text));
+    // // .then((text) => {
+    // //   console.log(text);
+    // //   text = parser(text);
+    // //   setText(text);
+    // //   setIsLoading(false);
+    // // });
   }, [page]);
 
   return (

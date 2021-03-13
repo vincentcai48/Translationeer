@@ -9,7 +9,7 @@
     "firebase": "^7.24.0",
     "next": "latest",
     "raw-loader": "^4.0.2",
-    "react": "latest",
+    "react": "^17.0.1",
     "react-beforeunload": "^2.4.0",
     "react-dom": "^16.14.0",
     "react-html-parser": "^2.0.2",
