@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 function Footer() {
   return (
@@ -6,9 +7,21 @@ function Footer() {
       <div className="footer-main">
         <div>&copy; Copyright Translationeer 2020</div>
         <ul className="legal-list">
-          <li className="link">Privacy Policy</li>
-          <li className="link">Terms and Conditions</li>
-          <li className="link">Disclaimers</li>
+          <li>
+            <Link href="/legal/privacypolicy">
+              <a className="link">Privacy Policy</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/legal/termsandconditions">
+              <a className="link">Terms And Conditions</a>
+            </Link>
+          </li>
+          <li>
+            <Link href="/legal/disclaimers">
+              <a className="link">Disclaimers</a>
+            </Link>
+          </li>
         </ul>
       </div>
     </footer>

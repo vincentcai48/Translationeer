@@ -127,10 +127,6 @@ class DocumentsList extends React.Component {
           <div className="document-buttons">
             <Link
               href={`/studio?document=${e.uid}&user=${pAuth.currentUser.uid}`}
-
-              // onClick={this.openInStudio}
-              // // SET IT TO THE UID
-              // name={e.uid}
             >
               <a className="open-in-studio">
                 Open In Studio <span>{">>>"}</span>

@@ -9,11 +9,12 @@ File Naming convention: (Menu#)Name (ex: (0)Overview)
 import variable naming convention: Docs# 
 
 */
-import Docs0 from "./markdownfiles/(0)Overview.md";
-import Docs1 from "./markdownfiles/(1)General Usage.md";
+// import Docs0 from "./markdownfiles/(0)Overview.md";
+// import Docs1 from "./markdownfiles/(1)General Usage.md";
 
 const DocsRoot = () => {
   //All Docs options, IN ORDER (starting from 0)
+  var Docs0, Docs1;
   const docOptions = [
     { text: "Overview", isPrimary: true, file: Docs0 },
     { text: "General Usage", isPrimary: false, file: Docs1 },
@@ -23,6 +24,11 @@ const DocsRoot = () => {
   const [text, setText] = useState("");
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    Docs0 = require("./markdownfiles/(0)Overview.md");
+    Docs1 = require("./markdownfiles/(1)General Usage.md");
+  }, []);
 
   //when switch the page, do two things: 1, get the content of the markdown file to display; 2: reset the button options to highlight the current one
   useEffect(() => {

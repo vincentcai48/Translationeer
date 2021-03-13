@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.2.1",
     "firebase": "^7.24.0",
     "next": "latest",
+    "raw-loader": "^4.0.2",
     "react": "latest",
     "react-beforeunload": "^2.4.0",
     "react-dom": "^16.14.0",
