@@ -33,6 +33,7 @@ class Studio extends React.Component {
       currentDoc: null, //the full object of the document, from firebase (aka doc.data())
       currentSection: -1,
       loading: false,
+      loadingDoc: false, //loading the entire doc in studio.
       redirect: false,
       translation: "", //what is in the edit translation text area
       isSaved: true,
@@ -94,6 +95,7 @@ class Studio extends React.Component {
   };
 
   setCurrentDoc = async (docId, userId) => {
+    this.setState({ loadingDoc: true });
     var query = pFirestore
       .collection("users")
       .doc(userId)
@@ -102,6 +104,7 @@ class Studio extends React.Component {
     var res = await query.get();
     this.setState({
       currentDoc: { ...res.data(), uid: res.id },
+      loadingDoc: false,
     });
   };
 
@@ -345,7 +348,14 @@ class Studio extends React.Component {
     const docColor = this.state.currentDoc
       ? convertColor(this.state.currentDoc.color)
       : "black"; //convert colors <v0.1.5
-    return this.state.currentDoc ? (
+    if (this.state.loadingDoc)
+      return (
+        <div className="center-child fullscreen-gray">
+          <Loading type="studio" />
+        </div>
+      );
+    if (!this.state.currentDoc) return <StudioDefault />;
+    return (
       <div id="studio">
         <Beforeunload
           onBeforeunload={(event) => {
@@ -422,8 +432,6 @@ class Studio extends React.Component {
           )}
         </div>
       </div>
-    ) : (
-      <StudioDefault />
     );
   }
 }

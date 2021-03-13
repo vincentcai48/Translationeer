@@ -310,6 +310,12 @@ textarea:focus {
   }
 }
 
+.studio-loader h5 {
+  margin: 10px 0px;
+  font-size: 30px;
+  font-weight: bolder;
+}
+
 #studio-slider {
   height: 40px;
   width: 50px;
@@ -821,6 +827,12 @@ ul.legal-list {
   background-color: white;
 }
 
+.center-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .grayed-out-background {
   position: fixed;
   top: 50%;
@@ -830,6 +842,12 @@ ul.legal-list {
   width: 100vw;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 101;
+}
+
+.fullscreen-gray {
+  width: 100%;
+  height: 100vh;
+  background-color: lightgrey;
 }
 
 #add-section-container {
@@ -2287,6 +2305,10 @@ section.studioDefault-section p {
 
   #newUser-container {
     height: 150vh;
+  }
+
+  footer .footer-main {
+    display: block;
   }
 }
 

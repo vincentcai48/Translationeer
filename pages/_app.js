@@ -1,6 +1,7 @@
 import Layout from "../components/root/Layout";
 import { LangContext } from "../services/context";
 import "../styles/global.css";
+import "../public/fontawesome/css/all.min.css";
 import { useEffect, useState } from "react";
 import { pFirestore, pAuth, fbFieldValue } from "../services/config";
 
