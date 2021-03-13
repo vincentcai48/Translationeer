@@ -159,6 +159,7 @@ function MyApp({ Component, pageProps }) {
     isAuth: isAuth,
     isJustCreatedUser: isJustCreatedUser,
     title: title,
+    setTitle: setTitle,
     setApis: setApis,
     updateLanguage: updateLanguage,
     updateTextEnd: setTextEnd,

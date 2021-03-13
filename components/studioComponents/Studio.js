@@ -99,6 +99,7 @@ class Studio extends React.Component {
       currentDoc: { ...res.data(), uid: res.id },
       loadingDoc: false,
     });
+    this.context.setTitle(res.data()["name"]);
   };
 
   promptEdit = (section) => {
