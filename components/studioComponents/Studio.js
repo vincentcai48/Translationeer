@@ -42,13 +42,6 @@ class Studio extends React.Component {
     };
   }
 
-  componentWillMount() {
-    // const urlParams = new URLSearchParams(window.location.search);
-    // if (urlParams.has("document")) {
-    //   this.setCurrentDoc(urlParams.get("document"));
-    // }
-  }
-
   componentDidMount() {
     var newThis = this;
     pAuth.onAuthStateChanged((user) => {

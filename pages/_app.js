@@ -19,6 +19,9 @@ function MyApp({ Component, pageProps }) {
   const [isAuth, setIsAuth] = useState(false);
   const [isJustCreatedUser, setIsJustCreatedUser] = useState(false);
 
+  //For <CustomHead/>
+  const [title, setTitle] = useState("Translationeer");
+
   useEffect(() => {
     componentDidMount();
   }, []);
@@ -155,6 +158,7 @@ function MyApp({ Component, pageProps }) {
     isMobile: isMobile,
     isAuth: isAuth,
     isJustCreatedUser: isJustCreatedUser,
+    title: title,
     setApis: setApis,
     updateLanguage: updateLanguage,
     updateTextEnd: setTextEnd,
