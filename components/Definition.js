@@ -11,17 +11,6 @@ import Loading from "./Loading";
 var x, y;
 var rect;
 
-// window.addEventListener("mousemove", (e) => {
-//   // e = Mouse click event.
-//   if (document.querySelector("body") && !rect) {
-//     rect = document.querySelector("body").getBoundingClientRect();
-//   }
-//   if (rect) {
-//     x = e.pageX - rect.left; //x position within the element.
-//     y = e.pageY - rect.top; //y position within the element.
-//   }
-// });
-
 function dragElement(elmnt) {
   var pos1 = 0,
     pos2 = 0,
@@ -118,6 +107,7 @@ class Definition extends React.Component {
 
   componentDidMount() {
     this.setState({ word: this.props.word, inputWord: this.props.word });
+    this.onMouseMove(); //to set initial x and y position of the definition box.
     this.newDefinition();
 
     //IMPORTANT TO PREVENT GLITCHES
@@ -127,23 +117,21 @@ class Definition extends React.Component {
     });
 
     window.addEventListener("mousemove", (e) => {
-      // e = Mouse click event.
-      if (document.querySelector("body") && !rect) {
-        rect = document.querySelector("body").getBoundingClientRect();
-      }
-      if (rect) {
-        x = e.pageX - rect.left; //x position within the element.
-        y = e.pageY - rect.top; //y position within the element.
-      }
+      this.onMouseMove(e);
     });
-
-    // if (document.getElementById("definition-container")) {
-    //   console.log(document.getElementById("definition-container"));
-    //   const defElement = document.getElementById("definition-container");
-    //   dragElement(defElement);
-    //   this.newDefinition();
-    // }
   }
+
+  //simply what to call on mouse move (setting the initial x and y values of the definition box, so also call directly on componentDidMount)
+  onMouseMove = (e) => {
+    // e = Mouse click event.
+    if (document.querySelector("body") && !rect) {
+      rect = document.querySelector("body").getBoundingClientRect();
+    }
+    if (rect) {
+      x = e.pageX - rect.left; //x position within the element.
+      y = e.pageY - rect.top; //y position within the element.
+    }
+  };
 
   newDefinition = () => {
     //console.log(this.context.apis);
