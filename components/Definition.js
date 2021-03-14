@@ -106,18 +106,17 @@ class Definition extends React.Component {
   }
 
   componentDidMount() {
+    window.addEventListener("mousemove", (e) => {
+      this.onMouseMove(e);
+    });
     this.setState({ word: this.props.word, inputWord: this.props.word });
-    this.onMouseMove(); //to set initial x and y position of the definition box.
+    // this.onMouseMove(); //to set initial x and y position of the definition box.
     this.newDefinition();
 
     //IMPORTANT TO PREVENT GLITCHES
     //An Extra check, just in case the mouse comes up and its not on the element
     window.addEventListener("mouseup", (e) => {
       this.setState({ dragging: false });
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      this.onMouseMove(e);
     });
   }
 

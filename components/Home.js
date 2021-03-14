@@ -21,7 +21,7 @@ function Home(props) {
   return isSearched ? (
     <QuickSearch query={query || "No Text Supplied"} unSearch={unSearch} />
   ) : (
-    <div>
+    <div id="home">
       <div id="jumbotron">
         {/* <div className="jImage-container">
             <Image
@@ -52,7 +52,7 @@ function Home(props) {
         </div>
       </div>
       <section id="home-sec1">
-        <h2>What is Translationeer?{process.env.FIREBASE_API_KEY}</h2>
+        {/* <h2>What is Translationeer?{process.env.FIREBASE_API_KEY}</h2>
         <p>
           Translationeer is a platform for language students to access all
           necessary translation resources in one place. Use our canvas-style
@@ -76,7 +76,7 @@ function Home(props) {
               How To Guide<span>{">>>"}</span>
             </span>
           </Link>
-        </div>
+        </div> */}
       </section>
 
       <section id="home-sec2">
@@ -121,6 +121,31 @@ function Home(props) {
           </div>
         </div>
       </section>
+
+      <section id="home-sec3"></section>
+      <section id="home-sec4"></section>
+      <section id="home-sec5">
+        <div className="split-grid">
+          <div className="left-grid">
+            <a
+              href="https://github.com/Translationeer/Translationeer"
+              className="github-link"
+              target="_blank"
+            >
+              <div className="github-link"></div>
+            </a>
+          </div>
+          <div className="right-grid">
+            {/* <label>(Click the icon)</label> */}
+            <div>
+              <h4>We're Open Source!</h4>
+              <p>Find us on GitHub. Feel free to contribute!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="home-sec6"></section>
+      <section id="home-sec7"></section>
     </div>
   );
 }

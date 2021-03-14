@@ -1713,10 +1713,25 @@ h3.choose-doc {
   display: none;
 }
 
+#home {
+  position: relative;
+}
+
 #home-sec1-links {
   display: flex;
 }
 
+/* This is the tilted piece */
+#home-sec1 {
+  width: 110vw;
+  height: 9vw;
+  background-color: white;
+  position: absolute;
+  /* transform: translateY(-50%); */
+  transform: translate(-5%, -50%) rotateZ(3deg);
+  box-shadow: 0px -7px 7px black;
+}
+/* 
 #home-sec1 {
   padding: 20px 5vw;
   margin-top: -15px;
@@ -1733,8 +1748,8 @@ h3.choose-doc {
 
 #home-sec1 p {
   padding: 0 1%;
-}
-
+} */
+/* 
 .home-link {
   text-decoration: none;
   color: black;
@@ -1745,11 +1760,6 @@ h3.choose-doc {
   border: 3px solid black;
   border-radius: 5px;
   transition: all 0.3s;
-}
-/* 
-.home-link:hover {
-  color: white;
-  background-color: black;
 } */
 
 #home-sec2 .split-grid {
@@ -1779,6 +1789,9 @@ h3.choose-doc {
   height: 300px;
   width: 400px;
   margin: 0px 0px 100px 0px;
+  background-image: url("../public/images/homesec2.PNG");
+  background-size: cover;
+  box-shadow: 5px 5px 15px black;
 }
 
 #home-sec2 .right-grid div {
@@ -1807,6 +1820,9 @@ h3.choose-doc {
   position: absolute;
   transition: all 0.2s;
   box-shadow: 1px 4px 5px grey;
+
+  text-decoration: none;
+  color: black;
 }
 /* 
 .home-buttons .home-link:hover {
@@ -1866,6 +1882,67 @@ h3.choose-doc {
   .home-buttons .home-link {
     position: static;
   }
+}
+
+#home-sec5 {
+  background-color: black;
+  box-sizing: border-box;
+  padding: 10vh 5vw;
+  color: white;
+}
+
+#home-sec5 .split-grid {
+  display: grid;
+  grid-template-columns: 1fr 5fr;
+}
+
+#home-sec5 .left-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.github-link {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-image: url("../public/images/githubicon.png");
+  background-size: cover;
+  background-color: white;
+  transition: all 0.2s;
+  position: absolute;
+}
+
+.github-link:hover {
+  box-shadow: 0px 0px 10px lightgrey;
+  width: 160px;
+  height: 160px;
+  opacity: 0.8;
+}
+
+#home-sec5 .right-grid label {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  transform: rotateX(-45deg);
+  color: white;
+}
+
+#home-sec5 .right-grid {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+#home-sec5 .right-grid h4 {
+  font-size: 50px;
+  font-weight: bolder;
+  margin: 0px;
+}
+
+#home-sec5 .right-grid p {
+  font-size: 20px;
+  font-weight: bolder;
 }
 
 #studio-default-container {
