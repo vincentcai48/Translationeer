@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import QuickSearch from "./QuickSearch";
 import Link from "next/link";
 import { parser } from "../services/react-custom-markdown/mdparser";
@@ -11,6 +11,12 @@ function Home(props) {
 
   const submit = () => setIsSearched(true);
   const unSearch = () => setIsSearched(false);
+
+  const keyUp = (e) => {
+    if (e.keyCode == 13) submit();
+  };
+
+  useEffect(() => {}, []);
 
   return isSearched ? (
     <QuickSearch query={query || "No Text Supplied"} unSearch={unSearch} />
@@ -37,6 +43,7 @@ function Home(props) {
             <input
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Type something ..."
+              onKeyUp={keyUp}
             ></input>
             <button type="button" onClick={submit}>
               Translate<span>{""}</span>
