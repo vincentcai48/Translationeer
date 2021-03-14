@@ -7,6 +7,11 @@
   --scd: #b400b8;
   --ptc: black;
   --ltc: white;
+  --p-green: rgb(
+    0,
+    165,
+    0
+  ); /*primary green color (for charts and homepage, etc...)*/
 
   /*DOCUMENT COLORS:*/
   --dc-blue: #3498db; /*Not necessarily var(--pc), because later add change color functionality  */
@@ -1741,10 +1746,97 @@ h3.choose-doc {
   border-radius: 5px;
   transition: all 0.3s;
 }
-
+/* 
 .home-link:hover {
   color: white;
   background-color: black;
+} */
+
+#home-sec2 .split-grid {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+}
+
+#home-sec2 .left-grid {
+  margin: 0px 30px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+#home-sec2 h3 {
+  font-size: 45px;
+  font-weight: bolder;
+  margin: 50px 0px 50px 5vw;
+}
+
+.home-pic {
+  background-color: gray;
+  border-radius: 20px;
+}
+
+#home-sec2 .home-pic {
+  height: 300px;
+  width: 400px;
+  margin: 0px 0px 100px 0px;
+}
+
+#home-sec2 .right-grid div {
+  width: 70%;
+  max-width: 600px;
+  font-size: 18px;
+}
+
+#home-sec2 .right-grid p {
+  margin-bottom: 15px;
+}
+
+.home-buttons {
+  max-width: 600px;
+  height: 400px;
+  position: relative;
+}
+
+.home-buttons .home-link {
+  border: 3px solid black;
+  border-radius: 7px;
+  width: auto;
+  display: inline-block;
+  font-size: 18px;
+  padding: 3px 20px;
+  position: absolute;
+  transition: all 0.2s;
+  box-shadow: 1px 4px 5px grey;
+}
+/* 
+.home-buttons .home-link:hover {
+  background-color: white;
+} */
+
+.home-link.blue {
+  top: 10px;
+  left: 20px;
+  border-color: var(--pc);
+  background-color: var(--pc);
+  font-size: 24px;
+}
+
+.home-link.purple {
+  top: 70px;
+  left: 150px;
+  border-color: var(--scd);
+  background-color: var(--scd);
+  font-size: 22px;
+}
+
+.home-link.green {
+  top: 20px;
+  left: 265px;
+  display: block;
+  white-space: nowrap;
+  border-color: var(--p-green);
+  background-color: var(--p-green);
+  font-size: 20px;
 }
 
 #studioHeader-topRow {
@@ -1756,12 +1848,25 @@ h3.choose-doc {
   align-self: flex-end;
   margin: 3px 15px 3px auto;
 }
-/* 
-  #studio-h1 {
-    background-color: var(--scd);
-    font-size: 50px;
-    box-shadow: 0px 3px 5px #121212;
-  } */
+
+@media (max-width: 576px) {
+  #home-sec2 .left-grid {
+    display: none;
+  }
+
+  #home-sec2 .split-grid {
+    display: block;
+  }
+
+  .home-buttons {
+    display: block;
+    position: static;
+  }
+
+  .home-buttons .home-link {
+    position: static;
+  }
+}
 
 #studio-default-container {
   background-color: black;
