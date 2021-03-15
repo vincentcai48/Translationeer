@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "firebase": "^7.24.0",
     "next": "latest",
@@ -19,7 +17,7 @@
     "dev": "next dev",
     "build": "next build && next export",
     "start": "next start",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -37,5 +35,13 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://localhost:5000"
+  "proxy": "http://localhost:5000",
+  "devDependencies": {
+    "@testing-library/dom": "^7.30.0",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "jest-dom": "^4.0.0"
+  }
 }
