@@ -18,6 +18,8 @@ function MyApp({ Component, pageProps }) {
   const [isMobile, setIsMobile] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
   const [isJustCreatedUser, setIsJustCreatedUser] = useState(false);
+  const [mouseX, setMouseX] = useState(0);
+  const [mouseY, setMouseY] = useState(0);
 
   //For <CustomHead/>
   const [title, setTitle] = useState("Translationeer");
@@ -145,6 +147,11 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
+  const updateMouseCoords = (e) => {
+    setMouseX(e.pageX);
+    setMouseY(e.pageY);
+  };
+
   const contextValue = {
     tc: tc,
     newUser: newUser,
@@ -164,14 +171,16 @@ function MyApp({ Component, pageProps }) {
     updateLanguage: updateLanguage,
     updateTextEnd: setTextEnd,
     updateIsAuth: setIsAuth,
+    mouseX: mouseX,
+    mouseY: mouseY,
   };
 
   return (
     <LangContext.Provider value={contextValue}>
       <Layout>
-        <>
+        <div onMouseMove={updateMouseCoords}>
           <Component {...pageProps} />
-        </>
+        </div>
       </Layout>
     </LangContext.Provider>
   );

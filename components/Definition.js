@@ -102,17 +102,22 @@ class Definition extends React.Component {
       diffY: 0,
       styles: {},
       dragging: false,
+      isMounted: false,
     };
   }
 
   componentDidMount() {
-    window.addEventListener("mousemove", (e) => {
-      this.onMouseMove(e);
+    //Step 1: set x and y values from mouse, and get the definition (which sets the location of the definition box)
+    this.onMouseMove({
+      pageX: this.context.mouseX,
+      pageY: this.context.mouseY,
     });
-    this.setState({ word: this.props.word, inputWord: this.props.word });
-    // this.onMouseMove(); //to set initial x and y position of the definition box.
     this.newDefinition();
 
+    window.addEventListener("mousemove", (e) => {
+      this.onMouseMove(e); //get the definition on the first mousemove. its the "isMounted" var in state.
+    });
+    this.setState({ word: this.props.word, inputWord: this.props.word });
     //IMPORTANT TO PREVENT GLITCHES
     //An Extra check, just in case the mouse comes up and its not on the element
     window.addEventListener("mouseup", (e) => {

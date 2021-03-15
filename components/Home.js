@@ -92,13 +92,13 @@ function Home(props) {
                 Translationeer is a platform for language students to access all
                 necessary translation resources in one place. Use our
                 canvas-style translation suite with tons of interactive elements
-                on the screen for an immersive experience. We offer many
-                languages and translation services that you can toggle on and
-                off to personalize your translation experience. Create an
-                account for free by just logging in with your Google Account,
-                and unlock the power of the Translationeer Studio, where you can
-                custom split and merge your document into understandable pieces,
-                all while using our interactive canvas. Get started Now!
+                on the screen for an immersive experience. We offer translation
+                services that you can toggle on and off to personalize your
+                translation experience. Create an account for free by just
+                logging in with your Google Account, and unlock the power of the
+                Translationeer Studio, where you can custom split and merge your
+                document into understandable pieces, all while using our
+                interactive canvas. Get started Now!
               </p>
               <div className="home-buttons">
                 <Link href="/studiodefault">

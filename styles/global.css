@@ -1865,7 +1865,7 @@ h3.choose-doc {
   margin: 3px 15px 3px auto;
 }
 
-@media (max-width: 576px) {
+@media (max-width: 575px) {
   #home-sec2 .left-grid {
     display: none;
   }
@@ -1876,7 +1876,34 @@ h3.choose-doc {
 
   .home-buttons {
     display: block;
+    margin-bottom: 20px;
     position: static;
+  }
+
+  .home-buttons .home-link {
+    display: inline-block;
+    margin: 10px 20px 20px 0px;
+  }
+
+  .home-buttons .home-link {
+    position: static;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 991px) {
+  #home-sec2 .split-grid {
+    display: block;
+  }
+
+  .home-buttons {
+    display: block;
+
+    position: static;
+  }
+
+  .home-buttons .home-link {
+    display: inline-block;
+    margin: 10px 20px 20px 0px;
   }
 
   .home-buttons .home-link {
@@ -1932,6 +1959,7 @@ h3.choose-doc {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding-left: 50px;
 }
 
 #home-sec5 .right-grid h4 {
