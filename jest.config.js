@@ -3,6 +3,6 @@ module.exports = {
   setupFilesAfterEnv: ["<rootDir>/setupTests.js"],
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-    "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+    // "\\.(css|less|scss|sass)$": "identity-obj-proxy",
   },
 };
