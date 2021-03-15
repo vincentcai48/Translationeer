@@ -4,6 +4,7 @@ import "../styles/global.css";
 import "../public/fontawesome/css/all.min.css";
 import { useEffect, useState } from "react";
 import { pFirestore, pAuth, fbFieldValue } from "../services/config";
+import NewUser from "../components/NewUser";
 
 function MyApp({ Component, pageProps }) {
   const [tc, setTc] = useState([]);
@@ -88,10 +89,14 @@ function MyApp({ Component, pageProps }) {
     setLanguage(languageParam);
     setApis(arr);
     if (pAuth.currentUser) {
-      await pFirestore
-        .collection("users")
-        .doc(pAuth.currentUser.uid)
-        .update({ defaultLanguage: languageParam });
+      try {
+        await pFirestore
+          .collection("users")
+          .doc(pAuth.currentUser.uid)
+          .update({ defaultLanguage: languageParam });
+      } catch (e) {
+        //this probably just means a new user, so the doc won't exist
+      }
     }
   };
 
@@ -117,6 +122,8 @@ function MyApp({ Component, pageProps }) {
       await pAuth.currentUser.delete();
       setNewUser(null);
     } catch (e) {
+      await pAuth.signOut();
+      setNewUser(null);
       console.error(e);
     }
   };
@@ -175,6 +182,16 @@ function MyApp({ Component, pageProps }) {
     mouseY: mouseY,
   };
 
+  if (newUser) {
+    return (
+      <NewUser
+        registerNewUser={registerNewUser}
+        user={newUser}
+        cancelFunction={cancelNewUser}
+        tc={tc}
+      />
+    );
+  }
   return (
     <LangContext.Provider value={contextValue}>
       <Layout>

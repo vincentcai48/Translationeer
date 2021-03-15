@@ -128,7 +128,7 @@ class App extends React.Component {
         timeCreated: fbFieldValue.serverTimestamp(),
       })
       .then(() => {
-        this.setState({ newUser: null });
+        setNewUser(null);
         // thisUserRef
         //   .collection("documents")
         //   .add({
@@ -153,7 +153,7 @@ class App extends React.Component {
   cancelNewUser = () => {
     pAuth.currentUser
       .delete()
-      .then(this.setState({ newUser: null }))
+      .then(setNewUser(null))
       .catch((e) => console.error(e));
   };
 

@@ -2090,7 +2090,7 @@ section.studioDefault-section p {
 }
 
 #newUser-container section button {
-  border: 2px solid black;
+  border: 3px solid black;
   background-color: black;
   color: white;
   padding: 5px 15px;
@@ -2120,16 +2120,38 @@ section.studioDefault-section p {
   background-color: white;
   overflow-y: scroll;
   height: 40vh;
+  font-size: 0.8em;
   margin-bottom: 10px;
+  font-size: 14px;
+}
+
+#tcNewUser h1,
+#tcNewUser h2,
+#tcNewUser h3,
+#tcNewUser h4,
+#tcNewUser h5,
+#tcNewUser h6 {
+  margin: 10px 0px;
+}
+
+#tcNewUser h2 {
+  font-size: 22px;
+}
+
+#tcNewUser h3 {
+  font-size: 20px;
+}
+
+#tcNewUser h4 {
+  font-size: 18px;
 }
 
 #tcNewUser h5 {
-  margin: 0;
+  font-size: 16px;
 }
 
-#tcNewUser p {
-  margin: 5px 0;
-  font-size: 14px;
+#tcNewUser h6 {
+  font-size: 16px;
 }
 
 .edit-searchWord {
