@@ -14,6 +14,7 @@ import Howto from "./components/documentation/Howto";
 import StudioDefault from "./components/studioComponents/studioDefault";
 import NewUser from "./components/NewUser";
 import DocsRoot from "./components/documentation/DocsRoot";
+import PrivacyPolicy from "./components/legal/PrivacyPolicy";
 
 class App extends React.Component {
   constructor() {
@@ -127,7 +128,7 @@ class App extends React.Component {
         timeCreated: fbFieldValue.serverTimestamp(),
       })
       .then(() => {
-        this.setState({ newUser: null });
+        setNewUser(null);
         // thisUserRef
         //   .collection("documents")
         //   .add({
@@ -152,7 +153,7 @@ class App extends React.Component {
   cancelNewUser = () => {
     pAuth.currentUser
       .delete()
-      .then(this.setState({ newUser: null }))
+      .then(setNewUser(null))
       .catch((e) => console.error(e));
   };
 
@@ -226,6 +227,9 @@ class App extends React.Component {
                 </Route>
                 <Route path="/studiodefault">
                   <StudioDefault />
+                </Route>
+                <Route path="/privacypolicy">
+                  <PrivacyPolicy />
                 </Route>
               </Switch>
             </main>
