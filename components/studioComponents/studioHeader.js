@@ -15,7 +15,7 @@ class StudioHeader extends React.Component {
 
   changeTextEnd = (e) => {
     var sliderValue = Number(e.target.value);
-    this.context.textEnd = sliderValue;
+    this.context.updateTextEnd(sliderValue);
     const leftStudioDOM = document.getElementById("left-studio");
     const rightStudioDOM = document.getElementById("right-studio");
     const min = 30;
