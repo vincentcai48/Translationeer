@@ -5,7 +5,7 @@ function Footer() {
   return (
     <footer>
       <div className="footer-main">
-        <div>&copy; Copyright Translationeer 2020</div>
+        <div>&copy; Copyright Translationeer 2021</div>
         <ul className="legal-list">
           <li>
             <Link href="/legal/privacypolicy">
