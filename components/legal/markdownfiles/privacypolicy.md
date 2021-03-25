@@ -1,5 +1,7 @@
 # Privacy Policy
 
+**Last Updated: March 25 2021**
+
 ## Translationeer Privacy Policy
 
 At Translationeer, accessible from https://translationeer.com/, one of our main priorities is the privacy of our visitors. This Privacy Policy document contains types of information that is collected and recorded by Translationeer and how we use it.
