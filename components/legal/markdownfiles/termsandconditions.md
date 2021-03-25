@@ -1,5 +1,7 @@
 # Terms and Conditions
 
+**Last Updated: March 25 2021**
+
 These terms and conditions outline the rules and regulations for the use of Translationeer's Website, located at https://translationeer.com/.
 
 By accessing this website we assume you accept these terms and conditions. Do not continue to use Translationeer if you do not agree to take all of the terms and conditions stated on this page.
