@@ -4,7 +4,7 @@ Powerful tools for language Translation
 
 ## Use Translationeer
 
-We offer a hosted web-based software as a service for Translationeer online at https://translationeer.com/
+We offer a hosted web-based software as a service for Translationeer online at https://translationeer.com/, for the current version of the platform. Please note that Translationeer is still in active development.
 
 This project on GitHub is open source and free to use
 
