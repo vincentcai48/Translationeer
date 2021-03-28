@@ -100,25 +100,14 @@ function Definition(props) {
   const [word, setWord] = useState("");
   const [diffX, setDiffX] = useState(0);
   const [diffY, setDiffY] = useState(0);
-  //x and y for where the mouse is (relative to the entire document, NOT the viewport.)
-  const [x, setX] = useState(0);
-  const [y, setY] = useState(0);
-  //
   const [styles, setStyles] = useState({});
   const [isDragging, setIsDragging] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    //Step 1: set x and y values from mouse, and get the definition (which sets the location of the definition box)
-    onMouseMove({
-      pageX: context.mouseX,
-      pageY: context.mouseY,
-    });
+    //Step 1: get the definition (which sets the location of the definition box)
     newDefinition();
 
-    window.addEventListener("mousemove", (e) => {
-      onMouseMove(e); //get the definition on the first mousemove. its the "isMounted" var in
-    });
     setWord(props.word);
     setInputWord(props.word);
     //IMPORTANT TO PREVENT GLITCHES
@@ -135,33 +124,15 @@ function Definition(props) {
     [ref.current ? ref.current.getBoundingClientRect().left : ref.current]
   );
 
-  //simply what to call on mouse move (setting the initial x and y values of the definition box, so also call directly on componentDidMount)
-  const onMouseMove = (e) => {
-    setX(e.pageX); // - rect.left; //x position within the element.
-    setY(e.pageY); //- rect.top; //y position within the element.
-  };
-
   const newDefinition = () => {
-    const xVar = x;
-    const yVar = y;
     if (ref && ref.current) {
       //Step 1: assign new styles, top and right, for positioning
       var newStyles = { ...styles }; //styles for the ref element
-      newStyles.top = yVar + 20 + "px";
-      newStyles.left = xVar - ref.current.offsetWidth * 0.5 + "px";
-      //Step 2: check if off the screen below
-      const lowerBound =
-        document.querySelector("body").offsetHeight - ref.current.offsetHeight;
-      if (ref.current.offsetTop > lowerBound) {
-        newStyles.top = lowerBound + "px";
-      }
-      //Step 3: check if off the screen to the left
-      var isOut = isOutOfViewport(ref.current, context.textEnd);
-      console.log(ref.current.getBoundingClientRect().left); //the ref.current isn't updating, always the last one.
-      console.log(isOut.left);
-      if (isOut.left) {
-        newStyles.left = 0;
-      }
+      newStyles.top = context.mouseY + 20 + "px";
+      newStyles.left =
+        Math.max(context.mouseX - ref.current.offsetWidth * 0.5, 0) + "px"; //check to not flow out leftwards.
+
+      //Then set those styles.
       setStyles(newStyles);
     }
   };
