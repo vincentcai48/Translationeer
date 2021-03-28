@@ -63,13 +63,13 @@ class Studio extends React.Component {
 
     window.addEventListener("mousemove", (e) => {
       // e = Mouse click event.
-      if (document.querySelector("body") && !rect) {
-        rect = document.querySelector("body").getBoundingClientRect();
-      }
-      if (rect) {
-        x = e.pageX - rect.left; //x position within the element.
-        y = e.pageY - rect.top; //y position within the element.
-      }
+      // if (document.querySelector("body") && !rect) {
+      //   rect = document.querySelector("body").getBoundingClientRect();
+      // }
+      // if (rect) {
+      x = e.pageX; //- rect.left; //x position within the element.
+      y = e.pageY; //- rect.top; //y position within the element.
+      //}
     });
   }
 
