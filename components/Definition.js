@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { DefinitionContext, LangContext } from "../services/context";
 import { validate } from "../services/validate";
 import InnerDefinition from "./InnerDefinition";
@@ -11,65 +11,65 @@ import Loading from "./Loading";
 var x, y;
 var rect;
 
-function dragElement(elmnt) {
-  var pos1 = 0,
-    pos2 = 0,
-    pos3 = 0,
-    pos4 = 0;
-  elmnt.onmousedown = dragMouseDown;
+// function dragElement(elmnt) {
+//   var pos1 = 0,
+//     pos2 = 0,
+//     pos3 = 0,
+//     pos4 = 0;
+//   elmnt.onmousedown = dragMouseDown;
 
-  function dragMouseDown(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // get the mouse cursor position at startup:
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    // call a function whenever the cursor moves:
-    document.onmousemove = elementDrag;
-  }
+//   function dragMouseDown(e) {
+//     e = e || window.event;
+//     e.preventDefault();
+//     // get the mouse cursor position at startup:
+//     pos3 = e.clientX;
+//     pos4 = e.clientY;
+//     document.onmouseup = closeDragElement;
+//     // call a function whenever the cursor moves:
+//     document.onmousemove = elementDrag;
+//   }
 
-  function elementDrag(e) {
-    e = e || window.event;
-    e.preventDefault();
-    // calculate the new cursor position:
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    // set the element's new position:
-    const docContainer = document.querySelector("#docContainer");
-    const docContainerBottom =
-      docContainer.offsetTop + docContainer.offsetHeight;
-    //+/- 40 because of the 20px translate y
-    // if (elmnt.offsetTop - pos2 + elmnt.offsetHeight + 40 > docContainerBottom) {
-    //   elmnt.style.top = docContainerBottom - elmnt.offsetHeight - 40 + "px";
-    // } else if (elmnt.offsetTop - pos2 < docContainer.offsetTop) {
-    //   elmnt.style.top = docContainer.offsetTop;
-    // } else {
-    //   elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-    // }
+//   function elementDrag(e) {
+//     e = e || window.event;
+//     e.preventDefault();
+//     // calculate the new cursor position:
+//     pos1 = pos3 - e.clientX;
+//     pos2 = pos4 - e.clientY;
+//     pos3 = e.clientX;
+//     pos4 = e.clientY;
+//     // set the element's new position:
+//     const docContainer = document.querySelector("#docContainer");
+//     const docContainerBottom =
+//       docContainer.offsetTop + docContainer.offsetHeight;
+//     //+/- 40 because of the 20px translate y
+//     // if (elmnt.offsetTop - pos2 + elmnt.offsetHeight + 40 > docContainerBottom) {
+//     //   elmnt.style.top = docContainerBottom - elmnt.offsetHeight - 40 + "px";
+//     // } else if (elmnt.offsetTop - pos2 < docContainer.offsetTop) {
+//     //   elmnt.style.top = docContainer.offsetTop;
+//     // } else {
+//     //   elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+//     // }
 
-    if (
-      elmnt.offsetTop - pos2 + elmnt.offsetHeight >
-      document.querySelector("body").offsetHeight
-    ) {
-      const lowerBound =
-        document.querySelector("body").offsetHeight - elmnt.offsetHeight;
+//     if (
+//       elmnt.offsetTop - pos2 + elmnt.offsetHeight >
+//       document.querySelector("body").offsetHeight
+//     ) {
+//       const lowerBound =
+//         document.querySelector("body").offsetHeight - elmnt.offsetHeight;
 
-      elmnt.style.top = lowerBound + "px";
-    } else {
-      elmnt.style.top = elmnt.offsetTop - pos2 + "px";
-    }
-    elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
-  }
+//       elmnt.style.top = lowerBound + "px";
+//     } else {
+//       elmnt.style.top = elmnt.offsetTop - pos2 + "px";
+//     }
+//     elmnt.style.left = elmnt.offsetLeft - pos1 + "px";
+//   }
 
-  function closeDragElement() {
-    // stop moving when mouse button is released:
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
-}
+//   function closeDragElement() {
+//     // stop moving when mouse button is released:
+//     document.onmouseup = null;
+//     document.onmousemove = null;
+//   }
+// }
 
 var isOutOfViewport = function (elem, textEnd) {
   // Get element's bounding
@@ -90,122 +90,117 @@ var isOutOfViewport = function (elem, textEnd) {
   return out;
 };
 
-class Definition extends React.Component {
-  constructor(props) {
-    super();
-    this.state = {
-      apis: props.apis,
-      isEditing: false,
-      inputWord: "",
-      word: "",
-      diffX: 0,
-      diffY: 0,
-      styles: {},
-      dragging: false,
-      isMounted: false,
-    };
-  }
+function Definition(props) {
+  const context = useContext(LangContext);
+  const ref = useRef(null);
 
-  componentDidMount() {
+  const [apis, setApis] = useState(props.apis);
+  const [isEditing, setIsEditing] = useState(false);
+  const [inputWord, setInputWord] = useState("");
+  const [word, setWord] = useState("");
+  const [diffX, setDiffX] = useState(0);
+  const [diffY, setDiffY] = useState(0);
+  //x and y for where the mouse is (relative to the entire document, NOT the viewport.)
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  //
+  const [styles, setStyles] = useState({});
+  const [isDragging, setIsDragging] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
     //Step 1: set x and y values from mouse, and get the definition (which sets the location of the definition box)
-    this.onMouseMove({
-      pageX: this.context.mouseX,
-      pageY: this.context.mouseY,
+    onMouseMove({
+      pageX: context.mouseX,
+      pageY: context.mouseY,
     });
-    this.newDefinition();
+    newDefinition();
 
     window.addEventListener("mousemove", (e) => {
-      this.onMouseMove(e); //get the definition on the first mousemove. its the "isMounted" var in state.
+      onMouseMove(e); //get the definition on the first mousemove. its the "isMounted" var in
     });
-    this.setState({ word: this.props.word, inputWord: this.props.word });
+    setWord(props.word);
+    setInputWord(props.word);
     //IMPORTANT TO PREVENT GLITCHES
     //An Extra check, just in case the mouse comes up and its not on the element
-    window.addEventListener("mouseup", (e) => {
-      this.setState({ dragging: false });
-    });
-  }
+    window.addEventListener("mouseup", dragEnd);
+  }, []);
 
   //simply what to call on mouse move (setting the initial x and y values of the definition box, so also call directly on componentDidMount)
-  onMouseMove = (e) => {
-    // e = Mouse click event.
-    if (document.querySelector("body") && !rect) {
-      rect = document.querySelector("body").getBoundingClientRect();
-    }
-    if (rect) {
-      x = e.pageX - rect.left; //x position within the element.
-      y = e.pageY - rect.top; //y position within the element.
-    }
+  const onMouseMove = (e) => {
+    setX(e.pageX); // - rect.left; //x position within the element.
+    setY(e.pageY); //- rect.top; //y position within the element.
   };
 
-  newDefinition = () => {
-    //console.log(this.context.apis);
+  const newDefinition = () => {
     const xVar = x;
     const yVar = y;
-    if (document.getElementById("definition-container")) {
-      const defElement = document.getElementById("definition-container");
-      defElement.style.top = yVar + 20 + "px";
-      defElement.style.left = xVar - defElement.offsetWidth * 0.5 + "px";
+    if (ref && ref.current) {
+      //Step 1: assign new styles, top and right, for positioning
+      var newStyles = { ...styles }; //styles for the ref element
+      newStyles.top = yVar + 20 + "px";
+      newStyles.left = xVar - ref.current.offsetWidth * 0.5 + "px";
+      //Step 2: check if off the screen below
       const lowerBound =
-        document.querySelector("body").offsetHeight - defElement.offsetHeight;
-      if (defElement.offsetTop > lowerBound) {
-        defElement.style.top = lowerBound + "px";
+        document.querySelector("body").offsetHeight - ref.current.offsetHeight;
+      if (ref.current.offsetTop > lowerBound) {
+        newStyles.top = lowerBound + "px";
       }
-      var isOut = isOutOfViewport(defElement, this.context.textEnd);
-      if (isOut.left) defElement.style.left = "0px";
+      var isOut = isOutOfViewport(ref.current, context.textEnd);
+      console.log(ref.current.getBoundingClientRect().left);
+      console.log(isOut.left);
+      if (isOut.left) {
+        newStyles.left = 0;
+      }
+      setStyles(newStyles);
     }
   };
 
-  componentDidUpdate(prevProps) {
-    //Only do this when the props change
-    if (prevProps.word != this.props.word) {
-      this.newDefinition();
-      this.setState({ word: this.props.word, inputWord: this.props.word });
-    }
-  }
+  //When the props change, set a new word.
+  useEffect(
+    (prevProps) => {
+      newDefinition();
+      setWord(props.word);
+      setInputWord(props.word);
+    },
+    [props.word]
+  );
 
-  crossOut = () => {
-    this.props.crossOut();
+  const crossOut = () => {
+    props.crossOut();
   };
 
-  dragStart = (e) => {
-    this.setState({
-      diffX:
-        e.screenX -
-        (e.currentTarget.getBoundingClientRect().left + window.scrollX),
-      diffY:
-        e.screenY -
-        (e.currentTarget.getBoundingClientRect().top + window.scrollY),
-      dragging: true,
-    });
+  const dragStart = (e) => {
+    setDiffX(
+      e.screenX -
+        (e.currentTarget.getBoundingClientRect().left + window.scrollX)
+    );
+    setDiffY(
+      e.screenY - (e.currentTarget.getBoundingClientRect().top + window.scrollY)
+    );
+    setIsDragging(true);
   };
 
-  dragging = (e) => {
-    if (this.state.dragging && !this.state.isEditing) {
-      var x = e.screenX - this.state.diffX;
-      var y = e.screenY - this.state.diffY;
-      this.setState({
-        styles: {
-          top: y,
-          left: x,
-        },
+  const dragging = (e) => {
+    if (isDragging && !isEditing) {
+      var x = e.screenX - diffX;
+      var y = e.screenY - diffY;
+      setStyles({
+        top: y,
+        left: x,
       });
     }
   };
 
-  dragEnd = (e) => {
-    this.setState({ dragging: false });
-  };
-
-  changeState = (e) => {
-    const { name, value } = e.target;
-    this.setState({ [name]: value });
+  const dragEnd = (e) => {
+    setIsDragging(false);
   };
 
   // getDefinition = async (api) => {
   //   const xVar = x;
   //   const yVar = y;
   //   console.log("X:", xVar, "Y:", yVar);
-  //   var word = this.props.word;
+  //   var word = props.word;
   //   console.log(word);
   //   word = validate.replaceChars(word);
   //   const url = api.url.replace("{{keyword}}", word);
@@ -218,7 +213,7 @@ class Definition extends React.Component {
   //     "<div draggable='true' class='" +
   //     classNames +
   //     "'><h4>" +
-  //     this.props.word +
+  //     props.word +
   //     "</h4><h5>" +
   //     api.name +
   //     "</h5><p>" +
@@ -244,75 +239,65 @@ class Definition extends React.Component {
   //   //Put into viewport, if outside
   //   var isOut = isOutOfViewport(justCreatedEl);
   //   console.log("Testing isOUT");
-  //   console.log(isOut, this.context.textEnd);
-  //   console.log("TextEnd: ", this.context.textEnd);
+  //   console.log(isOut, context.textEnd);
+  //   console.log("TextEnd: ", context.textEnd);
   //   //Remember that in the CSS, after you set "left", you also translateX(-50%), so you must offset by 50% of the width.
   //   if (isOut.left)
   //     justCreatedEl.style.left = justCreatedEl.clientWidth * 0.5 + 20 + "px";
   //   console.log(justCreatedEl.style.left);
   //   if (isOut.right)
   //     justCreatedEl.style.left =
-  //       this.context.textEnd - justCreatedEl.clientWidth * 0.5 - 20 + "px";
+  //       context.textEnd - justCreatedEl.clientWidth * 0.5 - 20 + "px";
   // };
 
-  changeSearch = () => {
-    this.setState((p) => {
-      var nextWord = p.inputWord;
-
-      return {
-        word: nextWord,
-        isEditing: false,
-      };
-    });
+  const changeSearch = () => {
+    setWord(inputWord);
+    setIsEditing(false);
   };
 
-  render() {
-    return (
-      <div
-        id="definition-container"
-        onMouseDown={this.dragStart}
-        onMouseMove={this.dragging}
-        onMouseUp={this.dragEnd}
-        style={this.state.styles}
-      >
-        <div id="definition-title">
-          {this.state.isEditing ? (
-            <input
-              className="edit-searchWord"
-              value={this.state.inputWord}
-              onChange={this.changeState}
-              name="inputWord"
-              placeholder="Enter Query"
-              autoComplete="off"
-            ></input>
-          ) : (
-            this.state.word
-          )}
-          {!this.state.isEditing ? (
-            <button
-              className="fas fa-pen"
-              onClick={() => {
-                this.setState({ isEditing: true });
-              }}
-            ></button>
-          ) : (
-            <button className="submit-newWord" onClick={this.changeSearch}>
-              <i className="fas fa-search"></i>
-            </button>
-          )}
-          <button type="button" className="x-out" onClick={this.crossOut}>
-            <i className="fas fa-times"></i>
+  return (
+    <div
+      id="definition-container"
+      onMouseDown={dragStart}
+      onMouseMove={dragging}
+      onMouseUp={dragEnd}
+      style={styles}
+      ref={ref}
+    >
+      <div id="definition-title">
+        {isEditing ? (
+          <input
+            className="edit-searchWord"
+            value={inputWord}
+            onChange={(e) => setInputWord(e.target.value)}
+            name="inputWord"
+            placeholder="Enter Query"
+            autoComplete="off"
+          ></input>
+        ) : (
+          word
+        )}
+        {!isEditing ? (
+          <button
+            className="fas fa-pen"
+            onClick={() => setIsEditing(true)}
+          ></button>
+        ) : (
+          <button className="submit-newWord" onClick={changeSearch}>
+            <i className="fas fa-search"></i>
           </button>
-        </div>
-        {this.context.apis
-          .filter((e) => e.enabled)
-          .map((e) => (
-            <InnerDefinition word={this.state.word} api={e} />
-          ))}
+        )}
+        <button type="button" className="x-out" onClick={crossOut}>
+          <i className="fas fa-times"></i>
+        </button>
       </div>
-    );
-  }
+      {context.apis
+        .filter((e) => e.enabled)
+        .map((e) => (
+          <InnerDefinition word={word} api={e} />
+        ))}
+    </div>
+  );
 }
-Definition.contextType = LangContext;
 
 export default Definition;

@@ -29,7 +29,7 @@ export default function CustomHead(props) {
         rel="icon"
         type="image/png"
         // path from "public directory"
-        href="/images/favicon-nobg.PNG"
+        href="favicon-nobg.PNG"
       />
     </Head>
   );
