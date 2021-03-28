@@ -126,6 +126,15 @@ function Definition(props) {
     window.addEventListener("mouseup", dragEnd);
   }, []);
 
+  //first listens to changes in ref.current, then checks if it isn't null, so it can listen to changes in the left bound of the ref.
+  useEffect(
+    () =>
+      console.log(
+        ref.current ? ref.current.getBoundingClientRect().left : "null thing"
+      ),
+    [ref.current ? ref.current.getBoundingClientRect().left : ref.current]
+  );
+
   //simply what to call on mouse move (setting the initial x and y values of the definition box, so also call directly on componentDidMount)
   const onMouseMove = (e) => {
     setX(e.pageX); // - rect.left; //x position within the element.
@@ -146,8 +155,9 @@ function Definition(props) {
       if (ref.current.offsetTop > lowerBound) {
         newStyles.top = lowerBound + "px";
       }
+      //Step 3: check if off the screen to the left
       var isOut = isOutOfViewport(ref.current, context.textEnd);
-      console.log(ref.current.getBoundingClientRect().left);
+      console.log(ref.current.getBoundingClientRect().left); //the ref.current isn't updating, always the last one.
       console.log(isOut.left);
       if (isOut.left) {
         newStyles.left = 0;
