@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import Auth from "../Auth";
 import { pAuth } from "../../services/config";
 import Link from "next/link";
+import { LangContext } from "../../services/context";
 
 function StudioDefault() {
-  this.context.setTitle("Translationeer Studio");
+  useContext(LangContext).setTitle("Translationeer Studio");
 
   return (
     <div id="studio-default-container">

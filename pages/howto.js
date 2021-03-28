@@ -1,7 +1,8 @@
 import HowTo from "../components/documentation/Howto.js";
-import React from "react";
+import React, { useContext } from "react";
+import { LangContext } from "../services/context.js";
 
 export default function HowToContainer() {
-  this.context.setTitle("Translationeer How To");
+  useContext(LangContext).setTitle("Translationeer How To");
   return <HowTo />;
 }
