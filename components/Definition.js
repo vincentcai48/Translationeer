@@ -107,24 +107,19 @@ function Definition(props) {
   useEffect(() => {
     //Step 1: get the definition (which sets the location of the definition box)
     newDefinition();
-
-    setWord(props.word);
-    setInputWord(props.word);
     //IMPORTANT TO PREVENT GLITCHES
     //An Extra check, just in case the mouse comes up and its not on the element
     window.addEventListener("mouseup", dragEnd);
   }, []);
 
-  //first listens to changes in ref.current, then checks if it isn't null, so it can listen to changes in the left bound of the ref.
-  useEffect(
-    () =>
-      console.log(
-        ref.current ? ref.current.getBoundingClientRect().left : "null thing"
-      ),
-    [ref.current ? ref.current.getBoundingClientRect().left : ref.current]
-  );
+  //When the props change, set a new word.
+  useEffect(() => {
+    newDefinition();
+  }, [props.word]);
 
   const newDefinition = () => {
+    setWord(props.word);
+    setInputWord(props.word);
     if (ref && ref.current) {
       //Step 1: assign new styles, top and right, for positioning
       var newStyles = { ...styles }; //styles for the ref element
@@ -136,16 +131,6 @@ function Definition(props) {
       setStyles(newStyles);
     }
   };
-
-  //When the props change, set a new word.
-  useEffect(
-    (prevProps) => {
-      newDefinition();
-      setWord(props.word);
-      setInputWord(props.word);
-    },
-    [props.word]
-  );
 
   const crossOut = () => {
     props.crossOut();
