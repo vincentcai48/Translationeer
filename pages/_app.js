@@ -29,10 +29,6 @@ function MyApp({ Component, pageProps }) {
     componentDidMount();
   }, []);
 
-  useEffect(() => {
-    console.log(apis);
-  }, [apis]);
-
   const componentDidMount = async () => {
     await getAllApisFromDB();
     await getAllLanguagesFromDB();
