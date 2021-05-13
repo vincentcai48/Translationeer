@@ -1,4 +1,8 @@
 const functions = require('firebase-functions');
+const admin = require("firebase-admin");
+admin.initializeApp();
+
+const db = admin.firestore();
 
 const express = require('express');
 const app = express();
@@ -28,6 +32,19 @@ const translateapi = require("./translateapi.js");
 
 //USES ALL THE API ENDPOINTS FOR TRANSLATION
 app.use("/translateapi", translateapi);
+app.post("/pickhacks/",(req,res)=>{
+    var d = new Date()
+    db.collection("pickhacks").add({
+        songName: req.body.name,
+        songId: req.body.id,
+        time: d.getTime(),
+    }).then(r=>{
+        console.log(r);
+        res.send(200);
+    }).catch(e=>{
+        res.send(500)
+    })
+})
 
 // if (process.env.NODE_ENV === "production") {
 //   app.use(express.static(path.join(__dirname, "build")));
