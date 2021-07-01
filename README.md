@@ -1,29 +1,34 @@
-# Translationeer
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-Powerful tools for language Translation
+## Getting Started
 
-## Use Translationeer
+First, run the development server:
 
-We offer a hosted web-based software as a service for Translationeer online at https://translationeer.com/, for the current version of the platform. Please note that Translationeer is still in active development.
+```bash
+npm run dev
+# or
+yarn dev
+```
 
-This project on GitHub is open source and free to use
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Current Work
+You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
 
-Currently a work in progress, may be subject to breaking changes.
+[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
 
-Support for many languages is being worked on. As of now, there is support for Latin to English and English to Latin.
+The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-## Contributing
+## Learn More
 
-Translationeer welcomes contributions by anyone. Simply open a pull request or an issue on GitHub to make a contribution.
+To learn more about Next.js, take a look at the following resources:
 
-## Development
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Built with React and Firebase. Continuous deployment is set up through this repository via GitHub actions. However, there is no guarantee that the code in this repository is the exact code run on the platform. 
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-### Notes
+## Deploy on Vercel
 
-All open source code from Translationeer is in this repository. Translationeer is maintained by Vincent Cai @vincentcaitech.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Any unauthorized usage of any material from Translationeer is strictly prohibited.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
