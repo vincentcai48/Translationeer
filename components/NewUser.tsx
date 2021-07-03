@@ -11,7 +11,7 @@ export default function NewUser(props) {
   var privacypolicy = require("./legal/markdownfiles/privacypolicy.md").default;
 
   //var privacypolicy = require("./legal/markdownfiles/privacypolicy.md").default
-  //var termsandconditions = require("./legal/markdownfiles/termsandconditions.md").default
+  var termsandconditions = require("./legal/markdownfiles/termsandconditions.md").default
 
 
   var submit = () => {
@@ -29,7 +29,7 @@ export default function NewUser(props) {
       </h1>
       <section>
         <h2>
-          {props.user.displayName.split(" ")[0]}, Welcome to Translationeer!
+          Welcome to Translationeer!
         </h2>
         <p>
           <input
@@ -60,7 +60,7 @@ export default function NewUser(props) {
             <ReactMarkdown>{privacypolicy}</ReactMarkdown>
             <br></br>
             <hr></hr>
-            {/* <ReactMarkdown>{termsandconditions}</ReactMarkdown> */}
+            <ReactMarkdown>{termsandconditions}</ReactMarkdown>
           </div>
         )}
         {showMessage && (

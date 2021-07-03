@@ -44,7 +44,7 @@ export default function Auth(){
             </div>}
             <div className="button-container row">
                 <button className="sb" onClick={login}>Login</button>
-                <button className="tb ml5" onClick={createUser}>Create Account</button>
+                <button className="tb ml15" onClick={createUser}>Create Account</button>
             </div>
         </div>
     </div>

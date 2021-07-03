@@ -145,7 +145,7 @@ export default function Header(){
                         src={pAuth.currentUser.photoURL}
                       ></img>
 
-                      {pAuth.currentUser.displayName.split(" ")[0]}
+                      {/* {pAuth.currentUser.displayName.split(" ")[0]} */}
                     </a>
                   </Link>
                 </div>

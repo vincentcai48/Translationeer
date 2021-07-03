@@ -11,6 +11,7 @@
   background-color: black;
   padding: 6px 10px;
   border-radius: 5px;
+  font-size: 16px;
   border: none;
   box-shadow: 1px 1px 3px lightgrey;
   @include hovererlighten();
@@ -20,6 +21,7 @@
   color: black;
   background-color: transparent;
   border: none;
+  font-size: 16px;
   padding: 0px;
   @include hovererlighten();
 }
@@ -66,6 +68,14 @@
 
 .mr5{
   margin-right: 5px;
+}
+
+.ml15{
+  margin-left: 15px;
+}
+
+.mr15{
+  margin-right: 15px;
 }
 
 * {
@@ -166,4 +176,42 @@ textarea {
 textarea:focus {
   background-color: white;
   outline: none;
+}
+
+ul{
+  list-style: none;
+  padding: 0px;
+}
+
+.gob{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  @include center();
+  z-index: 200;
+  .popup{
+    padding: 20px;
+    border-radius: 3px;
+    background-color: white;
+    color: black;
+    position: relative;
+    max-height: 80vh;
+    max-width: 90vw;;
+    .x-button{
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      border: none;
+      background-color: none;
+      background-color: transparent;
+      .icon{
+        height: 20px;
+        color:red;
+      }
+      @include hovererlighten();
+    }
+  }
 }

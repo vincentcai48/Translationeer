@@ -1,6 +1,6 @@
-import '../styles/basics.scss'
-import '../styles/original.scss'
-import '../styles/newstyles.scss'
+import "../styles/basics.scss";
+import "../styles/original.scss";
+import "../styles/newstyles.scss";
 
 import Layout from "../components/root/Layout";
 import PContext from "../services/context";
@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { pFirestore, pAuth, fbFieldValue } from "../services/config";
 import NewUser from "../components/NewUser";
 
-function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   const [tc, setTc] = useState([]);
   const [newUser, setNewUser] = useState(null); //not in context, and only for use when creating a new user, set this to the new user object
   const [allApis, setAllApis] = useState(null);
@@ -17,6 +17,7 @@ function App({ Component, pageProps }) {
   const [language, setLanguage] = useState(""); //important to NOT initially set a language, so it will set the language WITH all the Apis
   const [defaultText, setDefaultText] = useState("");
   const linebreakCode = "&$linebreak&";
+  const batchSize = 10;
   const [textEnd, setTextEnd] = useState("50"); //this is actually set in line 82 of studioHeader
   const [isMobile, setIsMobile] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
@@ -158,27 +159,49 @@ function App({ Component, pageProps }) {
   };
 
   const contextValue = {
-    tc: tc,
-    newUser: newUser,
-    allApis: allApis,
-    apis: apis,
-    languageOptions: languageOptions,
-    language: language,
-    defaultText: defaultText,
-    linebreakCode: linebreakCode,
-    textEnd: textEnd,
-    isMobile: isMobile,
-    isAuth: isAuth,
-    isJustCreatedUser: isJustCreatedUser,
-    title: title,
-    setTitle: setTitle,
-    setApis: setApis,
-    updateLanguage: updateLanguage,
-    updateTextEnd: setTextEnd,
-    updateIsAuth: setIsAuth,
-    mouseX: mouseX,
-    mouseY: mouseY,
+    tc,
+    allApis,
+    apis,
+    languageOptions,
+    language,
+    defaultText,
+    linebreakCode,
+    textEnd,
+    isMobile,
+    isAuth,
+    isJustCreatedUser,
+    title,
+    setTitle,
+    setApis,
+    updateLanguage,
+    setTextEnd,
+    setIsAuth,
+    mouseX,
+    mouseY,
   };
+
+  // const contextValue = {
+  //   tc: tc,
+  //   newUser: newUser,
+  //   allApis: allApis,
+  //   apis: apis,
+  //   languageOptions: languageOptions,
+  //   language: language,
+  //   defaultText: defaultText,
+  //   linebreakCode: linebreakCode,
+  //   textEnd: textEnd,
+  //   isMobile: isMobile,
+  //   isAuth: isAuth,
+  //   isJustCreatedUser: isJustCreatedUser,
+  //   title: title,
+  //   setTitle: setTitle,
+  //   setApis: setApis,
+  //   updateLanguage: updateLanguage,
+  //   updateTextEnd: setTextEnd,
+  //   updateIsAuth: setIsAuth,
+  //   mouseX: mouseX,
+  //   mouseY: mouseY,
+  // };
 
   if (newUser) {
     return (
@@ -200,16 +223,3 @@ function App({ Component, pageProps }) {
     </PContext.Provider>
   );
 }
-
-export default App;
-
-
-// function MyApp({ Component, pageProps }) {
-//   return <div>
-//     <CustomHead></CustomHead>
-//     <Header></Header>
-//     <Component {...pageProps} />
-//   </div>
-// }
-
-// export default MyApp
