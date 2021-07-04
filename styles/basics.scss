@@ -162,16 +162,21 @@ input:focus {
   background-color: white;
 }
 
-textarea {
+
+textarea{
+  box-sizing: border-box;
+  font-family: var(--primary-font);
+  height: var(--studio-font-size)
+}
+
+textarea:not(.ta-main) {
   font-size: 16px;
   height: 200px;
   background-color: #ededed;
   border: 2px solid black;
   border-radius: 5px;
   padding: 3px;
-  box-sizing: border-box;
   margin: 10px 0;
-  font-family: var(--primary-font);
 }
 
 textarea:focus {

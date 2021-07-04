@@ -219,10 +219,30 @@
     display: flex;
     width: 100%;
     border-bottom: 1px solid black;
+    position: relative;
     .left{
         padding: 20px;
         width: 50%;
         background-color: rgb(235, 235, 235);
+    }
+    button.merge{
+        position: absolute;
+        z-index: 5;
+        bottom: 0px;
+        left: 50%;
+        transform: translate(-50%, 50%);
+        background-color: black;
+        border: none;
+        @include hovererlighten();
+        @include center();
+        padding: 3px;
+        border-radius: 3px;
+        width: 20px;
+        height: 20px;
+        .icon{
+            height: 16px;
+            color:white;
+        }
     }
     .right{
         width: 50%;

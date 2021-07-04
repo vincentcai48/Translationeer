@@ -1,5 +1,5 @@
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SingleWord from "./SingleWord";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TextAreaNew from "../TextAreaNew";
@@ -8,6 +8,10 @@ import TextAreaNew from "../TextAreaNew";
 //isEditing: show the editing textbox, setIsEditing: toggle isEditing
 export default function WordList({ text, setText, number, isEditing, setIsEditing }) {
   const [editText, setEditText] = useState<string>(text);
+
+  useEffect(()=>{
+    setEditText(text);
+  },[text])
 
   const renderText = () => {
     var res: any[] = [];
