@@ -107,7 +107,8 @@ export default function Studio({ id }) {
   const findBreakoffIndex = (bText: string, texts: any[]): number => {
     var index = -1;
     for (let i = 0; i < texts.length; i++) {
-      let thisText = texts[i].replace("\n", " ");
+      let thisText = texts[i].replace(/\n|\r/g, " ");
+      console.log(bText,thisText);
       if (thisText.includes(bText)) index = i;
 
       //check with spaces at end removed
