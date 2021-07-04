@@ -1,7 +1,7 @@
 import { faArrowsAltV, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState, useContext } from "react";
-import { pAuth, pFirestore } from "../../services/config";
+import { fbFieldValue, pAuth, pFirestore } from "../../services/config";
 import PContext from "../../services/context";
 import Loading from "../Loading";
 import TextAreaNew from "../TextAreaNew";
@@ -9,6 +9,8 @@ import WordList from "../word/WordList";
 
 export default function Studio({ id }) {
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
+  const [saving,setSaving] = useState<boolean>(false);
+  const [lastSave,setLastSave] = useState<number>(0); //milliseconds time
   const { isAuth } = useContext(PContext);
   const [name, setName] = useState<string>("");
   const [texts, setTexts] = useState<string[]>([]);
@@ -23,17 +25,26 @@ export default function Studio({ id }) {
 
   const getDoc = async (): Promise<void> => {
     try {
-      let res = await pFirestore
+      let query = pFirestore
         .collection("users")
         .doc(pAuth.currentUser.uid)
         .collection("documents")
         .doc(id)
-        .get();
+
+    let res =  await query.get();
       let data = res.data();
       setName(data["name"]);
-      setTexts(data["body"].map((e) => e.text));
+        //Handle version 1:
+        if(data["body"]){
+            setTexts(data["body"].map((e) => e.text));
       setTranslations(data["body"].map((e) => e.translation));
       setTextsEditing(data["body"].map((e) => false)); //all false
+      await query.update({
+          body: fbFieldValue.delete(),
+          texts: data["body"].map((e) => e.text),
+          translations: data["body"].map((e) => e.translation),
+      })
+        }
     } catch (e) {
       console.error(e);
     }
@@ -241,6 +252,21 @@ export default function Studio({ id }) {
 
     setTexts(newTexts);
     setTranslations(newTranslations);
+  }
+
+  const save = async () =>{
+    setSaving(true)
+    try{
+        var body = [];
+        var res = await pFirestore.collection("users").doc(pAuth.currentUser.uid).collection("documents").doc(id).update({
+            name: name,
+            texts: texts,
+            translations: translations,
+        })
+    }catch(e){
+
+    }
+    setSaving(false);
   }
 
   const truncateText = (t: string, n: number):string => {

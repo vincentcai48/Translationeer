@@ -5,18 +5,18 @@ import { useState } from "react";
 import { pAuth, pFirestore } from "../services/config";
 import Link from "next/link";
 import Popup from "./Popup";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import Loading from "./Loading";
 import dateString from "../services/dateString";
 
 export default function Dashboard() {
-    const router = useRouter();
+  const router = useRouter();
   const [docs, setDocs] = useState([]);
   const [lastDoc, setLastDoc] = useState<any>(-1);
   const [addDocPopup, setAddDocPopup] = useState<boolean>(false);
   const [nameInput, setNameInput] = useState<string>("");
   const [textInput, setTextInput] = useState<string>("");
-  const [loading,setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     getDocs(false);
@@ -50,25 +50,27 @@ export default function Dashboard() {
     }
   };
 
-  const createDocument = async () =>{
-        setLoading(true);
-      try{
-        var res = await pFirestore.collection("users").doc(pAuth.currentUser.uid).collection("documents").add({
-            name: nameInput,
-            time: (new Date()).getTime(),
-            body: [{
-                text: textInput,
-                translation: "",
-            }]
-        })
-        setLoading(false);
-        router.push(`/document/${res.id}`);
-      }catch(e){
-          console.error(e);
-          setAddDocPopup(false);
-          setLoading(false);
-      }
-  }
+  const createDocument = async () => {
+    setLoading(true);
+    try {
+      var res = await pFirestore
+        .collection("users")
+        .doc(pAuth.currentUser.uid)
+        .collection("documents")
+        .add({
+          name: nameInput,
+          time: new Date().getTime(),
+          texts: [textInput],
+          translations: "",
+        });
+      setLoading(false);
+      router.push(`/document/${res.id}`);
+    } catch (e) {
+      console.error(e);
+      setAddDocPopup(false);
+      setLoading(false);
+    }
+  };
 
   return (
     <div id="dashboard-container">
@@ -84,28 +86,32 @@ export default function Dashboard() {
       </section>
       <section id="docs-list">
         <ul>
-          {docs.sort((a,b)=>b.time-a.time).map((doc) => {
-            if (!doc.id) return;
-            return (
-              <li key={doc.id}>
-                <Link href={`/document/${doc.id}`}>
-                  <a className="single-doc row">
-                    <div className="left">
-                      <FontAwesomeIcon
-                        className="doc-icon"
-                        icon={faFileAlt}
-                      ></FontAwesomeIcon>
-                      <div className="doc-name">{doc.name}</div>
-                    </div>
-                    <div className="right">
-                      <div className="time">Edited {dateString(Number(doc.time))}</div>
-                    </div>
-                    <div className="open">Open Document</div>
-                  </a>
-                </Link>
-              </li>
-            );
-          })}
+          {docs
+            .sort((a, b) => b.time - a.time)
+            .map((doc) => {
+              if (!doc.id) return;
+              return (
+                <li key={doc.id}>
+                  <Link href={`/document/${doc.id}`}>
+                    <a className="single-doc row">
+                      <div className="left">
+                        <FontAwesomeIcon
+                          className="doc-icon"
+                          icon={faFileAlt}
+                        ></FontAwesomeIcon>
+                        <div className="doc-name">{doc.name}</div>
+                      </div>
+                      <div className="right">
+                        <div className="time">
+                          Edited {dateString(Number(doc.time))}
+                        </div>
+                      </div>
+                      <div className="open">Open Document</div>
+                    </a>
+                  </Link>
+                </li>
+              );
+            })}
         </ul>
       </section>
 
@@ -118,17 +124,20 @@ export default function Dashboard() {
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
             ></input>
-            <textarea 
+            <textarea
               placeholder="What are you translating? Paste the text here"
               value={textInput}
-              onChange={e=>setTextInput(e.target.value)}
+              onChange={(e) => setTextInput(e.target.value)}
             ></textarea>
-            {loading&&<Loading></Loading>}
+            {loading && <Loading></Loading>}
             <div className="row">
-                <button className="sb mr15" onClick={createDocument}>Create Document</button>
-                <button className="tb" onClick={()=>setAddDocPopup(false)}>Cancel</button>
+              <button className="sb mr15" onClick={createDocument}>
+                Create Document
+              </button>
+              <button className="tb" onClick={() => setAddDocPopup(false)}>
+                Cancel
+              </button>
             </div>
-
           </div>
         </Popup>
       )}
