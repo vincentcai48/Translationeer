@@ -23,10 +23,10 @@ export default function Header(){
     const renderLanguageOptions = () => {
         var arr = [];
         const allLanguages = context.languageOptions;
-        for (var i = 0; i < allLanguages.length; i++) {
+        for (let i = 0; i < allLanguages.length; i++) {
           const n = allLanguages[i];
           arr.push(
-            <li>
+            <li key={i}>
               <button
                 name={n}
                 onClick={setLanguage}
@@ -46,9 +46,9 @@ export default function Header(){
     const renderServiceOptions = () => {
         var arr = [];
         var allServices = context.apis;
-        for (var i = 0; i < allServices.length; i++) {
+        for (let i = 0; i < allServices.length; i++) {
           arr.push(
-            <li>
+            <li key={i}>
               <button
                 onClick={toggleService}
                 name={allServices[i].name}

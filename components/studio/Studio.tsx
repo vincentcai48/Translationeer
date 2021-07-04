@@ -34,12 +34,11 @@ export default function Studio({ id }) {
       let res = await query.get();
       let data = res.data();
       setName(data["name"]);
-      setTexts(data["texts"]||[]);
-      setTranslations(data["translations"]||[]);
-      setTextsEditing(data["texts"].map(() => false)); //all false
 
+      console.log(data["body"])
       //Handle version 1:
       if (data["body"]) {
+          console.log(data["body"])
         setTexts(data["body"].map((e) => e.text));
         setTranslations(data["body"].map((e) => e.translation));
         setTextsEditing(data["body"].map(() => false)); //all false
@@ -48,6 +47,10 @@ export default function Studio({ id }) {
           texts: data["body"].map((e) => e.text),
           translations: data["body"].map((e) => e.translation),
         });
+      }else{
+        setTexts(data["texts"]||[]);
+      setTranslations(data["translations"]||[]);
+      setTextsEditing(data["texts"].map(() => false)); //all false
       }
     } catch (e) {
       console.error(e);
