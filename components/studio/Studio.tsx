@@ -11,7 +11,7 @@ import WordList from "../word/WordList";
 export default function Studio({id}){
     const [studioLoading,setStudioLoading] = useState<boolean>(true);
     const {isAuth} = useContext(PContext);
-    const [name,setName] = useState<string>();
+    const [name,setName] = useState<string>("");
     const [texts,setTexts] = useState<string[]>([]);
     const [translations,setTranslations] = useState<string[]>([])
     const [textsEditing,setTextsEditing] = useState<boolean[]>([]);
@@ -22,7 +22,7 @@ export default function Studio({id}){
         if(isAuth) getDoc();
     },[isAuth])
 
-    const getDoc = async () =>{
+    const getDoc = async ():Promise<void> =>{
         try{
             let res = await pFirestore.collection('users').doc(pAuth.currentUser.uid).collection("documents").doc(id).get();
             let data = res.data();
@@ -36,7 +36,7 @@ export default function Studio({id}){
         setStudioLoading(false);
     }
 
-    const renderSections = () =>{
+    const renderSections = ():any[] =>{
         var arr:any[] = [];
         for(let i = 0;i<texts.length;i++){
             arr.push(<div className="single-section">
@@ -61,25 +61,25 @@ export default function Studio({id}){
         return arr;
     }
 
-    const setText = (text:string,index:number) =>{
+    const setText = (text:string,index:number):void =>{
         var arr = [...texts];
         arr[index] = text;
         setTexts(arr);
     }
 
-    const setTranslation = (translation:string,index:number) =>{
+    const setTranslation = (translation:string,index:number):void =>{
         var arr = [...translations];
         arr[index] = translation;
         setTranslations(arr);
     }
 
-    const setIsEditing = (isEditing:boolean,index:number) =>{
+    const setIsEditing = (isEditing:boolean,index:number):void =>{
         var arr = [...textsEditing];
         arr[index] = isEditing;
         setTextsEditing(arr);
     }
 
-    const onMouseUp = () =>{
+    const onMouseUp = ():void =>{
         const selectedText:string = window.getSelection().toString().replaceAll(/(\r\n|\n|\r)/gm, "")
         .replaceAll(/[\s\u00A0]/gm, " ");
         if(selectedText!==breakoffText){
@@ -87,15 +87,17 @@ export default function Studio({id}){
                 setBreakoffText(null);
                 setBreakoffIndex(-1);
             }else{
-                setBreakoffText(selectedText)
-                setBreakoffIndex(findBreakoffIndex(selectedText))
+            
+                let index = (findBreakoffIndex(selectedText,texts))
+                setBreakoffIndex(index);
+                if(index>-1) setBreakoffText(selectedText)
             }
         }
 
         
     }
 
-    const findBreakoffIndex = (bText) =>{
+    const findBreakoffIndex = (bText:string,texts:any[]):number =>{
         var index = -1;
         for(let i = 0;i<texts.length;i++){
             let thisText = texts[i].replace("\n"," ");
@@ -108,6 +110,13 @@ export default function Studio({id}){
         return index;
     }
 
+
+
+    const truncateText = (t:string,n:number) =>{
+        if(t.length>n) return t.substring(0,n) + "..."
+        return t;
+    }
+
     if(studioLoading) return <div id="studio-loading">
         <Loading></Loading>
     </div>
@@ -118,9 +127,9 @@ export default function Studio({id}){
         </section>
         <section id="heading">
             <div></div>
-            {breakoffText&&<div className="break0ff-text"><span>{breakoffText}</span><button>Break Off Text</button></div>
+            {breakoffText&&breakoffIndex>-1&&<div className="breakoff-text"><span>{truncateText(breakoffText,20)}</span><button>Break Off Text</button></div>}
         </section>
-        <section id="body">
+        <section id="body" onMouseUp={onMouseUp}>
             {renderSections()}
         </section>
     </div>

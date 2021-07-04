@@ -154,6 +154,20 @@
         background-color: black;
         min-height: 30px;
         box-shadow: 0px 0px 5px black;
+        .breakoff-text{
+            span{
+                color: white;
+            }
+            button{
+                background-color: white;
+                margin-left: 15px;
+                padding: 5px 10px;
+                border-radius: 5px;
+                font-weight: bold;
+                border: 2px solid white;
+                @include hovererlighten();
+            }
+        }
     }
 }
 
