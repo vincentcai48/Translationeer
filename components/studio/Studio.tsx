@@ -210,7 +210,16 @@ export default function Studio({ id }) {
     newTranslations.splice(breakoffIndex,1,...newArr.map(s=>s.translation));
     setTexts(newTexts);
     setTranslations(newTranslations);
+    setBreakoffText(null);
+    setBreakoffIndex(-1);
+    clearSelection();
   };
+
+  const clearSelection = () => {
+    if (window&&window.getSelection) {
+      window.getSelection().removeAllRanges();
+    }
+  }
 
   const isDegenerate = (str:string):boolean => {
     if (str.length < 1) return true;
