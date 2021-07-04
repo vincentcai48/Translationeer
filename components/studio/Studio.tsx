@@ -140,6 +140,7 @@ export default function Studio({ id }) {
     var startingIndex = textNoLB.indexOf(breakoffText);
     var endingIndex = startingIndex + breakoffText.length;
 
+    //NOT needed because a "\n" is one character, and when you select a linebreak, the space " " is one character, so the lengths will be the same
     //Step 4: then modify these start and end indices based on how many linebreaks come before it.
     var countBeforeStart = 0; //# of linebreaks before starting index
     var countBeforeEnd = 0; //and before ending index
@@ -149,11 +150,11 @@ export default function Studio({ id }) {
       if (i <= endingIndex) countBeforeEnd++;
     });
 
-    const linebreakCodeLength = 1; //linebreak \n is one char long
-    //IMPORTANT: Minus one because in the text, a linebreak is represented by a space " " character, so it only adds more characters if the sequence is more than 1 character long.
+    // const linebreakCodeLength = 1; //linebreak \n is one char long
+    // //IMPORTANT: Minus one because in the text, a linebreak is represented by a space " " character, so it only adds more characters if the sequence is more than 1 character long.
 
-    startingIndex += countBeforeStart * linebreakCodeLength;
-    endingIndex += countBeforeEnd * linebreakCodeLength;
+    // startingIndex += countBeforeStart * linebreakCodeLength;
+    // endingIndex += countBeforeEnd * linebreakCodeLength;
 
     //Step 5: Proceed by splitting the section up, now that you have the starting and ending indices, taking linebreak escape sequences into account.
     //NOTE: still put into one large array so you can easily delete generate sections.

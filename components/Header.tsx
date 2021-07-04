@@ -95,8 +95,7 @@ export default function Header(){
     };
     
 
-    return <header>
-        <header id="header">
+    return <header id="header">
         <h1>
           <Link href="/">
             <a id="h1-link">Translationeer</a>
@@ -159,6 +158,4 @@ export default function Header(){
           </div>
         </div>
       </header>
-
-    </header>
 }
