@@ -9,8 +9,8 @@ import WordList from "../word/WordList";
 
 export default function Studio({ id }) {
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
-  const [saving,setSaving] = useState<boolean>(false);
-  const [lastSave,setLastSave] = useState<number>(0); //milliseconds time
+  const [saving, setSaving] = useState<boolean>(false);
+  const [lastSave, setLastSave] = useState<number>(0); //milliseconds time
   const { isAuth } = useContext(PContext);
   const [name, setName] = useState<string>("");
   const [texts, setTexts] = useState<string[]>([]);
@@ -29,22 +29,26 @@ export default function Studio({ id }) {
         .collection("users")
         .doc(pAuth.currentUser.uid)
         .collection("documents")
-        .doc(id)
+        .doc(id);
 
-    let res =  await query.get();
+      let res = await query.get();
       let data = res.data();
       setName(data["name"]);
-        //Handle version 1:
-        if(data["body"]){
-            setTexts(data["body"].map((e) => e.text));
-      setTranslations(data["body"].map((e) => e.translation));
-      setTextsEditing(data["body"].map((e) => false)); //all false
-      await query.update({
+      setTexts(data["texts"]||[]);
+      setTranslations(data["translations"]||[]);
+      setTextsEditing(data["texts"].map(() => false)); //all false
+
+      //Handle version 1:
+      if (data["body"]) {
+        setTexts(data["body"].map((e) => e.text));
+        setTranslations(data["body"].map((e) => e.translation));
+        setTextsEditing(data["body"].map(() => false)); //all false
+        await query.update({
           body: fbFieldValue.delete(),
           texts: data["body"].map((e) => e.text),
           translations: data["body"].map((e) => e.translation),
-      })
-        }
+        });
+      }
     } catch (e) {
       console.error(e);
     }
@@ -65,7 +69,14 @@ export default function Studio({ id }) {
               setIsEditing={(b) => setIsEditing(b, i)}
             ></WordList>
           </div>
-          {i!=texts.length-1&&<button className="merge" onClick={()=>mergeDown(i)}><FontAwesomeIcon className="icon" icon={faArrowsAltV}></FontAwesomeIcon></button>}
+          {i != texts.length - 1 && (
+            <button className="merge" onClick={() => mergeDown(i)}>
+              <FontAwesomeIcon
+                className="icon"
+                icon={faArrowsAltV}
+              ></FontAwesomeIcon>
+            </button>
+          )}
           <div className="right">
             <TextAreaNew
               val={translations[i]}
@@ -119,7 +130,7 @@ export default function Studio({ id }) {
     var index = -1;
     for (let i = 0; i < texts.length; i++) {
       let thisText = texts[i].replace(/\n|\r/g, " ");
-      console.log(bText,thisText);
+      console.log(bText, thisText);
       if (thisText.includes(bText)) index = i;
 
       //check with spaces at end removed
@@ -202,10 +213,7 @@ export default function Studio({ id }) {
     }
 
     //Case 3: the last section is degenerate AND there is still a section to merge into
-    if (
-      isDegenerate(newArr[newArr.length - 1].text) &&
-      newArr.length >= 2
-    ) {
+    if (isDegenerate(newArr[newArr.length - 1].text) && newArr.length >= 2) {
       var holdText = newArr[newArr.length - 1].text;
       newArr[newArr.length - 2].text =
         holdText + newArr[newArr.length - 2].text;
@@ -219,8 +227,12 @@ export default function Studio({ id }) {
     var newTexts = [...texts];
     var newTranslations = [...translations];
     //the splice method modifies by reference, important.
-    newTexts.splice(breakoffIndex,1,...newArr.map(s=>s.text));
-    newTranslations.splice(breakoffIndex,1,...newArr.map(s=>s.translation));
+    newTexts.splice(breakoffIndex, 1, ...newArr.map((s) => s.text));
+    newTranslations.splice(
+      breakoffIndex,
+      1,
+      ...newArr.map((s) => s.translation)
+    );
     setTexts(newTexts);
     setTranslations(newTranslations);
     setBreakoffText(null);
@@ -229,12 +241,12 @@ export default function Studio({ id }) {
   };
 
   const clearSelection = () => {
-    if (window&&window.getSelection) {
+    if (window && window.getSelection) {
       window.getSelection().removeAllRanges();
     }
-  }
+  };
 
-  const isDegenerate = (str:string):boolean => {
+  const isDegenerate = (str: string): boolean => {
     if (str.length < 1) return true;
     for (var i = 0; i < str.length; i++) {
       if (str.substring(i, i + 1) !== " ") return false;
@@ -242,34 +254,41 @@ export default function Studio({ id }) {
     return true;
   };
 
-  const mergeDown = (index:number) =>{
-    if(index<0||index>=texts.length-1) return;
+  const mergeDown = (index: number) => {
+    if (index < 0 || index >= texts.length - 1) return;
     var newTexts = [...texts];
     var newTranslations = [...translations];
 
-    newTexts.splice(index,2,texts[index]+texts[index+1]);
-    newTranslations.splice(index,2,translations[index]+translations[index+1]);
+    newTexts.splice(index, 2, texts[index] + texts[index + 1]);
+    newTranslations.splice(
+      index,
+      2,
+      translations[index] + translations[index + 1]
+    );
 
     setTexts(newTexts);
     setTranslations(newTranslations);
-  }
+  };
 
-  const save = async () =>{
-    setSaving(true)
-    try{
-        var body = [];
-        var res = await pFirestore.collection("users").doc(pAuth.currentUser.uid).collection("documents").doc(id).update({
-            name: name,
-            texts: texts,
-            translations: translations,
-        })
-    }catch(e){
-
-    }
+  const save = async () => {
+    setSaving(true);
+    try {
+      var body = [];
+      var res = await pFirestore
+        .collection("users")
+        .doc(pAuth.currentUser.uid)
+        .collection("documents")
+        .doc(id)
+        .update({
+          name: name,
+          texts: texts,
+          translations: translations,
+        });
+    } catch (e) {}
     setSaving(false);
-  }
+  };
 
-  const truncateText = (t: string, n: number):string => {
+  const truncateText = (t: string, n: number): string => {
     if (t.length > n) return t.substring(0, n) + "...";
     return t;
   };
