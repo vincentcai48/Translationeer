@@ -7,6 +7,6 @@ export default function TextAreaNew({val,setFunc,placeholder}){
             placeholder={placeholder}
         ></textarea>
         {/* Make sure line breaks are counted for in height by a <div> that has at least one character "|" so it's not height 0px */}
-        <div className="ta-copy">{val.split("\n").map(e=><div>{e||"|"}</div>)}</div>
+        <div className="ta-copy">{val.split("\n").map(e=><div key={e}>{e||"|"}</div>)}</div>
     </div>
 }

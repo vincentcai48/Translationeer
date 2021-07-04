@@ -140,10 +140,10 @@ export default function Header(){
                   </div>
                   <Link href="/account">
                     <a className="user-displayName">
-                      <img
+                      {/* <img
                         id="header-profile-picture"
                         src={pAuth.currentUser.photoURL}
-                      ></img>
+                      ></img> */}
 
                       {/* {pAuth.currentUser.displayName.split(" ")[0]} */}
                     </a>

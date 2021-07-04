@@ -110,6 +110,9 @@ export default function Studio({id}){
         return index;
     }
 
+    const breakoff = () => {
+        
+    }
 
 
     const truncateText = (t:string,n:number) =>{
@@ -127,7 +130,7 @@ export default function Studio({id}){
         </section>
         <section id="heading">
             <div></div>
-            {breakoffText&&breakoffIndex>-1&&<div className="breakoff-text"><span>{truncateText(breakoffText,20)}</span><button>Break Off Text</button></div>}
+            {breakoffText&&breakoffIndex>-1&&<div className="breakoff-text"><span>{truncateText(breakoffText,20)}</span><button onClick={breakoff}>Break Off Text</button></div>}
         </section>
         <section id="body" onMouseUp={onMouseUp}>
             {renderSections()}
