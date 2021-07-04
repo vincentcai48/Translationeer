@@ -62,7 +62,7 @@ export default function Dashboard() {
             }]
         })
         setLoading(false);
-        router.push(`/documents/${res.id}`);
+        router.push(`/document/${res.id}`);
       }catch(e){
           console.error(e);
           setAddDocPopup(false);
@@ -118,7 +118,11 @@ export default function Dashboard() {
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
             ></input>
-            <textarea placeholder="What are you translating? Paste the text here"></textarea>
+            <textarea 
+              placeholder="What are you translating? Paste the text here"
+              value={textInput}
+              onChange={e=>setTextInput(e.target.value)}
+            ></textarea>
             {loading&&<Loading></Loading>}
             <div className="row">
                 <button className="sb mr15" onClick={createDocument}>Create Document</button>
