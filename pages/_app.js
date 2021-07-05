@@ -16,7 +16,6 @@ export default function App({ Component, pageProps }) {
   const [languageOptions, setLanguageOptions] = useState([]);
   const languageMapping = useRef(null);
   const [language, setLanguage] = useState(null); //important to NOT initially set a language, so it will set the language WITH all the Apis
-  const [defaultText, setDefaultText] = useState("");
   const linebreakCode = "&$linebreak&";
   const batchSize = 10;
   const [textEnd, setTextEnd] = useState("50"); //this is actually set in line 82 of studioHeader
@@ -173,7 +172,6 @@ export default function App({ Component, pageProps }) {
     apis,
     languageOptions,
     language,
-    defaultText,
     linebreakCode,
     textEnd,
     isMobile,
