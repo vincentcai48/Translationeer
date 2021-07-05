@@ -14,14 +14,17 @@ export default function WordList({ text, setText, number, isEditing, setIsEditin
   },[text])
 
   const renderText = () => {
+    var i = 0;
     var res: any[] = [];
     text = String(text);
     var arr: string[] = text.split(" ");
     arr.forEach((l) => {
       var a: string[] = l.split("\n");
       a.forEach((w) => {
-        res.push(<SingleWord word={w} setWord={() => {}}></SingleWord>);
-        res.push(<div className="break"></div>);
+        res.push(<SingleWord  key={i} word={w} setWord={() => {}}></SingleWord>);
+        i++;
+        res.push(<div className="break" key={i}></div>);
+        i++;
       });
       res.pop();
     });

@@ -1,6 +1,13 @@
-import { faArrowsAltV, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowsAltV,
+  faCheckCircle,
+  faCircleNotch,
+  faFileAlt,
+  faPlus,
+  faPlusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { fbFieldValue, pAuth, pFirestore } from "../../services/config";
 import PContext from "../../services/context";
 import Loading from "../Loading";
@@ -10,7 +17,6 @@ import WordList from "../word/WordList";
 export default function Studio({ id }) {
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const [lastSave, setLastSave] = useState<number>(0); //milliseconds time
   const { isAuth } = useContext(PContext);
   const [name, setName] = useState<string>("");
   const [texts, setTexts] = useState<string[]>([]);
@@ -19,9 +25,39 @@ export default function Studio({ id }) {
   const [breakoffText, setBreakoffText] = useState<string | null>(null);
   const [breakoffIndex, setBreakoffIndex] = useState<number>(-1);
 
+  //For auto-save
+  const saves = useRef(-3); //-3 to start, set three values at start, 0 for each new save batch;
+  //Three refs so it can change while setTimeout runs
+  const nameRef = useRef(name);
+  const textsRef = useRef(texts);
+  const translationsRef = useRef(translations);
+  const saveInterval = 10; //in secs
+
   useEffect(() => {
     if (isAuth) getDoc();
   }, [isAuth]);
+
+  const autoSave = () => {
+    setSaving(true);
+    //Then check if beginning of a save batch;
+    if (saves.current == 0) {
+      setTimeout(() => {
+        saves.current = 0;
+        save();
+      }, saveInterval * 1000);
+    }
+    console.log(saves.current);
+
+    //First set Refs
+    nameRef.current = name;
+    textsRef.current = texts;
+    translationsRef.current = translations;
+
+    saves.current = saves.current + 1;
+  };
+
+  //auto save on change
+  useEffect(autoSave, [name, texts, translations]);
 
   const getDoc = async (): Promise<void> => {
     try {
@@ -62,8 +98,19 @@ export default function Studio({ id }) {
     var arr: any[] = [];
     for (let i = 0; i < texts.length; i++) {
       arr.push(
-        <div className="single-section">
+        <div className={`single-section${i != texts.length - 1?"":" last"}`}>
           <div className="left">
+            <div className="options">
+            <button
+          className="sb add"
+          onClick={() => addSection("", texts.length - 1)}
+        >
+          <FontAwesomeIcon
+            className="icon"
+            icon={faPlus}
+          ></FontAwesomeIcon>
+        </button>
+            </div>
             <WordList
               text={texts[i]}
               setText={(text) => setText(text, i)}
@@ -72,12 +119,19 @@ export default function Studio({ id }) {
               setIsEditing={(b) => setIsEditing(b, i)}
             ></WordList>
           </div>
-          {i != texts.length - 1 && (
+          {i != texts.length - 1 ? (
             <button className="merge" onClick={() => mergeDown(i)}>
               <FontAwesomeIcon
                 className="icon"
                 icon={faArrowsAltV}
               ></FontAwesomeIcon>
+            </button>
+          ) : (
+            <button
+              className="sb add"
+              onClick={() => addSection("", texts.length - 1)}
+            >
+              <FontAwesomeIcon className="icon" icon={faPlus}></FontAwesomeIcon>
             </button>
           )}
           <div className="right">
@@ -90,6 +144,12 @@ export default function Studio({ id }) {
         </div>
       );
     }
+    arr.push(
+      <div className="single-section background">
+        <div className="left"></div>
+        <div className="right"></div>
+      </div>
+    );
     return arr;
   };
 
@@ -273,21 +333,35 @@ export default function Studio({ id }) {
     setTranslations(newTranslations);
   };
 
+  const addSection = (text: string, after: number) => {
+    var newTexts = [...texts];
+    var newTranslations = [...translations];
+
+    newTexts.splice(after + 1, 0, text);
+    newTranslations.splice(after + 1, 0, "");
+
+    setTexts(newTexts);
+    setTranslations(newTranslations);
+    setIsEditing(true,after+1);//edit this new section's text
+  };
+
   const save = async () => {
     setSaving(true);
+    console.log("saving");
     try {
-      var body = [];
-      var res = await pFirestore
+      await pFirestore
         .collection("users")
         .doc(pAuth.currentUser.uid)
         .collection("documents")
         .doc(id)
         .update({
-          name: name,
-          texts: texts,
-          translations: translations,
+          name: nameRef.current,
+          texts: textsRef.current,
+          translations: translationsRef.current,
         });
-    } catch (e) {}
+    } catch (e) {
+      console.error(e);
+    }
     setSaving(false);
   };
 
@@ -309,7 +383,24 @@ export default function Studio({ id }) {
         <h2>{name}</h2>
       </section>
       <section id="heading">
-        <div></div>
+        <div id="first-row">
+          <div className="left">
+            <div className="save-area">
+              {saving ? (
+                <FontAwesomeIcon
+                  className="icon-spin"
+                  icon={faCircleNotch}
+                ></FontAwesomeIcon>
+              ) : (
+                <FontAwesomeIcon
+                  className="icon-check"
+                  icon={faCheckCircle}
+                ></FontAwesomeIcon>
+              )}
+            </div>
+          </div>
+          <div className="right"></div>
+        </div>
         {breakoffText && breakoffIndex > -1 && (
           <div className="breakoff-text">
             <span>{truncateText(breakoffText, 20)}</span>

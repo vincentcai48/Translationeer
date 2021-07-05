@@ -136,6 +136,18 @@
     @include center();
 }
 
+@keyframes spin{
+    0%{
+        transform: rotate(0deg);
+    }
+    50%{
+        transform: rotate(180deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+}
+
 #studio{
     #top{
         background-color: lightgrey;
@@ -157,9 +169,25 @@
         position: sticky;
         position: -webkit-sticky;
         top: 50px;
+        z-index: 10;
+        #first-row{
+            .left{
+                .save-area{
+                    .icon-check, .icon-spin{
+                        height: 18px;
+                        color:white;
+                        margin: 0px 10px;
+                    }
+                    .icon-spin{
+                        animation: spin 1s infinite linear;
+                    }
+                }
+            }
+        }
         .breakoff-text{
             span{
                 color: white;
+                margin-left: 15px;
             }
             button{
                 background-color: white;
@@ -175,7 +203,8 @@
 
     #body{
         min-height: 100vh;
-        padding-bottom: 30vh;
+        @include col();
+        position: relative;
     }
 }
 
@@ -228,12 +257,22 @@
     width: 100%;
     border-bottom: 1px solid black;
     position: relative;
+    &.last{
+        margin-bottom: 30vh;
+    }
+    &.background{
+        height: 100%;
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        z-index: -1;
+    }
     .left{
         padding: 20px;
         width: 50%;
         background-color: rgb(235, 235, 235);
     }
-    button.merge{
+    button.merge, button.add{
         position: absolute;
         z-index: 5;
         bottom: 0px;
