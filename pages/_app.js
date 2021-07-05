@@ -4,18 +4,18 @@ import "../styles/newstyles.scss";
 
 import Layout from "../components/root/Layout";
 import PContext from "../services/context";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { pFirestore, pAuth, fbFieldValue } from "../services/config";
 import NewUser from "../components/NewUser";
 
 export default function App({ Component, pageProps }) {
-  const [tc, setTc] = useState([]);
+  const [tc, setTc] = useState([]); //for "terms and conditions"
   const [newUser, setNewUser] = useState(null); //not in context, and only for use when creating a new user, set this to the new user object
   const [allApis, setAllApis] = useState(null);
   const [apis, setApis] = useState([]); //these are the current apis for the selected language
   const [languageOptions, setLanguageOptions] = useState([]);
-  const [languageMapping,setLanguageMapping] = useState({});
-  const [language, setLanguage] = useState(""); //important to NOT initially set a language, so it will set the language WITH all the Apis
+  const languageMapping = useRef(null);
+  const [language, setLanguage] = useState(null); //important to NOT initially set a language, so it will set the language WITH all the Apis
   const [defaultText, setDefaultText] = useState("");
   const linebreakCode = "&$linebreak&";
   const batchSize = 10;
@@ -32,6 +32,15 @@ export default function App({ Component, pageProps }) {
   useEffect(() => {
     componentDidMount();
   }, []);
+
+  //when languageMapping first loads (the languages mapped to their apis, so now you can get the apis)
+  useEffect(()=>{
+    if (languageMapping.current){
+      console.log(language);
+      if(language) updateLanguage(language);
+      if(!language&&languageOptions&&languageOptions[1]) updateLanguage(languageOptions[1]); //the 2nd element is Latin to English
+    }
+  },[languageMapping.current]);
 
   const componentDidMount = async () => {
     await getAllApisFromDB();
@@ -73,15 +82,19 @@ export default function App({ Component, pageProps }) {
 
   //NOTE: different from setLanguage, this gets all apis, doesn't just set state.
   const updateLanguage = async (languageParam) => {
+    console.log(languageParam);
+    console.log(languageMapping.current)
+    if(!languageMapping.current) return;
     //Step 1: set the language
     setLanguage(languageParam);
 
 
     //Step 2: update the apis list for this language
+    var thisAllApis = [];
     if (!allApis || allApis.length == 0) {
       thisAllApis = await getAllApisFromDB();
     } else thisAllApis = allApis;
-    var arr = (languageMapping[languageParam] || []).map(i=>allApis[i]); //array of api objects
+    var arr = (languageMapping.current[languageParam]).map(i=>thisAllApis[i]); //array of api objects
     setApis(arr);
 
 
@@ -131,10 +144,7 @@ export default function App({ Component, pageProps }) {
       var doc = await pFirestore.collection("languages").doc("languages").get();
       var arr = Object.keys(doc.data())
       setLanguageOptions(arr);
-      setLanguageMapping({...doc.data()})
-      if (language.length < 1) {
-        updateLanguage(arr[1]); //the 2nd element is Latin to English
-      }
+      languageMapping.current = {...doc.data()};
     } catch (e) {
       console.error(e);
     }

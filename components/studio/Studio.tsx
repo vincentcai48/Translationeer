@@ -70,8 +70,6 @@ export default function Studio({ id }) {
       let res = await query.get();
       let data = res.data();
       setName(data["name"]);
-
-      console.log(data["body"]);
       //Handle version 1:
       if (data["body"]) {
         console.log(data["body"]);
