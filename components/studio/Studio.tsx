@@ -12,6 +12,7 @@ import { fbFieldValue, pAuth, pFirestore } from "../../services/config";
 import PContext from "../../services/context";
 import Loading from "../Loading";
 import TextAreaNew from "../TextAreaNew";
+import Definition from "../word/Definition";
 import WordList from "../word/WordList";
 
 export default function Studio({ id }) {
@@ -24,6 +25,7 @@ export default function Studio({ id }) {
   const [textsEditing, setTextsEditing] = useState<boolean[]>([]);
   const [breakoffText, setBreakoffText] = useState<string | null>(null);
   const [breakoffIndex, setBreakoffIndex] = useState<number>(-1);
+  const [word,setWord] = useState<string|null>(null);
 
   //For auto-save
   const saves = useRef(-3); //-3 to start, set three values at start, 0 for each new save batch;
@@ -116,6 +118,7 @@ export default function Studio({ id }) {
               number={i + 1}
               isEditing={textsEditing[i]}
               setIsEditing={(b) => setIsEditing(b, i)}
+              setWord={(w)=>setWord(w)}
             ></WordList>
           </div>
           {i != texts.length - 1 ? (
@@ -410,6 +413,12 @@ export default function Studio({ id }) {
       <section id="body" onMouseUp={onMouseUp}>
         {renderSections()}
       </section>
+
+      {word&&<Definition
+        word={word}
+        setWord={setWord}
+        exitFunc={()=>setWord(null)}
+      ></Definition>}
     </div>
   );
 }

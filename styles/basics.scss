@@ -26,6 +26,11 @@
   @include hovererlighten();
 }
 
+@mixin siStyles{
+  height: 18px;
+  font-size: 18px;
+}
+
 @mixin center{
   display: flex;
   align-items: center;
@@ -76,6 +81,21 @@
 
 .mr15{
   margin-right: 15px;
+}
+
+.siw{
+  @include siStyles();
+  color: white;
+}
+
+.sib{
+  @include siStyles();
+  color: black
+}
+
+.sir{
+  @include siStyles();
+  color: red;
 }
 
 * {

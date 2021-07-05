@@ -6,7 +6,7 @@ import TextAreaNew from "../TextAreaNew";
 
 //text: string (the text), setText: function (for editing it), number:number (the nth section)
 //isEditing: show the editing textbox, setIsEditing: toggle isEditing
-export default function WordList({ text, setText, number, isEditing, setIsEditing }) {
+export default function WordList({ text, setText, number, isEditing, setIsEditing, setWord }) {
   const [editText, setEditText] = useState<string>(text);
 
   useEffect(()=>{
@@ -21,7 +21,7 @@ export default function WordList({ text, setText, number, isEditing, setIsEditin
     arr.forEach((l) => {
       var a: string[] = l.split("\n");
       a.forEach((w) => {
-        res.push(<SingleWord  key={i} word={w} setWord={() => {}}></SingleWord>);
+        res.push(<SingleWord  key={i} word={w} setWord={setWord}></SingleWord>);
         i++;
         res.push(<div className="break" key={i}></div>);
         i++;
