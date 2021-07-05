@@ -14,6 +14,7 @@ export default function App({ Component, pageProps }) {
   const [allApis, setAllApis] = useState(null);
   const [apis, setApis] = useState([]); //these are the current apis for the selected language
   const [languageOptions, setLanguageOptions] = useState([]);
+  const [languageMapping,setLanguageMapping] = useState({});
   const [language, setLanguage] = useState(""); //important to NOT initially set a language, so it will set the language WITH all the Apis
   const [defaultText, setDefaultText] = useState("");
   const linebreakCode = "&$linebreak&";
@@ -72,21 +73,19 @@ export default function App({ Component, pageProps }) {
 
   //NOTE: different from setLanguage, this gets all apis, doesn't just set state.
   const updateLanguage = async (languageParam) => {
-    var thisAllApis = [];
+    //Step 1: set the language
+    setLanguage(languageParam);
+
+
+    //Step 2: update the apis list for this language
     if (!allApis || allApis.length == 0) {
       thisAllApis = await getAllApisFromDB();
     } else thisAllApis = allApis;
-    var arr = []; //array of api objects
-    var doc = await pFirestore.collection("languages").doc(languageParam).get();
-    doc.data().apis.forEach((e) => {
-      var currentApi = thisAllApis[e];
-      if (currentApi) {
-        if (!currentApi.enabled) currentApi.enabled = false; //for the case that "enabled" is not set, default to disabled
-        arr.push(currentApi);
-      }
-    });
-    setLanguage(languageParam);
+    var arr = (languageMapping[languageParam] || []).map(i=>allApis[i]); //array of api objects
     setApis(arr);
+
+
+    //Step 3: save it to firestore as default language
     if (pAuth.currentUser) {
       try {
         await pFirestore
@@ -129,10 +128,10 @@ export default function App({ Component, pageProps }) {
 
   const getAllLanguagesFromDB = async () => {
     try {
-      var docs = await pFirestore.collection("languages").get();
-      var arr = [];
-      docs.forEach((doc) => arr.push(doc.id));
+      var doc = await pFirestore.collection("languages").doc("languages").get();
+      var arr = Object.keys(doc.data())
       setLanguageOptions(arr);
+      setLanguageMapping({...doc.data()})
       if (language.length < 1) {
         updateLanguage(arr[1]); //the 2nd element is Latin to English
       }

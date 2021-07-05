@@ -95,6 +95,7 @@ export default function Studio({ id }) {
   };
 
   const renderSections = (): any[] => {
+    if(!texts) return;
     var arr: any[] = [];
     for (let i = 0; i < texts.length; i++) {
       arr.push(

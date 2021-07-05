@@ -61,7 +61,7 @@ export default function Dashboard() {
           name: nameInput,
           time: new Date().getTime(),
           texts: [textInput],
-          translations: "",
+          translations: [""],
         });
       setLoading(false);
       router.push(`/document/${res.id}`);
