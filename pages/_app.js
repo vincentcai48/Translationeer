@@ -1,7 +1,7 @@
 import "../styles/basics.scss";
 import "../styles/original.scss";
 import "../styles/newstyles.scss";
-import "../../styles/definition.scss";
+import "../styles/definition.scss";
 
 import Layout from "../components/root/Layout";
 import PContext from "../services/context";
