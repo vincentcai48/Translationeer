@@ -1,5 +1,3 @@
-import "../../styles/definitionbox.scss";
-
 import parse from 'html-react-parser';
 import { useEffect, useState } from 'react';
 import axios from "axios"
