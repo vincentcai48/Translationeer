@@ -1,6 +1,6 @@
 const validate = {
-    replaceChars: (word) => {
-      var exceptions = [
+    replaceChars: (word:string):string => {
+      var exceptions:string[] = [
         "ā",
         "ē",
         "ī",
@@ -21,7 +21,7 @@ const validate = {
         ".",
         ",",
       ];
-      var replacements = [
+      var replacements:string[] = [
         "a",
         "e",
         "i",

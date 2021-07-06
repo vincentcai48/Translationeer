@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import PContext from "../../services/context";
 import { validate } from "../../services/validate";
 import Loading from "../Loading";
+import InnerDefinition from "./InnerDefinition";
 
 //PROPS: String word, Array[Object()] apis, Function crossOut
 
@@ -78,6 +79,20 @@ function Definition({word,setWord,exitFunc}) {
     setIsEditing(false);
   };
 
+  const renderDefinitions = ():any[] =>{
+      var arr = [];
+      context.apis.filter(api=>api.enabled).forEach(api=>{
+          arr.push(<InnerDefinition
+            word={word}
+            url={api.url}
+            name={api.name}
+            cssSelector={api.cssSelector}
+          ></InnerDefinition>)
+      })
+      console.log(arr,context.apis);
+      return arr;
+  }
+
   return (
     <div
       id="definition-container"
@@ -119,8 +134,9 @@ function Definition({word,setWord,exitFunc}) {
           <FontAwesomeIcon className="sir" icon={faTimes}></FontAwesomeIcon>
         </button>
       </div>
-    
-    
+      <ul className="definitions-list">
+            {renderDefinitions()}
+      </ul>
     </div>
   );
 }
