@@ -19,34 +19,35 @@ import Definition from "../word/Definition";
 import WordList from "../word/WordList";
 import Popup from "../Popup";
 
-interface Settings{
-  copyDivide?: string,
-  fontSize?: number,
+interface Settings {
+  copyDivide?: string;
+  fontSize?: number;
 }
 
 export default function Studio({ id }) {
+  //THIS is the DEFINTIIVE list of possible settings
   const defaultSettings = {
     copyDivide: " ",
     fontSize: 22,
-  }
-
+    studioWidth: 50,
+  };
 
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const [saveError,setSaveError] = useState<boolean>(false);
+  const [saveError, setSaveError] = useState<boolean>(false);
   const { isAuth, defaultName } = useContext(PContext);
   const [name, setName] = useState<string>("");
-  const [nameInput,setNameInput] = useState<string>(name);
-  const [editName,setEditName] = useState<boolean>(false);
+  const [nameInput, setNameInput] = useState<string>(name);
+  const [editName, setEditName] = useState<boolean>(false);
   const [texts, setTexts] = useState<string[]>([]);
   const [translations, setTranslations] = useState<string[]>([]);
   const [textsEditing, setTextsEditing] = useState<boolean[]>([]);
   const [breakoffText, setBreakoffText] = useState<string | null>(null);
   const [breakoffIndex, setBreakoffIndex] = useState<number>(-1);
-  const [word,setWord] = useState<string|null>(null);
-  const [settings,setSettings] = useState<object>({});
-  const [showSettings,setShowSettings] = useState<boolean>(false);
-  const [copyMessage,setCopyMessage] = useState<string>("Copy");
+  const [word, setWord] = useState<string | null>(null);
+  const [settings, setSettings] = useState<object>({});
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const [copyMessage, setCopyMessage] = useState<string>("Copy");
 
   //For auto-save
   const saves = useRef(-3); //-3 to start, set three values at start, 0 for each new save batch;
@@ -82,17 +83,7 @@ export default function Studio({ id }) {
   };
 
   //auto save on change
-  useEffect(autoSave, [name, texts, translations,settings]);
-
-  useEffect(()=>{
-    let root = document.documentElement;
-
-    //Go through each setting
-    let fontSize = settings["fontSize"] || defaultSettings.fontSize;
-    console.log(fontSize);
-    root.style.setProperty("--studio-font-size",fontSize+"px");
-
-  },[settings])
+  useEffect(autoSave, [name, texts, translations, settings]);
 
   const getDoc = async (): Promise<void> => {
     try {
@@ -121,8 +112,15 @@ export default function Studio({ id }) {
         setTranslations(data["translations"]);
         setTextsEditing(data["texts"].map(() => false)); //all false
       }
-      console.log(data["settings"],data["settings"]||{})
-      setSettings(data["settings"]||{});
+      //Set settings, to either saved value or the default
+      var newSettings = data["settings"] || defaultSettings;
+      console.log(newSettings);
+      Object.keys(defaultSettings).forEach((setting) => {
+        if (!newSettings[setting])
+          newSettings[setting] = defaultSettings[setting];
+      });
+      console.log(newSettings)
+      setSettings(newSettings);
     } catch (e) {
       console.error(e);
     }
@@ -130,22 +128,24 @@ export default function Studio({ id }) {
   };
 
   const renderSections = (): any[] => {
-    if(!texts) return;
+    if (!texts) return;
     var arr: any[] = [];
     for (let i = 0; i < texts.length; i++) {
       arr.push(
-        <div className={`single-section${i != texts.length - 1?"":" last"}`}>
+        <div
+          className={`single-section${i != texts.length - 1 ? "" : " last"}`}
+        >
           <div className="left">
             <div className="options">
-            <button
-          className="sb add"
-          onClick={() => addSection("", texts.length - 1)}
-        >
-          <FontAwesomeIcon
-            className="icon"
-            icon={faPlus}
-          ></FontAwesomeIcon>
-        </button>
+              <button
+                className="sb add"
+                onClick={() => addSection("", texts.length - 1)}
+              >
+                <FontAwesomeIcon
+                  className="icon"
+                  icon={faPlus}
+                ></FontAwesomeIcon>
+              </button>
             </div>
             <WordList
               text={texts[i]}
@@ -153,7 +153,7 @@ export default function Studio({ id }) {
               number={i + 1}
               isEditing={textsEditing[i]}
               setIsEditing={(b) => setIsEditing(b, i)}
-              setWord={(w)=>setWord(w)}
+              setWord={(w) => setWord(w)}
             ></WordList>
           </div>
           {i != texts.length - 1 ? (
@@ -202,6 +202,24 @@ export default function Studio({ id }) {
     setTranslations(arr);
   };
 
+  //on change settings
+  const settingsChange = () => {
+    let root = document.documentElement;
+
+    //Go through each setting
+
+    //fontSize
+    let fontSize = settings["fontSize"] || defaultSettings.fontSize;
+    root.style.setProperty("--studio-font-size", fontSize + "px");
+
+    //studioWidth
+    let studioWidth = settings["studioWidth"] || defaultSettings.studioWidth;
+    root.style.setProperty("--studio-width", studioWidth + "%");
+  };
+
+  //set all settings in css variables when settings are changed.
+  useEffect(settingsChange, [settings]);
+
   const setIsEditing = (isEditing: boolean, index: number): void => {
     var arr = [...textsEditing];
     arr[index] = isEditing;
@@ -237,7 +255,7 @@ export default function Studio({ id }) {
       let b2Text = bText.replace(/[ |\n]*$/gi, "");
       if (thisText.includes(b2Text)) index = i;
     }
-    if(index>=0&&!textsEditing[index]) return -1; //unable to break off if is editing section
+    if (index >= 0 && textsEditing[index]) return -1; //unable to break off if is editing section
     return index;
   };
 
@@ -380,7 +398,7 @@ export default function Studio({ id }) {
 
     setTexts(newTexts);
     setTranslations(newTranslations);
-    setIsEditing(true,after+1);//edit this new section's text
+    setIsEditing(true, after + 1); //edit this new section's text
   };
 
   const save = async () => {
@@ -396,7 +414,7 @@ export default function Studio({ id }) {
           texts: textsRef.current,
           translations: translationsRef.current,
           settings: settingsRef.current,
-          time: (new Date()).getTime(),
+          time: new Date().getTime(),
         });
       setSaveError(false);
     } catch (e) {
@@ -411,24 +429,24 @@ export default function Studio({ id }) {
     return t;
   };
 
-  const copyTranslation = async () =>{
-    try{
+  const copyTranslation = async () => {
+    try {
       var t = "";
-      translations.forEach(e=>{
+      translations.forEach((e) => {
         t += e + (settings["copyDivide"] || " ");
-      })
+      });
       await navigator.clipboard.writeText(t);
-      setCopyMessage("Copied!")
-    }catch(e){
-      setCopyMessage("Error!")
+      setCopyMessage("Copied!");
+    } catch (e) {
+      setCopyMessage("Error!");
     }
-  }
+  };
 
-  const changeSettings = (property:string,value:any)=>{
-    let newSettings = {...settings};
+  const changeSettings = (property: string, value: any) => {
+    let newSettings = { ...settings };
     newSettings[property] = value;
     setSettings(newSettings);
-  }
+  };
 
   if (studioLoading)
     return (
@@ -440,25 +458,42 @@ export default function Studio({ id }) {
     <div id="studio">
       <section id="top" className="row">
         <FontAwesomeIcon className="icon" icon={faFileAlt}></FontAwesomeIcon>
-        <h2>{!editName?<div className="name">{name}
-          <FontAwesomeIcon icon={faPen} className="sib tb ml15" onClick={()=>{
-            setEditName(true)
-            setNameInput(name);
-          }}></FontAwesomeIcon>
-        </div>:<div className="name-edit">
-            <input
-              value={nameInput}
-              onChange={e=>setNameInput(e.target.value)}
-              placeholder="Name"
-            ></input>
-            <button className="tb ml10 mr10" onClick={()=>{
-              setName(nameInput||defaultName);
-              setEditName(false);
-            }}>
-              <FontAwesomeIcon className="sib" icon={faCheckCircle}></FontAwesomeIcon>
-            </button>
-            {/* <button className="tb" onClick={()=>setEditName(false)}>Cancel</button> */}
-          </div>}</h2>
+        <h2>
+          {!editName ? (
+            <div className="name">
+              {name}
+              <FontAwesomeIcon
+                icon={faPen}
+                className="sib tb ml15"
+                onClick={() => {
+                  setEditName(true);
+                  setNameInput(name);
+                }}
+              ></FontAwesomeIcon>
+            </div>
+          ) : (
+            <div className="name-edit">
+              <input
+                value={nameInput}
+                onChange={(e) => setNameInput(e.target.value)}
+                placeholder="Name"
+              ></input>
+              <button
+                className="tb ml10 mr10"
+                onClick={() => {
+                  setName(nameInput || defaultName);
+                  setEditName(false);
+                }}
+              >
+                <FontAwesomeIcon
+                  className="sib"
+                  icon={faCheckCircle}
+                ></FontAwesomeIcon>
+              </button>
+              {/* <button className="tb" onClick={()=>setEditName(false)}>Cancel</button> */}
+            </div>
+          )}
+        </h2>
       </section>
       <section id="heading">
         <div id="first-row">
@@ -469,11 +504,13 @@ export default function Studio({ id }) {
                   className="icon-spin"
                   icon={faCircleNotch}
                 ></FontAwesomeIcon>
+              ) : saveError ? (
+                <FontAwesomeIcon
+                  className="icon-x"
+                  icon={faTimesCircle}
+                ></FontAwesomeIcon>
               ) : (
-                saveError?<FontAwesomeIcon
-                className="icon-x"
-                icon={faTimesCircle}
-              ></FontAwesomeIcon>:<FontAwesomeIcon
+                <FontAwesomeIcon
                   className="icon-check"
                   icon={faCheckCircle}
                 ></FontAwesomeIcon>
@@ -482,10 +519,19 @@ export default function Studio({ id }) {
           </div>
           <div className="middle"></div>
           <div className="right">
-            <button className="settings-button tb" onClick={()=>setShowSettings(true)}>
+            <button
+              className="settings-button tb"
+              onClick={() => setShowSettings(true)}
+            >
               <FontAwesomeIcon className="siw" icon={faCog}></FontAwesomeIcon>
             </button>
-            <button className="copy-translation tb" onClick={copyTranslation} onMouseLeave={()=>setCopyMessage("Copy")}>{copyMessage}</button>
+            <button
+              className="copy-translation tb"
+              onClick={copyTranslation}
+              onMouseLeave={() => setCopyMessage("Copy")}
+            >
+              {copyMessage}
+            </button>
           </div>
         </div>
         {breakoffText && breakoffIndex > -1 && (
@@ -499,40 +545,64 @@ export default function Studio({ id }) {
         {renderSections()}
       </section>
 
-      {word&&<Definition
-        word={word}
-        setWord={setWord}
-        exitFunc={()=>setWord(null)}
-      ></Definition>}
+      {word && (
+        <Definition
+          word={word}
+          setWord={setWord}
+          exitFunc={() => setWord(null)}
+        ></Definition>
+      )}
 
-      {showSettings&&<Popup
-          xFunction={()=>setShowSettings(false)}
-        >
-        <div className="settings-popup">
+      {showSettings && (
+        <Popup xFunction={() => setShowSettings(false)}>
+          <div className="settings-popup">
             <h4>Settings</h4>
             <ul className="settings-list">
               <h6>Display Settings</h6>
               <li key="fontSize">
                 <label>Font Size</label>
-                <select value={settings["fontSize"]} onChange={e=>changeSettings("fontSize",Number(e.target.value))}>
+                <select
+                  value={settings["fontSize"]}
+                  onChange={(e) =>
+                    changeSettings("fontSize", Number(e.target.value))
+                  }
+                >
                   <option value={16}>Small</option>
                   <option value={22}>Medium</option>
                   <option value={28}>Large</option>
                 </select>
               </li>
+              <li key="studioWidth">
+                <label>Text-Translation Ratio</label>
+                <select
+                  value={settings["studioWidth"]}
+                  onChange={(e) =>
+                    changeSettings("studioWidth", Number(e.target.value))
+                  }
+                >
+                  <option value={30}>30-70</option>
+                  <option value={40}>40-60</option>
+                  <option value={50}>50-50</option>
+                  <option value={60}>60-40</option>
+                  <option value={70}>70-30</option>
+                </select>
+              </li>
               <h6>Copy Settings</h6>
               <li key="copyDivide">
                 <label>Between each section:</label>
-                <select value={settings["copyDivide"]} onChange={e=>changeSettings("copyDivide",e.target.value)}>
+                <select
+                  value={settings["copyDivide"]}
+                  onChange={(e) => changeSettings("copyDivide", e.target.value)}
+                >
                   <option value=" ">Space</option>
                   <option value={"\n"}>New Line</option>
                   <option value={"\n\n"}>Line Between</option>
                 </select>
               </li>
-              
             </ul>
-        </div>  
-      </Popup>}
+          </div>
+        </Popup>
+      )}
     </div>
   );
 }
