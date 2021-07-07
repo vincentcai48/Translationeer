@@ -1975,6 +1975,8 @@ section.studioDefault-section p {
 }
 
 .docs-option-primary {
+  color: black;
+  display: block;
   width: 100%;
   text-align: left;
 
@@ -1995,6 +1997,8 @@ section.studioDefault-section p {
 }
 
 .docs-option-secondary {
+  color: black;
+  display: block;
   width: 100%;
 
   margin: 0px;
@@ -2012,6 +2016,7 @@ section.studioDefault-section p {
 .docs-option-primary:hover,
 .docs-option-secondary:hover {
   opacity: 0.7;
+  color: black;
 }
 
 .brp {
