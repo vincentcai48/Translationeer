@@ -83,41 +83,42 @@
         ul{
             margin: 0px;
         }
-        .single-doc{
-            width: 100%;
-            padding: 15px 5vw;
-            //justify-content: space-between;
-            color: black;
-            position: relative;
+        li.single-doc-container{
+            display: grid;
+            grid-template-columns: 1fr 50px;
             border-bottom: 1px solid black;
-            .left{
-                @include row();
-                font-size: 20px;
-                width: auto;
-                .doc-icon{
-                    margin-right: 10px;
-                    height: 20px;
-                }
-                .doc-name{
-                    display: block;
-                    font-weight: bold;
+            .single-doc{
+                width: 100%;
+                padding: 15px 5vw;
+                //justify-content: space-between;
+                color: black;
+                position: relative;
+                
+                border-right: 1px solid black;
+                .left{
+                    @include row();
+                    font-size: 20px;
                     width: auto;
+                    .doc-icon{
+                        margin-right: 10px;
+                        height: 20px;
+                    }
+                    .doc-name{
+                        display: block;
+                        font-weight: bold;
+                        width: auto;
+                    }
+                }
+                .right{
+                    margin-left: auto;
+                }
+                &:hover{
+                    background-color: var(--scl);
                 }
             }
-            .right{
-                margin-left: auto;
-            }
-            // .open{
-            //     transition: opacity 0.3s;
-            //     @include sbstyles();
-            //     opacity: 0;
-            //     position: absolute;
-            //     top: 50%;
-            //     left: 50%;
-            //     transform: translate(-50%,-50%);
-            // }
-            &:hover{
-                background-color: var(--scl);
+            .delete-area{
+                
+                @include center();
             }
         }
     }
@@ -357,14 +358,14 @@
     }
     .left{
         padding: 20px;
-        width: 50%;
+        width: var(--studio-width);
         background-color: rgb(235, 235, 235);
     }
     button.merge, button.add{
         position: absolute;
         z-index: 5;
         bottom: 0px;
-        left: 50%;
+        left: var(--studio-width);
         transform: translate(-50%, 50%);
         background-color: black;
         border: none;
@@ -380,7 +381,7 @@
         }
     }
     .right{
-        width: 50%;
+        width: 100% - var(--studio-width);
         padding: 20px;
         background-color: white;
        .translation-textarea{

@@ -3,7 +3,7 @@ import {useContext} from "react";
 import Link from "next/link";
 import { pAuth, googleAuthProvider } from "../services/config";
 import PContext from "../services/context"
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faUserCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function toggleMenu(e) {
@@ -118,22 +118,26 @@ export default function Header(){
               <ul id="languageList">{renderLanguageOptions()}</ul>
             </div>
             <div className="header-item">
-              <Link href="/howto">
+              <Link href="/documentation/howto">
                 <a className="header-item-link">How to</a>
               </Link>
             </div>
             <div className="header-item">
-              <Link href="/studiodefault">
-                <a className="header-item-link">Studio</a>
+              <Link href="/documentation">
+                <a className="header-item-link">Documentation</a>
               </Link>
             </div>
             <div id="auth-area">
               {context.isAuth && pAuth.currentUser ? (
                 <div id="header-user-info">
-                  <div className="header-item">
-                    <Link href="/dashboard">
+                  {/* <div className="header-item">
+                    <Link href="/">
                       <a className="header-item-link">Dashboard</a>
                     </Link>
+                  </div> */}
+                  <div className="account-box">
+                    <FontAwesomeIcon className="auth-icon" icon={faUserCircle}></FontAwesomeIcon>
+                    <div className="tooltip">{pAuth.currentUser.email}</div>
                   </div>
                 </div>
               ) : (

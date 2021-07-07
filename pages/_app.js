@@ -19,7 +19,7 @@ export default function App({ Component, pageProps }) {
   const [language, setLanguage] = useState(null); //important to NOT initially set a language, so it will set the language WITH all the Apis
   const linebreakCode = "&$linebreak&";
   const batchSize = 10;
-  const defaultName = "Untitled Document"
+  const defaultName = "Untitled"
   const [textEnd, setTextEnd] = useState("50"); //this is actually set in line 82 of studioHeader
   const [isMobile, setIsMobile] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
@@ -120,11 +120,8 @@ export default function App({ Component, pageProps }) {
     try {
       await thisUserRef.set({
         defaultLanguage: "Latin to English",
-        displayName: user.displayName,
-        phoneNumber: user.phoneNumber,
-        imageURL: user.photoURL,
         email: user.email,
-        timeCreated: fbFieldValue.serverTimestamp(),
+        timeCreated: (new Date()).getTime(),
       });
       setNewUser(null);
     } catch (e) {
@@ -190,6 +187,7 @@ export default function App({ Component, pageProps }) {
     setIsAuth,
     mouseX,
     mouseY,
+    defaultName
   };
 
   // const contextValue = {

@@ -13,6 +13,7 @@ export default async function deleteAccountFunc(): Promise<boolean>{
             batch.delete(d.ref);
         })
         await batch.commit();
+        await pAuth.currentUser.delete();
         return true;
     }catch(e){
         console.error(e);

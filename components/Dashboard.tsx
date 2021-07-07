@@ -1,6 +1,6 @@
-import { faCogs, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faFileAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { pAuth, pFirestore } from "../services/config";
 import Link from "next/link";
@@ -9,12 +9,15 @@ import { useRouter } from "next/router";
 import Loading from "./Loading";
 import dateString from "../services/dateString";
 import deleteAccountFunc from "../services/deleteAccount";
+import PContext from "../services/context";
 
 export default function Dashboard() {
   const router = useRouter();
+  const {defaultName} = useContext(PContext);
   const [docs, setDocs] = useState([]);
   const [lastDoc, setLastDoc] = useState<any>(-1);
   const [addDocPopup, setAddDocPopup] = useState<boolean>(false);
+  const [docToDelete,setDocToDelete] = useState<string|null>(null);
   const [nameInput, setNameInput] = useState<string>("");
   const [textInput, setTextInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -62,7 +65,7 @@ export default function Dashboard() {
         .doc(pAuth.currentUser.uid)
         .collection("documents")
         .add({
-          name: nameInput,
+          name: nameInput || defaultName,
           time: new Date().getTime(),
           texts: [textInput],
           translations: [""],
@@ -80,6 +83,25 @@ export default function Dashboard() {
     }
   };
 
+  const deleteDocument = async () =>{
+    if(!docToDelete) return;
+    setLoading(true);
+    try{
+      //delete doc in firestore
+      await pFirestore.collection('users').doc(pAuth.currentUser.uid).collection("documents").doc(docToDelete).delete();
+      
+      //delete doc from list
+      var newArr = [...docs].filter(d=>d.id!=docToDelete);
+      setDocs(newArr);
+
+      //then close out of popup
+      setDocToDelete(null);
+    }catch(e){
+      console.error(e);
+    }
+    setLoading(false);
+  }
+
   const logout = async () => {
     try {
       await pAuth.signOut();
@@ -87,7 +109,7 @@ export default function Dashboard() {
       console.error(e);
     }
   };
-
+  if(!pAuth.currentUser) return;
   return (
     <div id="dashboard-container">
       <section id="top" className="center">
@@ -107,13 +129,16 @@ export default function Dashboard() {
         <button onClick={() => setAddDocPopup(true)}>Add Document</button>
       </section>
       <section id="docs-list">
+        {docs.length==0&&<div className="no-docs-container center">
+          <div>No documents yet. Create one now!</div>  
+        </div>}
         <ul>
           {docs
             .sort((a, b) => b.time - a.time)
             .map((doc) => {
               if (!doc.id) return;
               return (
-                <li key={doc.id}>
+                <li key={doc.id} className="row single-doc-container">
                   <Link href={`/document/${doc.id}`}>
                     <a className="single-doc row">
                       <div className="left">
@@ -123,7 +148,7 @@ export default function Dashboard() {
                         ></FontAwesomeIcon>
                         <div className="doc-name">{doc.name}</div>
                       </div>
-                      <div className="right">
+                      <div className="right row">
                         <div className="time">
                           Edited {dateString(Number(doc.time))}
                         </div>
@@ -131,6 +156,11 @@ export default function Dashboard() {
                       {/* <div className="open">Open Document</div> */}
                     </a>
                   </Link>
+                  <div className="delete-area">
+                  <button className="tb" onClick={()=>setDocToDelete(doc.id)}>
+                          <FontAwesomeIcon className="sib" icon={faTrash}></FontAwesomeIcon>
+                        </button>
+                  </div>
                 </li>
               );
             })}
@@ -164,6 +194,18 @@ export default function Dashboard() {
         </Popup>
       )}
 
+      {docToDelete!=null&&<Popup xFunction={()=>setDocToDelete(null)}>
+        <div className="delete-doc-popup">
+          <div className="row">
+            <button onClick={deleteDocument} className="sb mr15">
+              Delete Document
+            </button>
+            <button onClick={()=>setDocToDelete(null)} className="tb">Cancel</button>
+          </div>
+          {loading&&<p><Loading></Loading></p>}
+        </div>
+      </Popup>}
+
       {accountPopup && (
         <Popup xFunction={() => setAccountPopup(false)}>
           <div className="account-popup">
@@ -185,17 +227,23 @@ export default function Dashboard() {
                 ></input>
                 <div className="row">
                   {deleteAccountInput === "confirm" && (
-                    <button className="sb mr15"
-                      onClick={async ()=>{
-                        var res:boolean = await deleteAccountFunc();
-                        if(!res) setDeleteAccountInput("Error!");
+                    <button
+                      className="sb mr15"
+                      onClick={async () => {
+                        var res: boolean = await deleteAccountFunc();
+                        if (!res) setDeleteAccountInput("Error!");
                         else setDeleteAccount(false);
                       }}
-                    >Delete Account</button>
+                    >
+                      Delete Account
+                    </button>
                   )}
                   <button
                     className="tb"
-                    onClick={() => setDeleteAccount(false)}
+                    onClick={() => {
+                      setDeleteAccount(false);
+                      setDeleteAccountInput("");
+                    }}
                   >
                     Cancel
                   </button>

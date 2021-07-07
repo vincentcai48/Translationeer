@@ -237,6 +237,7 @@ export default function Studio({ id }) {
       let b2Text = bText.replace(/[ |\n]*$/gi, "");
       if (thisText.includes(b2Text)) index = i;
     }
+    if(index>=0&&!textsEditing[index]) return -1; //unable to break off if is editing section
     return index;
   };
 
