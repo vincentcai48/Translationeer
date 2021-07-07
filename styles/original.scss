@@ -340,7 +340,8 @@ header#header {
   color: white;
   font-weight: normal;
   background-color: #ad0000;
-  margin-left: 50px;
+  border: none;
+  margin-left: 20px;
   padding: 8px 10px;
   border-radius: 15px;
   box-shadow: 2px 2px 2px black;
@@ -357,7 +358,7 @@ header#header {
   width: 20px;
   background-size: cover;
   margin-right: 10px;
-  //background-image: url("../public/images/googleicon50x50.png");
+  background-image: url("/images/googleicon50x50.png");
 }
 
 .header-item {

@@ -128,7 +128,7 @@ export default function Header(){
               </Link>
             </div>
             <div id="auth-area">
-              {context.isAuth && pAuth.currentUser ? (
+              {context.isAuth && pAuth.currentUser && (
                 <div id="header-user-info">
                   {/* <div className="header-item">
                     <Link href="/">
@@ -142,12 +142,8 @@ export default function Header(){
                     </a>
                   </Link>
                 </div>
-              ) : (
-                <button onClick={googleLogin} id="header-login-button">
-                  <div id="google-logo"></div>
-                  <div>Google Login</div>
-                </button>
               )}
+              
             </div>
           </div>
         </div>

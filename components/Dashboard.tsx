@@ -7,7 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
-import { pAuth, pFirestore } from "../services/config";
+import { fbFieldValue, pAuth, pFirestore } from "../services/config";
 import Link from "next/link";
 import Popup from "./Popup";
 import { useRouter } from "next/router";
@@ -67,9 +67,11 @@ export default function Dashboard() {
     setLoading(true);
     setErrorMessage(null);
     try {
-      var res = await pFirestore
-        .collection("users")
-        .doc(pAuth.currentUser.uid)
+      var userDoc = pFirestore
+      .collection("users")
+      .doc(pAuth.currentUser.uid);
+      //Add the doc
+      var res = await userDoc
         .collection("documents")
         .add({
           name: nameInput || defaultName,
@@ -82,6 +84,10 @@ export default function Dashboard() {
             studioWidth: 50,
           },
         });
+      //increment numDocs
+      await userDoc.update({
+        numDocs: fbFieldValue.increment(1),
+      })
       setLoading(false);
       router.push(`/document/${res.id}`);
     } catch (e) {
@@ -95,13 +101,20 @@ export default function Dashboard() {
     if (!docToDelete) return;
     setLoading(true);
     try {
+      var userDoc = pFirestore
+      .collection("users")
+      .doc(pAuth.currentUser.uid);
+
       //delete doc in firestore
-      await pFirestore
-        .collection("users")
-        .doc(pAuth.currentUser.uid)
+      await userDoc
         .collection("documents")
         .doc(docToDelete)
         .delete();
+      
+      //decrement numDocs
+      await userDoc.update({
+        numDocs: fbFieldValue.increment(-1),
+      })
 
       //delete doc from list
       var newArr = [...docs].filter((d) => d.id != docToDelete);

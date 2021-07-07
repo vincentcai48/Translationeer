@@ -2,11 +2,12 @@ import "../styles/basics.scss";
 import "../styles/original.scss";
 import "../styles/newstyles.scss";
 import "../styles/definition.scss";
+import "../styles/homepage.scss";
 
 import Layout from "../components/root/Layout";
 import PContext from "../services/context";
 import { useEffect, useState, useRef } from "react";
-import { pFirestore, pAuth, fbFieldValue } from "../services/config";
+import { pFirestore, pAuth } from "../services/config";
 import NewUser from "../components/NewUser";
 
 export default function App({ Component, pageProps }) {
@@ -122,6 +123,7 @@ export default function App({ Component, pageProps }) {
         defaultLanguage: "Latin to English",
         email: user.email,
         timeCreated: (new Date()).getTime(),
+        numDocs: 0,
       });
       setNewUser(null);
     } catch (e) {

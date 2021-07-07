@@ -1,38 +1,5 @@
 @import "basics.scss";
 
-#home-auth {
-  position: absolute;
-  right: 5vw;
-  top: 20vh;
-  padding: 20px;
-  width: 280px;
-  h4{
-      margin: 0px 0px 20px 0px;
-      font-size: 30px;
-  }
-  input{
-      background-color: transparent;
-      border: none;
-      border-bottom: 3px solid black;
-      font-size: 12px;
-      transition: all 0.3s;
-      display: block;
-      margin-bottom: 20px;
-      border-radius: 0px;
-      width: 250px;
-      padding: 5px;
-      height: 25px;
-      &:focus{
-          font-size: 16px;
-      }
-  }
-  .errorM{
-      font-size: 12px;
-      color:red;
-      margin-bottom: 20px;
-  }
-}
-
 #dashboard-container{
     #top{
         height: 120px;

@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { pAuth } from "../services/config";
+import { googleAuthProvider, pAuth } from "../services/config";
 
 export default function Auth(){
     const [email,setEmail] = useState<string>("");
@@ -21,6 +21,14 @@ export default function Auth(){
             setErrorM(e.message);
         }
     }
+
+    const googleLogin = async () => {
+        try{
+            await pAuth.signInWithRedirect(googleAuthProvider);
+        }catch(e){
+            console.error(e);
+        }
+      };
 
     return <div>
         <h4>Login</h4>
@@ -45,6 +53,13 @@ export default function Auth(){
             <div className="button-container row">
                 <button className="sb" onClick={login}>Login</button>
                 <button className="tb ml15" onClick={createUser}>Create Account</button>
+            </div>
+            <div id="google-login-area" className="row">
+                <p>OR</p>
+                <button onClick={googleLogin} id="header-login-button">
+                  <div id="google-logo"></div>
+                  <div>Google Login</div>
+            </button>
             </div>
         </div>
     </div>
