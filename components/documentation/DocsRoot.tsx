@@ -30,14 +30,10 @@ export default function DocsRoot({ paramURL }) {
     if (docOptions[i].url == paramURL) n = i;
   }
   const num = n;
-
-  console.log(num);
   useContext(PContext).setTitle(
     `${docOptions[num].name} - Translationeer Documentation`
   );
-
   const thisDoc = require(`./markdownfiles/docs${num}.md`).default;
-  console.log(thisDoc);
   const text = parser(thisDoc);
   //Set button options
   var optionsArr = [];
