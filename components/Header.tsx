@@ -3,7 +3,8 @@ import {useContext} from "react";
 import Link from "next/link";
 import { pAuth, googleAuthProvider } from "../services/config";
 import PContext from "../services/context"
-
+import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 function toggleMenu(e) {
     const menuBackgroundDOM = document.getElementById("menu-background");
@@ -108,10 +109,7 @@ export default function Header(){
             <div id="services-dropdown">
               <div id="services-header-text">
                 Translators
-                <i
-                  style={{ marginLeft: "5px" }}
-                  className="fas fa-caret-down"
-                ></i>
+                <FontAwesomeIcon className="sib ml5" icon={faCaretDown}></FontAwesomeIcon>
               </div>
               <ul id="serviceList">{renderServiceOptions()}</ul>
             </div>
@@ -137,16 +135,6 @@ export default function Header(){
                       <a className="header-item-link">Dashboard</a>
                     </Link>
                   </div>
-                  <Link href="/account">
-                    <a className="user-displayName">
-                      {/* <img
-                        id="header-profile-picture"
-                        src={pAuth.currentUser.photoURL}
-                      ></img> */}
-
-                      {/* {pAuth.currentUser.displayName.split(" ")[0]} */}
-                    </a>
-                  </Link>
                 </div>
               ) : (
                 <button onClick={googleLogin} id="header-login-button">

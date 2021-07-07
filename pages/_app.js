@@ -19,6 +19,7 @@ export default function App({ Component, pageProps }) {
   const [language, setLanguage] = useState(null); //important to NOT initially set a language, so it will set the language WITH all the Apis
   const linebreakCode = "&$linebreak&";
   const batchSize = 10;
+  const defaultName = "Untitled Document"
   const [textEnd, setTextEnd] = useState("50"); //this is actually set in line 82 of studioHeader
   const [isMobile, setIsMobile] = useState(false);
   const [isAuth, setIsAuth] = useState(false);
@@ -34,69 +35,72 @@ export default function App({ Component, pageProps }) {
   }, []);
 
   //when languageMapping first loads (the languages mapped to their apis, so now you can get the apis)
-  useEffect(()=>{
-    if (languageMapping.current){
+  useEffect(() => {
+    if (languageMapping.current) {
       console.log(language);
-      if(language) updateLanguage(language);
-      if(!language&&languageOptions&&languageOptions[1]) updateLanguage(languageOptions[1]); //the 2nd element is Latin to English
+      if (language) updateLanguage(language);
+      if (!language && languageOptions && languageOptions[1])
+        updateLanguage(languageOptions[1]); //the 2nd element is Latin to English
     }
-  },[languageMapping.current]);
+  }, [languageMapping.current]);
 
   const componentDidMount = async () => {
-    await getAllApisFromDB();
-    await getAllLanguagesFromDB();
-    var tcRes = await pFirestore
-      .collection("settings")
-      .doc("termsandconditions")
-      .get();
+    try {
+      await getAllApisFromDB();
+      await getAllLanguagesFromDB();
+      var tcRes = await pFirestore
+        .collection("settings")
+        .doc("termsandconditions")
+        .get();
 
-    var newTCArr = [];
-    tcRes.data()["paragraphs"].forEach((element) => {
-      newTCArr.push(element);
-    });
-    setTc(newTCArr);
+      var newTCArr = [];
+      tcRes.data()["paragraphs"].forEach((element) => {
+        newTCArr.push(element);
+      });
+      setTc(newTCArr);
 
-    pAuth.onAuthStateChanged(async (user) => {
-      console.log(user);
-      if (user) {
-        setIsAuth(true);
-        const thisUserRef = pFirestore.collection("users").doc(user.uid);
-        try {
-          var doc = await thisUserRef.get();
-          //THIS IS JUST TO ADD STARTING DOCUMENT IF USER IS NEW
-          if (!doc.exists) {
-            setNewUser(user);
-          } else {
-            console.log(doc.data().defaultLanguage);
-            if (doc.data().defaultLanguage) {
-              updateLanguage(doc.data().defaultLanguage);
+      pAuth.onAuthStateChanged(async (user) => {
+        console.log(user);
+        if (user) {
+          setIsAuth(true);
+          const thisUserRef = pFirestore.collection("users").doc(user.uid);
+          try {
+            var doc = await thisUserRef.get();
+            //THIS IS JUST TO ADD STARTING DOCUMENT IF USER IS NEW
+            if (!doc.exists) {
+              setNewUser(user);
+            } else {
+              console.log(doc.data().defaultLanguage);
+              if (doc.data().defaultLanguage) {
+                updateLanguage(doc.data().defaultLanguage);
+              }
             }
+          } catch (e) {
+            console.error(e);
           }
-        } catch (e) {
-          console.error(e);
-        }
-      } else setIsAuth(false);
-    });
-    getAllApisFromDB();
+        } else setIsAuth(false);
+      });
+      getAllApisFromDB();
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   //NOTE: different from setLanguage, this gets all apis, doesn't just set state.
   const updateLanguage = async (languageParam) => {
     console.log(languageParam);
-    console.log(languageMapping.current)
-    if(!languageMapping.current) return;
+    console.log(languageMapping.current);
+    if (!languageMapping.current) return;
     //Step 1: set the language
     setLanguage(languageParam);
-
 
     //Step 2: update the apis list for this language
     var thisAllApis = [];
     if (!allApis || allApis.length == 0) {
       thisAllApis = await getAllApisFromDB();
     } else thisAllApis = allApis;
-    var arr = (languageMapping.current[languageParam]).map(i=>thisAllApis[i]); //array of api objects
+    var arr = languageMapping.current[languageParam].map((i) => thisAllApis[i]); //array of api objects
     setApis(arr);
-
 
     //Step 3: save it to firestore as default language
     if (pAuth.currentUser) {
@@ -142,9 +146,9 @@ export default function App({ Component, pageProps }) {
   const getAllLanguagesFromDB = async () => {
     try {
       var doc = await pFirestore.collection("languages").doc("languages").get();
-      var arr = Object.keys(doc.data())
+      var arr = Object.keys(doc.data());
       setLanguageOptions(arr);
-      languageMapping.current = {...doc.data()};
+      languageMapping.current = { ...doc.data() };
     } catch (e) {
       console.error(e);
     }

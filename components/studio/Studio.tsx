@@ -2,9 +2,12 @@ import {
   faArrowsAltV,
   faCheckCircle,
   faCircleNotch,
+  faCog,
   faFileAlt,
+  faPen,
   faPlus,
   faPlusCircle,
+  faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState, useContext, useRef } from "react";
@@ -14,18 +17,36 @@ import Loading from "../Loading";
 import TextAreaNew from "../TextAreaNew";
 import Definition from "../word/Definition";
 import WordList from "../word/WordList";
+import Popup from "../Popup";
+
+interface Settings{
+  copyDivide?: string,
+  fontSize?: number,
+}
 
 export default function Studio({ id }) {
+  const defaultSettings = {
+    copyDivide: " ",
+    fontSize: 22,
+  }
+
+
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
-  const { isAuth } = useContext(PContext);
+  const [saveError,setSaveError] = useState<boolean>(false);
+  const { isAuth, defaultName } = useContext(PContext);
   const [name, setName] = useState<string>("");
+  const [nameInput,setNameInput] = useState<string>(name);
+  const [editName,setEditName] = useState<boolean>(false);
   const [texts, setTexts] = useState<string[]>([]);
   const [translations, setTranslations] = useState<string[]>([]);
   const [textsEditing, setTextsEditing] = useState<boolean[]>([]);
   const [breakoffText, setBreakoffText] = useState<string | null>(null);
   const [breakoffIndex, setBreakoffIndex] = useState<number>(-1);
   const [word,setWord] = useState<string|null>(null);
+  const [settings,setSettings] = useState<object>({});
+  const [showSettings,setShowSettings] = useState<boolean>(false);
+  const [copyMessage,setCopyMessage] = useState<string>("Copy");
 
   //For auto-save
   const saves = useRef(-3); //-3 to start, set three values at start, 0 for each new save batch;
@@ -33,6 +54,7 @@ export default function Studio({ id }) {
   const nameRef = useRef(name);
   const textsRef = useRef(texts);
   const translationsRef = useRef(translations);
+  const settingsRef = useRef(settings);
   const saveInterval = 10; //in secs
 
   useEffect(() => {
@@ -54,12 +76,23 @@ export default function Studio({ id }) {
     nameRef.current = name;
     textsRef.current = texts;
     translationsRef.current = translations;
+    settingsRef.current = settings;
 
     saves.current = saves.current + 1;
   };
 
   //auto save on change
-  useEffect(autoSave, [name, texts, translations]);
+  useEffect(autoSave, [name, texts, translations,settings]);
+
+  useEffect(()=>{
+    let root = document.documentElement;
+
+    //Go through each setting
+    let fontSize = settings["fontSize"] || defaultSettings.fontSize;
+    console.log(fontSize);
+    root.style.setProperty("--studio-font-size",fontSize+"px");
+
+  },[settings])
 
   const getDoc = async (): Promise<void> => {
     try {
@@ -88,6 +121,8 @@ export default function Studio({ id }) {
         setTranslations(data["translations"]);
         setTextsEditing(data["texts"].map(() => false)); //all false
       }
+      console.log(data["settings"],data["settings"]||{})
+      setSettings(data["settings"]||{});
     } catch (e) {
       console.error(e);
     }
@@ -349,7 +384,6 @@ export default function Studio({ id }) {
 
   const save = async () => {
     setSaving(true);
-    console.log("saving");
     try {
       await pFirestore
         .collection("users")
@@ -360,9 +394,13 @@ export default function Studio({ id }) {
           name: nameRef.current,
           texts: textsRef.current,
           translations: translationsRef.current,
+          settings: settingsRef.current,
+          time: (new Date()).getTime(),
         });
+      setSaveError(false);
     } catch (e) {
       console.error(e);
+      setSaveError(true);
     }
     setSaving(false);
   };
@@ -371,6 +409,25 @@ export default function Studio({ id }) {
     if (t.length > n) return t.substring(0, n) + "...";
     return t;
   };
+
+  const copyTranslation = async () =>{
+    try{
+      var t = "";
+      translations.forEach(e=>{
+        t += e + (settings["copyDivide"] || " ");
+      })
+      await navigator.clipboard.writeText(t);
+      setCopyMessage("Copied!")
+    }catch(e){
+      setCopyMessage("Error!")
+    }
+  }
+
+  const changeSettings = (property:string,value:any)=>{
+    let newSettings = {...settings};
+    newSettings[property] = value;
+    setSettings(newSettings);
+  }
 
   if (studioLoading)
     return (
@@ -382,7 +439,25 @@ export default function Studio({ id }) {
     <div id="studio">
       <section id="top" className="row">
         <FontAwesomeIcon className="icon" icon={faFileAlt}></FontAwesomeIcon>
-        <h2>{name}</h2>
+        <h2>{!editName?<div className="name">{name}
+          <FontAwesomeIcon icon={faPen} className="sib tb ml15" onClick={()=>{
+            setEditName(true)
+            setNameInput(name);
+          }}></FontAwesomeIcon>
+        </div>:<div className="name-edit">
+            <input
+              value={nameInput}
+              onChange={e=>setNameInput(e.target.value)}
+              placeholder="Name"
+            ></input>
+            <button className="tb ml10 mr10" onClick={()=>{
+              setName(nameInput||defaultName);
+              setEditName(false);
+            }}>
+              <FontAwesomeIcon className="sib" icon={faCheckCircle}></FontAwesomeIcon>
+            </button>
+            {/* <button className="tb" onClick={()=>setEditName(false)}>Cancel</button> */}
+          </div>}</h2>
       </section>
       <section id="heading">
         <div id="first-row">
@@ -394,14 +469,23 @@ export default function Studio({ id }) {
                   icon={faCircleNotch}
                 ></FontAwesomeIcon>
               ) : (
-                <FontAwesomeIcon
+                saveError?<FontAwesomeIcon
+                className="icon-x"
+                icon={faTimesCircle}
+              ></FontAwesomeIcon>:<FontAwesomeIcon
                   className="icon-check"
                   icon={faCheckCircle}
                 ></FontAwesomeIcon>
               )}
             </div>
           </div>
-          <div className="right"></div>
+          <div className="middle"></div>
+          <div className="right">
+            <button className="settings-button tb" onClick={()=>setShowSettings(true)}>
+              <FontAwesomeIcon className="siw" icon={faCog}></FontAwesomeIcon>
+            </button>
+            <button className="copy-translation tb" onClick={copyTranslation} onMouseLeave={()=>setCopyMessage("Copy")}>{copyMessage}</button>
+          </div>
         </div>
         {breakoffText && breakoffIndex > -1 && (
           <div className="breakoff-text">
@@ -419,6 +503,35 @@ export default function Studio({ id }) {
         setWord={setWord}
         exitFunc={()=>setWord(null)}
       ></Definition>}
+
+      {showSettings&&<Popup
+          xFunction={()=>setShowSettings(false)}
+        >
+        <div className="settings-popup">
+            <h4>Settings</h4>
+            <ul className="settings-list">
+              <h6>Display Settings</h6>
+              <li key="fontSize">
+                <label>Font Size</label>
+                <select value={settings["fontSize"]} onChange={e=>changeSettings("fontSize",Number(e.target.value))}>
+                  <option value={16}>Small</option>
+                  <option value={22}>Medium</option>
+                  <option value={28}>Large</option>
+                </select>
+              </li>
+              <h6>Copy Settings</h6>
+              <li key="copyDivide">
+                <label>Between each section:</label>
+                <select value={settings["copyDivide"]} onChange={e=>changeSettings("copyDivide",e.target.value)}>
+                  <option value=" ">Space</option>
+                  <option value={"\n"}>New Line</option>
+                  <option value={"\n\n"}>Line Between</option>
+                </select>
+              </li>
+              
+            </ul>
+        </div>  
+      </Popup>}
     </div>
   );
 }

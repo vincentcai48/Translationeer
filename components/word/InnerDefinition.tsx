@@ -30,9 +30,9 @@ export default function InnerDefinition({cssSelector,name,word,url}){
     }
 
 
-    return <div className={`definition ${cssSelector}`}>
-        <h4 className="api-name">{name}</h4>
-        <div>
+    return <div className="definition">
+        <h4 className="api-name"><span>From:</span>{name}</h4>
+        <div className={`definition-body ${cssSelector}`}>
             {loading?<Loading></Loading>:<div>{parse(content)}</div>}
         </div>
         

@@ -107,10 +107,11 @@
   --dark-text: black;
   --pc: #3498db;
   --pdc: #1e49a1;
-  --scl: #e8c9fb;
+  --scl: #c9f3fb;
   --scd: #b400b8;
   --ptc: black;
   --ltc: white;
+  --lc: rgb(240, 240, 240);
   --p-green: rgb(
     0,
     165,
@@ -207,6 +208,10 @@ textarea:focus {
 ul{
   list-style: none;
   padding: 0px;
+}
+
+pre{
+  margin: 0px;
 }
 
 .gob{

@@ -62,6 +62,9 @@ export default function Dashboard() {
           time: new Date().getTime(),
           texts: [textInput],
           translations: [""],
+          settings: {
+            
+          }
         });
       setLoading(false);
       router.push(`/document/${res.id}`);
@@ -106,7 +109,7 @@ export default function Dashboard() {
                           Edited {dateString(Number(doc.time))}
                         </div>
                       </div>
-                      <div className="open">Open Document</div>
+                      {/* <div className="open">Open Document</div> */}
                     </a>
                   </Link>
                 </li>
