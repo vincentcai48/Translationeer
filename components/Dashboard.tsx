@@ -18,6 +18,7 @@ export default function Dashboard() {
   const [lastDoc, setLastDoc] = useState<any>(-1);
   const [addDocPopup, setAddDocPopup] = useState<boolean>(false);
   const [docToDelete,setDocToDelete] = useState<string|null>(null);
+  const [errorMessage,setErrorMessage] = useState<string|null>(null);
   const [nameInput, setNameInput] = useState<string>("");
   const [textInput, setTextInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -37,7 +38,7 @@ export default function Dashboard() {
         .doc(pAuth.currentUser.uid)
         .collection("documents")
         .limit(10)
-        .orderBy("time", "desc");
+        .orderBy("timestamp", "desc");
       if (lastDoc !== -1 && !isRefresh) query = query.startAfter(lastDoc);
       var res = await query.get();
       var arr = [];
@@ -46,7 +47,7 @@ export default function Dashboard() {
         arr.push({
           name: data["name"],
           color: data["color"],
-          time: data["time"],
+          timestamp: data["timestamp"],
           id: doc.id,
         });
       });
@@ -59,6 +60,7 @@ export default function Dashboard() {
 
   const createDocument = async () => {
     setLoading(true);
+    setErrorMessage(null);
     try {
       var res = await pFirestore
         .collection("users")
@@ -66,19 +68,20 @@ export default function Dashboard() {
         .collection("documents")
         .add({
           name: nameInput || defaultName,
-          time: new Date().getTime(),
+          timestamp: (new Date()).getTime(),
           texts: [textInput],
           translations: [""],
           settings: {
             fontSize: 22,
             copyDivide: " ",
+            studioWidth: 50,
           },
         });
       setLoading(false);
       router.push(`/document/${res.id}`);
     } catch (e) {
       console.error(e);
-      setAddDocPopup(false);
+      setErrorMessage(e.message);
       setLoading(false);
     }
   };
@@ -130,11 +133,11 @@ export default function Dashboard() {
       </section>
       <section id="docs-list">
         {docs.length==0&&<div className="no-docs-container center">
-          <div>No documents yet. Create one now!</div>  
+          <div>No documents yet.</div>  
         </div>}
         <ul>
           {docs
-            .sort((a, b) => b.time - a.time)
+            .sort((a, b) => b.timestamp - a.timestamp)
             .map((doc) => {
               if (!doc.id) return;
               return (
@@ -150,7 +153,7 @@ export default function Dashboard() {
                       </div>
                       <div className="right row">
                         <div className="time">
-                          Edited {dateString(Number(doc.time))}
+                          Edited {dateString(Number(doc.timestamp))}
                         </div>
                       </div>
                       {/* <div className="open">Open Document</div> */}
@@ -182,6 +185,7 @@ export default function Dashboard() {
               onChange={(e) => setTextInput(e.target.value)}
             ></textarea>
             {loading && <Loading></Loading>}
+            {errorMessage&&<p style={{color: "red"}}>{errorMessage}</p>}
             <div className="row">
               <button className="sb mr15" onClick={createDocument}>
                 Create Document

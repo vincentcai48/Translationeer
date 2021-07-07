@@ -414,7 +414,7 @@ export default function Studio({ id }) {
           texts: textsRef.current,
           translations: translationsRef.current,
           settings: settingsRef.current,
-          time: new Date().getTime(),
+          timestamp: new Date().getTime(),
         });
       setSaveError(false);
     } catch (e) {

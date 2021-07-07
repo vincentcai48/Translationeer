@@ -80,6 +80,13 @@
         background-color: rgb(233, 233, 233);
         box-shadow: 0px -3px 5px black;
         min-height: 100vh;
+        .no-docs-container{
+            height: 100vh;
+            div{
+                font-size: 18px;
+                color: rgb(136, 136, 136);
+            }
+        }
         ul{
             margin: 0px;
         }
