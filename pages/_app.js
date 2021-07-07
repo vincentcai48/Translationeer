@@ -187,7 +187,8 @@ export default function App({ Component, pageProps }) {
     setIsAuth,
     mouseX,
     mouseY,
-    defaultName
+    defaultName,
+    batchSize
   };
 
   // const contextValue = {

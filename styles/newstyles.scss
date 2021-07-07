@@ -128,6 +128,16 @@
                 @include center();
             }
         }
+        .add-button-container{
+            width: 100%;
+            height: 100px;
+            button{
+                @include row();
+                .sib{
+                    margin-right: 10px;
+                }
+            }
+        }
     }
 }
 
@@ -389,7 +399,7 @@
         }
     }
     .right{
-        width: 100% - var(--studio-width);
+        width: calc(100% - var(--studio-width));
         padding: 20px;
         background-color: white;
        .translation-textarea{

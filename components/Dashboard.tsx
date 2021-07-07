@@ -1,4 +1,9 @@
-import { faCogs, faFileAlt, faTrash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCogs,
+  faFileAlt,
+  faPlus,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
@@ -13,12 +18,12 @@ import PContext from "../services/context";
 
 export default function Dashboard() {
   const router = useRouter();
-  const {defaultName} = useContext(PContext);
+  const { defaultName, batchSize } = useContext(PContext);
   const [docs, setDocs] = useState([]);
   const [lastDoc, setLastDoc] = useState<any>(-1);
   const [addDocPopup, setAddDocPopup] = useState<boolean>(false);
-  const [docToDelete,setDocToDelete] = useState<string|null>(null);
-  const [errorMessage,setErrorMessage] = useState<string|null>(null);
+  const [docToDelete, setDocToDelete] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [nameInput, setNameInput] = useState<string>("");
   const [textInput, setTextInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -68,7 +73,7 @@ export default function Dashboard() {
         .collection("documents")
         .add({
           name: nameInput || defaultName,
-          timestamp: (new Date()).getTime(),
+          timestamp: new Date().getTime(),
           texts: [textInput],
           translations: [""],
           settings: {
@@ -86,24 +91,29 @@ export default function Dashboard() {
     }
   };
 
-  const deleteDocument = async () =>{
-    if(!docToDelete) return;
+  const deleteDocument = async () => {
+    if (!docToDelete) return;
     setLoading(true);
-    try{
+    try {
       //delete doc in firestore
-      await pFirestore.collection('users').doc(pAuth.currentUser.uid).collection("documents").doc(docToDelete).delete();
-      
+      await pFirestore
+        .collection("users")
+        .doc(pAuth.currentUser.uid)
+        .collection("documents")
+        .doc(docToDelete)
+        .delete();
+
       //delete doc from list
-      var newArr = [...docs].filter(d=>d.id!=docToDelete);
+      var newArr = [...docs].filter((d) => d.id != docToDelete);
       setDocs(newArr);
 
       //then close out of popup
       setDocToDelete(null);
-    }catch(e){
+    } catch (e) {
       console.error(e);
     }
     setLoading(false);
-  }
+  };
 
   const logout = async () => {
     try {
@@ -112,7 +122,7 @@ export default function Dashboard() {
       console.error(e);
     }
   };
-  if(!pAuth.currentUser) return;
+  if (!pAuth.currentUser) return;
   return (
     <div id="dashboard-container">
       <section id="top" className="center">
@@ -132,9 +142,11 @@ export default function Dashboard() {
         <button onClick={() => setAddDocPopup(true)}>Add Document</button>
       </section>
       <section id="docs-list">
-        {docs.length==0&&<div className="no-docs-container center">
-          <div>No documents yet.</div>  
-        </div>}
+        {docs.length == 0 && (
+          <div className="no-docs-container center">
+            <div>No documents yet.</div>
+          </div>
+        )}
         <ul>
           {docs
             .sort((a, b) => b.timestamp - a.timestamp)
@@ -160,14 +172,28 @@ export default function Dashboard() {
                     </a>
                   </Link>
                   <div className="delete-area">
-                  <button className="tb" onClick={()=>setDocToDelete(doc.id)}>
-                          <FontAwesomeIcon className="sib" icon={faTrash}></FontAwesomeIcon>
-                        </button>
+                    <button
+                      className="tb"
+                      onClick={() => setDocToDelete(doc.id)}
+                    >
+                      <FontAwesomeIcon
+                        className="sib"
+                        icon={faTrash}
+                      ></FontAwesomeIcon>
+                    </button>
                   </div>
                 </li>
               );
             })}
         </ul>
+        <div className="center add-button-container">
+          {docs.length != 0 && lastDoc != null && (
+            <button className="tb" onClick={() => getDocs(false)}>
+              <FontAwesomeIcon className="sib" icon={faPlus}></FontAwesomeIcon>{" "}
+              More Docs
+            </button>
+          )}
+        </div>
       </section>
 
       {addDocPopup && (
@@ -185,7 +211,7 @@ export default function Dashboard() {
               onChange={(e) => setTextInput(e.target.value)}
             ></textarea>
             {loading && <Loading></Loading>}
-            {errorMessage&&<p style={{color: "red"}}>{errorMessage}</p>}
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             <div className="row">
               <button className="sb mr15" onClick={createDocument}>
                 Create Document
@@ -198,17 +224,25 @@ export default function Dashboard() {
         </Popup>
       )}
 
-      {docToDelete!=null&&<Popup xFunction={()=>setDocToDelete(null)}>
-        <div className="delete-doc-popup">
-          <div className="row">
-            <button onClick={deleteDocument} className="sb mr15">
-              Delete Document
-            </button>
-            <button onClick={()=>setDocToDelete(null)} className="tb">Cancel</button>
+      {docToDelete != null && (
+        <Popup xFunction={() => setDocToDelete(null)}>
+          <div className="delete-doc-popup">
+            <div className="row">
+              <button onClick={deleteDocument} className="sb mr15">
+                Delete Document
+              </button>
+              <button onClick={() => setDocToDelete(null)} className="tb">
+                Cancel
+              </button>
+            </div>
+            {loading && (
+              <p>
+                <Loading></Loading>
+              </p>
+            )}
           </div>
-          {loading&&<p><Loading></Loading></p>}
-        </div>
-      </Popup>}
+        </Popup>
+      )}
 
       {accountPopup && (
         <Popup xFunction={() => setAccountPopup(false)}>

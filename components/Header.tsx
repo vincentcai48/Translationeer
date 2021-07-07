@@ -135,10 +135,12 @@ export default function Header(){
                       <a className="header-item-link">Dashboard</a>
                     </Link>
                   </div> */}
-                  <div className="account-box">
-                    <FontAwesomeIcon className="auth-icon" icon={faUserCircle}></FontAwesomeIcon>
-                    <div className="tooltip">{pAuth.currentUser.email}</div>
-                  </div>
+                  <Link href="/">
+                    <a className="account-box">
+                      <FontAwesomeIcon className="auth-icon" icon={faUserCircle}></FontAwesomeIcon>
+                      <div className="tooltip">{pAuth.currentUser.email}</div>
+                    </a>
+                  </Link>
                 </div>
               ) : (
                 <button onClick={googleLogin} id="header-login-button">
