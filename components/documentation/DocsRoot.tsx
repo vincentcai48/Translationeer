@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
-import reactparser from "html-react-parser";
-import { parser } from "../../services/react-custom-markdown/mdparser";
+import ReactMarkdown from 'react-markdown'
 import Link from "next/link";
 import PContext from "../../services/context";
 
@@ -33,8 +32,7 @@ export default function DocsRoot({ paramURL }) {
   useContext(PContext).setTitle(
     `${docOptions[num].name} - Translationeer Documentation`
   );
-  const thisDoc = require(`./markdownfiles/docs${num}.md`).default;
-  const text = parser(thisDoc);
+  const text = require(`./markdownfiles/docs${num}.md`).default;
   //Set button options
   var optionsArr = [];
   for (var i = 0; i < docOptions.length; i++) {
@@ -63,7 +61,7 @@ export default function DocsRoot({ paramURL }) {
           <ul className="docs-options">{optionsArr}</ul>
         </div>
         <div className="docs-col2">
-          <section id="docs-body">{reactparser(text)}</section>
+          <section id="docs-body"><ReactMarkdown>{text}</ReactMarkdown></section>
         </div>
       </div>
     </div>

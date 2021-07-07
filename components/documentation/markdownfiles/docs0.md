@@ -14,4 +14,6 @@ Currently migrating to serverless with Firebase Functions, being moved off of Go
 
 Not deployed through this GitHub repository, the code in this repository is not necessarily the exact code run on the platform.
 
-All open source code from Translationeer is in this repository. Owned and managed by vincentcaitech.
+All open source code from Translationeer is in this repository. Owned and managed by vincentcaitech.  
+  
+[Homepage Here](/)
