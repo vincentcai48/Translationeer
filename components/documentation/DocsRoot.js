@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
-import ReactHtmlParser from "react-html-parser";
+import reactparser from "html-react-parser";
 import { parser } from "../../services/react-custom-markdown/mdparser";
 
 /*
 MARKDOWN FILES IMPORTED
 
-File Naming convention: (Menu#)Name (ex: (0)Overview)
+File Naming convention: docs{number}
 import variable naming convention: Docs# 
 
-// */
-// import Docs0 from "./markdownfiles/(0)Overview.md";
-// import Docs1 from "./markdownfiles/(1)General Usage.md";
+s*/
 
-const DocsRoot = () => {
+
+export default function DocsRoot({num}){
   //All Docs options, IN ORDER (starting from 0)
   var Docs0, Docs1;
   Docs0 = require("./markdownfiles/(0)Overview.md").default;
@@ -94,11 +93,9 @@ const DocsRoot = () => {
           </ul>
         </div>
         <div className="docs-col2">
-          <section id="docs-body">{ReactHtmlParser(text)}</section>
+          <section id="docs-body">{reactparser(text)}</section>
         </div>
       </div>
     </div>
   );
 };
-
-export default DocsRoot;
