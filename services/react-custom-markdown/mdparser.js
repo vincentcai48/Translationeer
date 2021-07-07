@@ -14,8 +14,6 @@ function parser(str) {
     .replace(/!\[(.*?)\]\((.*?)\)/gim, "<img alt='$1' src='$2' />")
     .replace(/\[(.*?)\]\((.*?)\)/gim, "<a href='$2'>$1</a>")
     .replace(/\n$/gim, "<br />");
-
-  console.log(htmlText);
   return htmlText;
 }
 
