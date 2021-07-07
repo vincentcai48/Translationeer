@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from "react";
 import reactparser from "html-react-parser";
 import { parser } from "../../services/react-custom-markdown/mdparser";
+import Link from "next/link";
 
 /*
 MARKDOWN FILES IMPORTED
 
 File Naming convention: docs{number}
-import variable naming convention: Docs# 
 
-s*/
+*/
 
 
-export default function DocsRoot({num}){
-  //All Docs options, IN ORDER (starting from 0)
-  var Docs0, Docs1;
-  Docs0 = require("./markdownfiles/(0)Overview.md").default;
-  Docs1 = require("./markdownfiles/(1)General Usage.md").default;
+export default function DocsRoot({paramURL}){
+  //In order ("num" property  not actually used, just so you know what index it is")
   const docOptions = [
-    { name: "Overview", isPrimary: true, text: Docs0 },
-    { name: "General Usage", isPrimary: false, text: Docs1 },
+    { url: "/", name: "Overview", isPrimary: true, num: 0},
+    { url: "/generalusage", name: "General Usage", isPrimary: false, num: 1 },
   ];
 
-  const [page, setPage] = useState(0);
+  const num  = 0;
+  for(let i = 0;i<docOptions.length;i++){
+    if(docOptions[url]==paramURL) num = i;
+  }
+
+  const thisDoc = require(`./markdownfiles/docs${num}.md`).default;
   const [text, setText] = useState("");
   const [options, setOptions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -38,40 +40,24 @@ export default function DocsRoot({num}){
       var classList = docOptions[i].isPrimary
         ? "docs-option-primary"
         : "docs-option-secondary";
-      if (page == i) {
+      if (num == i) {
         classList += " focused";
       }
-      console.log(classList);
       optionsArr.push(
         <li>
-          <button
+          <Link href={`/documentation${docOptions[i].url}`}>
+          <a
             className={classList}
-            onClick={(e) => {
-              console.log(e.target.name);
-              setPage(e.target.name);
-            }}
-            name={i}
           >
             {docOptions[i].name}
-          </button>
+            </a>
+          </Link>
         </li>
       );
     }
     setOptions(optionsArr);
-
-    setText(parser(docOptions[page].text));
-
-    //get markdown file;
-    // fetch(docOptions[page].file)
-    //   .then((res) => res.text())
-    //   .then((text) => console.log(text));
-    // // .then((text) => {
-    // //   console.log(text);
-    // //   text = parser(text);
-    // //   setText(text);
-    // //   setIsLoading(false);
-    // // });
-  }, [page]);
+    setText(parser(thisDoc));
+  }, []);
 
   return (
     <div>
@@ -82,14 +68,6 @@ export default function DocsRoot({num}){
         <div className="docs-col1">
           <ul className="docs-options">
             {options}
-            {/* <li>
-              <button className="docs-option-primary" name={0}>
-                Overview
-              </button>
-            </li>
-            <li>
-              <button className="docs-option-secondary">General Usage</button>
-            </li> */}
           </ul>
         </div>
         <div className="docs-col2">
