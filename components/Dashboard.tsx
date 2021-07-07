@@ -1,4 +1,4 @@
-import { faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faCogs, faFileAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import Popup from "./Popup";
 import { useRouter } from "next/router";
 import Loading from "./Loading";
 import dateString from "../services/dateString";
+import deleteAccountFunc from "../services/deleteAccount";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -17,6 +18,9 @@ export default function Dashboard() {
   const [nameInput, setNameInput] = useState<string>("");
   const [textInput, setTextInput] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [accountPopup, setAccountPopup] = useState<boolean>(false);
+  const [deleteAccount, setDeleteAccount] = useState<boolean>(false);
+  const [deleteAccountInput, setDeleteAccountInput] = useState<string>("");
 
   useEffect(() => {
     getDocs(false);
@@ -63,8 +67,9 @@ export default function Dashboard() {
           texts: [textInput],
           translations: [""],
           settings: {
-            
-          }
+            fontSize: 22,
+            copyDivide: " ",
+          },
         });
       setLoading(false);
       router.push(`/document/${res.id}`);
@@ -75,13 +80,27 @@ export default function Dashboard() {
     }
   };
 
+  const logout = async () => {
+    try {
+      await pAuth.signOut();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   return (
     <div id="dashboard-container">
       <section id="top" className="center">
-        <div>
+        <div className="top-center">
           <h3 className="dash-h3">
             {pAuth.currentUser ? pAuth.currentUser.email : "Not Signed In"}
           </h3>
+          <button
+            className="account-settings tb"
+            onClick={() => setAccountPopup(true)}
+          >
+            <FontAwesomeIcon className="sib" icon={faCogs}></FontAwesomeIcon>
+          </button>
         </div>
       </section>
       <section id="dash-menu">
@@ -141,6 +160,55 @@ export default function Dashboard() {
                 Cancel
               </button>
             </div>
+          </div>
+        </Popup>
+      )}
+
+      {accountPopup && (
+        <Popup xFunction={() => setAccountPopup(false)}>
+          <div className="account-popup">
+            <h4>Account</h4>
+            <div className="row email">
+              <label>Email: </label>
+              <span>{pAuth.currentUser.email}</span>
+            </div>
+            <button className="logout-button" onClick={logout}>
+              Logout
+            </button>
+            {deleteAccount ? (
+              <div className="delete-account">
+                <p>Type "confirm" to delete account</p>
+                <input
+                  placeholder="confirm"
+                  value={deleteAccountInput}
+                  onChange={(e) => setDeleteAccountInput(e.target.value)}
+                ></input>
+                <div className="row">
+                  {deleteAccountInput === "confirm" && (
+                    <button className="sb mr15"
+                      onClick={async ()=>{
+                        var res:boolean = await deleteAccountFunc();
+                        if(!res) setDeleteAccountInput("Error!");
+                        else setDeleteAccount(false);
+                      }}
+                    >Delete Account</button>
+                  )}
+                  <button
+                    className="tb"
+                    onClick={() => setDeleteAccount(false)}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                className="delete-account-button tb"
+                onClick={() => setDeleteAccount(true)}
+              >
+                Delete Account
+              </button>
+            )}
           </div>
         </Popup>
       )}

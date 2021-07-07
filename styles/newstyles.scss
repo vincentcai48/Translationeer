@@ -36,6 +36,20 @@
 #dashboard-container{
     #top{
         height: 120px;
+        h3{
+            margin: 0px;
+        }
+        .top-center{
+            position: relative;
+            .account-settings{
+                position: absolute;
+                right: 0px;
+                bottom: 0px;
+                transform: translate(100%,50%);
+                background-color: transparent;
+                border: none;
+            }
+        }
     }
 
     #dash-menu{
@@ -105,6 +119,43 @@
             &:hover{
                 background-color: var(--scl);
             }
+        }
+    }
+}
+
+.account-popup{
+    width: 250px;
+    h4{
+        margin: 0px;
+        margin-bottom: 40px;
+        font-size: 25px;
+    }
+    .email{
+        margin-bottom: 20px;
+        font-size: 18px;
+        label{
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    }
+    .logout-button{
+        border: 2px solid red;
+        background-color: white;
+        color: red;
+        border-radius: 5px;
+        padding: 5px 10px;
+        @include hovererlighten();
+        margin-bottom: 20px;
+    }
+
+    .delete-account-button{
+        display: block;
+        font-size: 14px;
+    }
+
+    .delete-account{
+        p{
+            margin: 40px 0px 5px 0px;
         }
     }
 }

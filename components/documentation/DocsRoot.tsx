@@ -32,7 +32,12 @@ export default function DocsRoot({ paramURL }) {
   useContext(PContext).setTitle(
     `${docOptions[num].name} - Translationeer Documentation`
   );
-  const text = require(`./markdownfiles/docs${num}.md`).default;
+  let text = ""
+  try{
+    text = require(`./markdownfiles/docs${num}.md`).default;
+  }catch(e){
+    text = "### Error!"
+  }
   //Set button options
   var optionsArr = [];
   for (var i = 0; i < docOptions.length; i++) {
