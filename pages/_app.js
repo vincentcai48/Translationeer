@@ -33,6 +33,7 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     componentDidMount();
+    if(window.outerWidth<576) setIsMobile(true);
   }, []);
 
   //when languageMapping first loads (the languages mapped to their apis, so now you can get the apis)

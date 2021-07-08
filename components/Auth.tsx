@@ -30,7 +30,7 @@ export default function Auth(){
         }
       };
 
-    return <div>
+    return <div id="auth-container">
         <h4>Login</h4>
         <div className="ep-auth">
             <input 

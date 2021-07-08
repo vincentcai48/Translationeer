@@ -222,6 +222,7 @@
             display: grid;
             grid-template-columns: 100px 1fr 100px;
             .left{
+                @include center();
                 .save-area{
                     @include center();
                     .icon-check, .icon-spin, .icon-x{
@@ -240,6 +241,7 @@
             .middle{
                 .test-warning{
                     width: 100%;
+                    padding: 0px 10px;
                     overflow: hidden;
                     color: red;
                     font-weight: bold

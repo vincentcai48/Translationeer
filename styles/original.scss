@@ -232,12 +232,6 @@ header#header {
   width: auto;
 }
 
-#header #menu-background {
-  padding: 0;
-  margin: 0;
-  height: 100%;
-}
-
 #header #menu-options {
   padding: 0;
   margin: 0;
@@ -2054,6 +2048,43 @@ section.studioDefault-section p {
   color: black;
 }
 
+@media (max-width: 576px){
+  .docs-header-container{
+    padding: 5vh 5vw;
+  }
+
+  #docs-container{
+    display: block;
+    .docs-col1{
+      .menu-header{
+        margin: 20px 0px;
+        h6{
+          margin: 0px;
+          margin-right: 10px;
+          font-size: 30px;
+
+        }
+        span{
+          color: red;
+        }
+      }
+      position: fixed;
+      top: 50px;
+      left: 0px;
+      z-index: 100;
+      background-color: white;
+      padding: 5vh 8vw;
+      padding-bottom: 100px; //to account for 50px cut off
+      width: 100%;
+      height: 100vh;
+      overflow-y: scroll;
+    }
+    .docs-col2{
+      width: 100%;
+    }
+  }
+}
+
 .brp {
   position: fixed;
   z-index: 100;
@@ -2139,10 +2170,9 @@ section.studioDefault-section p {
   }
 
   #header #menu-background {
-    display: none;
     width: 100%;
-    height: 100%;
-    background-color: var(--pc);
+    padding: 20px 0px;
+    
     position: fixed;
     box-sizing: border-box;
     padding: 0;
@@ -2150,15 +2180,16 @@ section.studioDefault-section p {
   }
 
   #header #menu-options {
-    padding-top: 50px;
+    background-color: var(--pc);
     display: grid;
     grid-template-columns: 1fr;
+    grid-template-rows: repeat(5,50px);
     position: fixed;
     width: 100%;
-    height: 300px;
+    height: 270px;
     margin: auto;
     box-sizing: border-box;
-    top: 0px;
+    top: 50px;
     left: 0px;
     z-index: 120;
   }
@@ -2178,6 +2209,7 @@ section.studioDefault-section p {
 
   #header #auth-area {
     margin: 0px;
+    height: auto;
   }
 
   #auth-area #header-user-info {
