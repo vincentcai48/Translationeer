@@ -1,0 +1,131 @@
+@import "basics.scss";
+
+#definition-container {
+  position: absolute;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr;
+  top: 0;
+  left: 0;
+width: 400px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  .definitions-list{
+    width: 400px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+}
+
+@media (max-width: 575px) {
+  #definition-container {
+    min-width: 300px;
+    max-width: 100%;
+    border: 3px dashed black;
+  }
+}
+
+#definition-title {
+  box-shadow: 0px 0px 3px black;
+  z-index: 10;
+  position: static;
+  padding: 5px 10px;
+  border: 2px black solid;
+  transform: translate(0, 0);
+  background-color: black;
+  border-radius: 5px;
+  color: white;
+  display: grid;
+  grid-template-columns: 1fr 30px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  button.submit-newWord {
+    border: 3px solid white;
+    border-radius: 5px;
+    background-color: white;
+    padding: 1px 7px;
+    transition: all 0.3s;
+    font-size: 20px;
+    font-weight: bolder;
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+  input {
+    border-radius: 0px;
+    background-color: #303030;
+    color: white;
+    margin: 0px 10px 0px 0px;
+    padding: 2px;
+    border-radius: 2px;
+    &:focus {
+      background-color: #444444;
+    }
+  }
+  button.x-out {
+    margin-left: auto;
+    font-weight: bolder;
+    background-color: transparent;
+    @include hovererlighten();
+    border: none;
+    padding: 0px;
+  }
+}
+
+
+
+.definition {
+  box-shadow: 0px 0px 3px black;
+  border-radius: 5px;
+  box-sizing: border-box;
+  margin: auto;
+  position: static;
+  padding: 0px;
+  transform: translate(0, 0);
+  background-color: white;
+  overflow: hidden;
+}
+
+.definition h4 {
+  margin: 0px;
+  padding: 5px 10px;
+  font-size: 14px;
+  background-color: lightgrey;
+  span{
+    font-size: 12px;
+    margin-right: 8px;
+  }
+}
+
+.definition-body {
+  box-sizing: border-box;
+  padding: 10px 15px;
+}
+
+/**CSS Selectors for different APIS. Make sure all the default definition styles are above, so you can override them below*/
+
+.whitakers {
+  overflow-x: scroll;
+}
+
+// .whitakers h4::after {
+//   content: "Notre Dame Archives";
+//   color: blue;
+//   font-size: 10px;
+//   margin-left: 5px;
+//   overflow-x: scroll;
+// }
+
+.onlinelatindictionary {
+  background-color: green;
+  color: rgb(236, 236, 236);
+}
+
+.onlinelatindictionary h4 {
+  color: #000;
+}
+
+.latdict {
+  background-color: grey;
+}

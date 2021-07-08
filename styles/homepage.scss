@@ -1,0 +1,126 @@
+@import "./basics.scss";
+
+#home-container{
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+
+#home-main{
+    margin: 10vh 5vw;
+    section{
+        h3{
+            font-size: 50px;
+            margin: 0px;
+            margin-bottom: 30px;
+        }
+        p.section-description{
+            margin: 0px;
+            margin-left: 20px;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        padding-bottom: 20vh;
+    }
+
+    .horiz-blocks{
+        margin: 10vh 0px;
+    }
+
+    .block-image{
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
+
+    .large-block{
+        @include col();
+        margin-right: 50px;
+        .block-image{
+            height: 150px;
+            width: 150px;
+            box-shadow: 3px 3px 8px black;
+            background-color: lightgrey;
+            &.clickdefinition{
+                background-image: url("/images/definition.png");
+            }
+            &.structure{
+                background-image: url("/images/structure.png");
+            }
+            &.sidebyside{
+                background-image: url("/images/sidebyside.png");
+            }
+        }
+        label{
+            width: 200px;
+            font-size: 27px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+        }
+    }
+
+    .small-block{
+        @include col();
+        margin-right: 40px;
+        .block-image{
+            @include hovererlighten();
+            height: 90px;
+            width: 90px;
+            box-shadow: 3px 3px 6px black;
+            border: none;
+            border-radius: 0px;
+        }
+        label, p{
+            width: 120px;
+            text-align: center;
+            
+        }
+        label{
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        p{
+            font-size: 16px;
+            margin-top: 5px;
+            color: rgb(122, 122, 122);
+        }
+    }
+}
+
+
+#home-auth {
+    padding: 20vh 5vw;
+    @include center();
+    height: 100vh;
+    h4{
+        margin: 0px 0px 20px 0px;
+        font-size: 30px;
+    }
+    input{
+        background-color: transparent;
+        border: none;
+        border-bottom: 3px solid black;
+        font-size: 12px;
+        transition: all 0.3s;
+        display: block;
+        margin-bottom: 20px;
+        border-radius: 0px;
+        width: 250px;
+        padding: 5px;
+        height: 25px;
+        &:focus{
+            font-size: 16px;
+        }
+    }
+    .errorM{
+        font-size: 12px;
+        color:red;
+        margin-bottom: 20px;
+    }
+  }
+  
+  #google-login-area{
+      margin-top: 50px;
+  }
+  

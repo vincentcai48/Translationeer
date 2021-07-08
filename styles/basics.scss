@@ -1,0 +1,278 @@
+@mixin hovererlighten{
+  opacity: 1;
+  transition: opacity 0.2s;
+  &:hover{
+    opacity: 0.7;
+  }
+}
+
+@mixin sbstyles{
+  color: white;
+  background-color: black;
+  padding: 6px 10px;
+  border-radius: 5px;
+  font-size: 16px;
+  border: none;
+  box-shadow: 1px 1px 3px lightgrey;
+  @include hovererlighten();
+}
+
+@mixin tbstyles{
+  color: black;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  padding: 0px;
+  @include hovererlighten();
+}
+
+@mixin siStyles{
+  height: 18px;
+  font-size: 18px;
+}
+
+@mixin center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin row{
+  display: flex;
+  align-items: center;
+}
+
+@mixin col{
+  @include row();
+  flex-direction: column;
+}
+
+.sb{
+  @include sbstyles();
+}
+
+.tb{
+  @include tbstyles();
+}
+
+.center{
+  @include center();
+}
+
+.row{
+  @include row();
+}
+
+.col{
+  @include col();
+}
+
+.ml5{
+  margin-left: 5px;
+}
+
+.mr5{
+  margin-right: 5px;
+}
+
+.ml15{
+  margin-left: 15px;
+}
+
+.mr15{
+  margin-right: 15px;
+}
+
+.siw{
+  @include siStyles();
+  color: white;
+}
+
+.sib{
+  @include siStyles();
+  color: black
+}
+
+.sir{
+  @include siStyles();
+  color: red;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --light-text: grey;
+  --dark-text: black;
+  --pc: #3498db;
+  --pdc: #1e49a1;
+  --scl: #c9f3fb;
+  --scd: #b400b8;
+  --ptc: black;
+  --ltc: white;
+  --lc: rgb(240, 240, 240);
+  --p-green: rgb(
+    0,
+    165,
+    0
+  ); /*primary green color (for charts and homepage, etc...)*/
+
+  /*DOCUMENT COLORS:*/
+  --dc-blue: #3498db; /*Not necessarily var(--pc), because later add change color functionality  */
+  --dc-purple: purple;
+  --dc-green: rgb(0, 165, 0);
+  --dc-pink: rgb(255, 103, 166);
+  --dc-orange: rgb(255, 166, 0);
+  --dc-red: red;
+
+  --primary-font: "Signika Negative", sans-serif;
+  --studio-font-size: 22px;
+  --studio-width: 50%;
+}
+
+@font-face {
+  font-family: "Signika Negative";
+  src: url("../public/fonts/signikanegative/SignikaNegative-Regular.ttf")
+    format("truetype");
+}
+
+body {
+  margin: 0;
+  // font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  //   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  //   sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--primary-font);
+  overflow-x: hidden;
+}
+
+code {
+  // font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+  //   monospace;
+}
+
+main {
+  min-height: 90vh;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  font-family: "Signika Negative", sans-serif;
+}
+
+button:focus {
+  outline: none;
+}
+
+input {
+  font-family: var(--primary-font);
+  padding: 2px;
+  border: 2px solid black;
+  border-radius: 3px;
+  font-size: 18px;
+  margin: 10px 10px 10px 0px;
+  background-color: #ededed;
+}
+
+input:focus {
+  outline: none;
+  background-color: white;
+}
+
+
+textarea{
+  box-sizing: border-box;
+  font-family: var(--primary-font);
+  height: var(--studio-font-size)
+}
+
+textarea:not(.ta-main) {
+  font-size: 16px;
+  height: 200px;
+  background-color: #ededed;
+  border: 2px solid black;
+  border-radius: 5px;
+  padding: 3px;
+  margin: 10px 0;
+}
+
+textarea:focus {
+  background-color: white;
+  outline: none;
+}
+
+ul{
+  list-style: none;
+  padding: 0px;
+}
+
+pre{
+  margin: 0px;
+}
+
+.gob{
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  @include center();
+  z-index: 200;
+  .popup{
+    padding: 20px;
+    border-radius: 3px;
+    background-color: white;
+    color: black;
+    position: relative;
+    max-height: 80vh;
+    max-width: 90vw;;
+    .x-button{
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      border: none;
+      background-color: none;
+      background-color: transparent;
+      .icon{
+        height: 20px;
+        color:red;
+      }
+      @include hovererlighten();
+    }
+  }
+}
+
+.ta-wrapper{
+  display: grid;
+  margin: 0px;
+  padding: 0px;
+  .ta-main, .ta-copy{
+    padding: 0px;
+    margin: 0px;
+    border: none;
+    font-size: var(--studio-font-size);
+    background-color: transparent;
+    color: inherit;
+    grid-column: 1/2;
+    grid-row: 1/2;
+    overflow: hidden;
+    word-break: break-all;
+  }
+  .ta-copy{
+    visibility: hidden;
+  }
+  .ta-main{
+    min-height: 100%;
+    max-height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    resize: none;
+  }
+
+}
