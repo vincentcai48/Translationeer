@@ -22,6 +22,7 @@ export default function DocsRoot({ paramURL }) {
   const docOptions: DocOption[] = [
     { url: "/", name: "Overview", isPrimary: true, num: 0 },
     { url: "/generalusage", name: "General Usage", isPrimary: false, num: 1 },
+    { url: "/howto", name: "How To Guide", isPrimary: false, num: 2 },
   ];
 
   let n = 0;

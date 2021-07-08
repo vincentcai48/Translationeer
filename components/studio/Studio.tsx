@@ -3,6 +3,7 @@ import {
   faCheckCircle,
   faCircleNotch,
   faCog,
+  faExclamationTriangle,
   faFileAlt,
   faPen,
   faPlus,
@@ -24,7 +25,7 @@ interface Settings {
   fontSize?: number;
 }
 
-export default function Studio({ id }) {
+export default function Studio({ id, isTest }) {
   //THIS is the DEFINTIIVE list of possible settings
   const defaultSettings = {
     copyDivide: " ",
@@ -58,11 +59,21 @@ export default function Studio({ id }) {
   const settingsRef = useRef(settings);
   const saveInterval = 10; //in secs
 
+  //Just for template dev.
+  const allTemplates = useRef([]);
+  const templateNum = useRef(0);
+
+  //set to save templates or not (if doing tmeplate dev)
+  const saveTemplates:boolean = false; //Make sure to also allow write in firestore rules
+  const setIndex:number|null = null;//if you want to set an index for template, not random.
+
   useEffect(() => {
     if (isAuth) getDoc();
-  }, [isAuth]);
+    if (isTest) getTemplate(id);
+  }, [isAuth,id]);
 
   const autoSave = () => {
+    if((isTest||!isAuth)&&!saveTemplates) return;
     setSaving(true);
     //Then check if beginning of a save batch;
     if (saves.current == 0) {
@@ -126,6 +137,33 @@ export default function Studio({ id }) {
     }
     setStudioLoading(false);
   };
+
+  const getTemplate = async (tid):Promise<void> =>{
+    try{
+      const language:string = "latin"; //hard code this in for now.
+      var res = (await pFirestore.collection("templates").doc(language).get()).data();
+      var text:string, name:string;
+      if(!res[tid]||tid=="blank") {
+        text = "";
+        name = "Test Document";
+      }else{
+        var index:number = setIndex?setIndex:Math.floor(Math.random()*res[tid].length);
+        allTemplates.current = res[tid];
+        templateNum.current = index;
+        var doc = res[tid][index];
+        console.log(doc);
+        text = doc["text"];
+        name = doc["name"];
+      }
+      setName(name);
+      setTexts([text]);
+      setTranslations(['']);
+      setSettings(defaultSettings);
+    }catch(e){
+      console.error(e);
+    }
+    setStudioLoading(false);
+  }
 
   const renderSections = (): any[] => {
     if (!texts) return;
@@ -404,18 +442,31 @@ export default function Studio({ id }) {
   const save = async () => {
     setSaving(true);
     try {
-      await pFirestore
-        .collection("users")
-        .doc(pAuth.currentUser.uid)
-        .collection("documents")
-        .doc(id)
-        .update({
+      if(isTest){
+        if(!saveTemplates) return;
+        const language = "latin";
+        var newArr = [...allTemplates.current];
+        newArr[templateNum.current] = {
           name: nameRef.current,
-          texts: textsRef.current,
-          translations: translationsRef.current,
-          settings: settingsRef.current,
-          timestamp: new Date().getTime(),
-        });
+          text: textsRef.current.reduce((a,n)=> a + " "+n),
+        }
+        await pFirestore.collection("templates").doc(language).update({
+          [id]: newArr,
+        })
+      }else{
+        await pFirestore
+          .collection("users")
+          .doc(pAuth.currentUser.uid)
+          .collection("documents")
+          .doc(id)
+          .update({
+            name: nameRef.current,
+            texts: textsRef.current,
+            translations: translationsRef.current,
+            settings: settingsRef.current,
+            timestamp: new Date().getTime(),
+          });
+      }
       setSaveError(false);
     } catch (e) {
       console.error(e);
@@ -517,7 +568,10 @@ export default function Studio({ id }) {
               )}
             </div>
           </div>
-          <div className="middle"></div>
+          <div className="middle center">{isTest&&<div className="test-warning center">
+              <FontAwesomeIcon icon={faExclamationTriangle} className="sir mr5"></FontAwesomeIcon>
+              WARNING: In test mode, changes will NOT be saved. Create an account to save documents.
+          </div>}</div>
           <div className="right">
             <button
               className="settings-button tb"

@@ -5,11 +5,11 @@ import Auth from "./Auth";
 export default function Home(){
 
     const templates = [
-        {title: "Blank Document", subtitle: "", imageURL: ""},
-        {title: "The Aeneid", subtitle: "Random Excerpt", imageURL: "aeneid.jpg"},
-        {title: "Catullus", subtitle: "Random Poem", imageURL: "catullus.jpg"},
-        {title: "Gallic Wars", subtitle: "Random Excerpt", imageURL: "gallicwars.jpg"},
-        {title: "Metamorphoses", subtitle: "Random Excerpt", imageURL: "metamorphoses.jpg"}
+        {title: "Blank Document", subtitle: "", imageURL: "", id:"blank"},
+        {title: "The Aeneid", subtitle: "Random Excerpt", imageURL: "aeneid.jpg", id: "aeneid"},
+        {title: "Catullus", subtitle: "Random Poem", imageURL: "catullus.jpg", id:"catullus"},
+        {title: "Gallic Wars", subtitle: "Random Excerpt", imageURL: "gallicwars.jpg", id: "gallicwars"},
+        {title: "Metamorphoses", subtitle: "Random Excerpt", imageURL: "metamorphoses.jpg", id: "metamorphoses"}
     ]
 
     const router = useRouter();
@@ -17,8 +17,6 @@ export default function Home(){
     const gotoTest = (id) =>{
         router.push(`/test/${id}`);
     }
-
-
 
     return <div id="home-container">
         <div id="home-main">
@@ -46,7 +44,7 @@ export default function Home(){
                 <ul className="horiz-blocks row">
                     {templates.map(t=>{
                     return <li className="small-block">
-                        <button className="block-image" style={{backgroundImage: `url("/images/${t.imageURL}")`}}></button>
+                        <button onClick={()=>gotoTest(t.id)} className="block-image" style={{backgroundImage: `url("/images/${t.imageURL}")`}}></button>
                         <label>{t.title}</label>
                         <p>{t.subtitle}</p>
                     </li>

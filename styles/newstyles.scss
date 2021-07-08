@@ -237,6 +237,14 @@
                     }
                 }
             }
+            .middle{
+                .test-warning{
+                    width: 100%;
+                    overflow: hidden;
+                    color: red;
+                    font-weight: bold
+                }
+            }
 
             .right{
                 @include center();
