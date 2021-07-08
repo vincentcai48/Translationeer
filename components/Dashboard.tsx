@@ -270,7 +270,7 @@ export default function Dashboard() {
             </button>
             {deleteAccount ? (
               <div className="delete-account">
-                <p>Type "confirm" to delete account</p>
+                <p>{"Type \"confirm\" to delete account"}</p>
                 <input
                   placeholder="confirm"
                   value={deleteAccountInput}

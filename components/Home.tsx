@@ -43,7 +43,7 @@ export default function Home(){
                 <p className="section-description">Want to see how it works? Open an example template and start translating!</p>
                 <ul className="horiz-blocks row">
                     {templates.map(t=>{
-                    return <li className="small-block">
+                    return <li className="small-block" key={t.id}>
                         <button onClick={()=>gotoTest(t.id)} className="block-image" style={{backgroundImage: `url("/images/${t.imageURL}")`}}></button>
                         <label>{t.title}</label>
                         <p>{t.subtitle}</p>
