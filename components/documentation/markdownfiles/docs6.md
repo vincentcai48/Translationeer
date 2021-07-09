@@ -1,5 +1,7 @@
 # Translationeer Document
 
+A Translationeer document can be created in your dashboard and is given a unique ID. A document created by you can only be accessed by you at the path `/document/[id]`. You must be authenticated to access a document, but you use a test document in [Test Mode](/documentation/testmode)
+
 ## Layout
 
 Every document will have the original text on the left side (grey background) and space for the user's translation on the right side. 
