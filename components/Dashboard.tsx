@@ -15,6 +15,7 @@ import Loading from "./Loading";
 import dateString from "../services/dateString";
 import deleteAccountFunc from "../services/deleteAccount";
 import PContext from "../services/context";
+import updateTitle from "../services/updateTitle";
 
 export default function Dashboard() {
   const router = useRouter();
@@ -33,6 +34,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getDocs(false);
+    updateTitle("Translationeer Dashboard")
   }, []);
 
   const getDocs = async (isRefresh: boolean): Promise<void> => {

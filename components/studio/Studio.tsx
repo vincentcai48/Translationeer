@@ -20,6 +20,7 @@ import TextAreaNew from "../TextAreaNew";
 import Definition from "../word/Definition";
 import WordList from "../word/WordList";
 import Popup from "../Popup";
+import updateTitle from "../../services/updateTitle";
 
 interface Settings {
   copyDivide?: string;
@@ -96,6 +97,9 @@ export default function Studio({ id, isTest }) {
 
   //auto save on change
   useEffect(autoSave, [name, texts, translations, settings]);
+
+  //update title on name change
+  useEffect(()=>updateTitle(`${name} - Translationeer Document`),[name]);
 
   const getDoc = async (): Promise<void> => {
     try {

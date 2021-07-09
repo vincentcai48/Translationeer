@@ -1,6 +1,7 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
+import updateTitle from "../services/updateTitle";
 import Auth from "./Auth";
 
 export default function Home() {
@@ -37,6 +38,8 @@ export default function Home() {
   const gotoTest = (id) => {
     router.push(`/test/${id}`);
   };
+
+  updateTitle("Translationeer");
 
   return (
     <div id="home-container">
