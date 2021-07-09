@@ -50,6 +50,10 @@ Near the top right corner of the page, click the gear icon. Here you can toggle 
 
 Your documents are all auto-saved. Near the top left corner of the page, there will be a small icon to show saving status. A spinner means the document is collecting changes to save or is in saving progress, and a checkmark means all changes have been saved. If an error has occured, an error icon will show.
 
+### Reference
+
+Reference all of these features of a Translationeer document in greater depth in the reference section of the documentation: [Document Reference](/documentation/document)
+
 ## Step 4: Copy Your Translation!
 
 After you're done translating, it's time to copy your translation to your clipboard!
