@@ -20,6 +20,7 @@ import TextAreaNew from "../TextAreaNew";
 import Definition from "../word/Definition";
 import WordList from "../word/WordList";
 import Popup from "../Popup";
+import Link from "next/link";
 
 interface Settings {
   copyDivide?: string;
@@ -37,7 +38,7 @@ export default function Studio({ id, isTest }) {
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [saveError, setSaveError] = useState<boolean>(false);
-  const { isAuth, defaultName,setTitle } = useContext(PContext);
+  const { isAuth, defaultName, setTitle } = useContext(PContext);
   const [name, setName] = useState<string>("");
   const [nameInput, setNameInput] = useState<string>(name);
   const [editName, setEditName] = useState<boolean>(false);
@@ -98,7 +99,7 @@ export default function Studio({ id, isTest }) {
   useEffect(autoSave, [name, texts, translations, settings]);
 
   //update title on name change
-  useEffect(()=>setTitle(`${name} - Translationeer Document`),[name]);
+  useEffect(() => setTitle(`${name} - Translationeer Document`), [name]);
 
   const getDoc = async (): Promise<void> => {
     try {
@@ -678,12 +679,15 @@ export default function Studio({ id, isTest }) {
             <FontAwesomeIcon className="sir" icon={faTimes}></FontAwesomeIcon>
           </button>
           <p>
-            Read our "How To Guide" to learn how to
-            use Traslationeer. It's easy and simple!
+            {
+              'Read our "How To Guide" to learn how to use Traslationeer. It\'s easy and simple!'
+            }
           </p>
-          <a href="/documentation/howto" target="_blank" className="sb">
+          <Link href="/documentation/howto">
+            <a target="_blank" className="sb">
             Read the How To Guide
-          </a>
+            </a>
+          </Link>
         </div>
       )}
     </div>
