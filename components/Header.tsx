@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Header() {
   const context = useContext(PContext);
-  const [showMenu, setShowMenu] = useState<boolean>();
+  const [showMenu, setShowMenu] = useState<boolean>(true);
 
   useEffect(()=>{
     setShowMenu(!(window.outerWidth<=992));
@@ -88,10 +88,6 @@ export default function Header() {
   const setLanguage = (e) => {
     context.updateLanguage(e.target.name);
   };
-
-  useEffect(() => {
-    console.log(showMenu);
-  }, [showMenu]);
 
   return (
     <header id="header">
