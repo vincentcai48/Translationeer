@@ -77,6 +77,15 @@ Translationeer waits until the document has loaded and then waits ten seconds to
 
 ## Settings
 
+Click the gear icon on the right side of the document header. This will show the settings popup.
+
+#### Display Settings:
+- Font Size: 16px for small, 22px for medium, 28px for large
+- Text-Translation Ratio: the width of the left/right sides of the document (For example, 40-60 means the left side is 40% of the screen width while the right side is 60%)
+
+#### Copy Settings:
+- Between each section: what text to put between each section when your translation is copied to clipboard.
+
 ## Copying Text
 
-Click the "Copy" text on the right of the document header to copy all sections of your translation (the right side) to your clipboard. The text will say "Copied" if successful or "Error" if unsuccessful.
+Click the "Copy" text on the right of the document header to copy all sections of your translation (the right side) to your clipboard. The text will say "Copied" if successful or "Error" if unsuccessful. You can toggle some copy settings in the settings popup.
