@@ -15,11 +15,10 @@ import Loading from "./Loading";
 import dateString from "../services/dateString";
 import deleteAccountFunc from "../services/deleteAccount";
 import PContext from "../services/context";
-import updateTitle from "../services/updateTitle";
 
 export default function Dashboard() {
   const router = useRouter();
-  const { defaultName, batchSize } = useContext(PContext);
+  const { defaultName, batchSize, setTitle} = useContext(PContext);
   const [docs, setDocs] = useState([]);
   const [lastDoc, setLastDoc] = useState<any>(-1);
   const [addDocPopup, setAddDocPopup] = useState<boolean>(false);
@@ -34,7 +33,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getDocs(false);
-    updateTitle("Translationeer Dashboard")
+    setTitle("Translationeer Dashboard")
   }, []);
 
   const getDocs = async (isRefresh: boolean): Promise<void> => {
@@ -44,7 +43,7 @@ export default function Dashboard() {
         .collection("users")
         .doc(pAuth.currentUser.uid)
         .collection("documents")
-        .limit(10)
+        .limit(batchSize)
         .orderBy("timestamp", "desc");
       if (lastDoc !== -1 && !isRefresh) query = query.startAfter(lastDoc);
       var res = await query.get();

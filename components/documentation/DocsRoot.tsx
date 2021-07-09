@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import ReactMarkdown from 'react-markdown'
 import Link from "next/link";
 import PContext from "../../services/context";
-import updateTitle from "../../services/updateTitle";
 
 /*
 MARKDOWN FILES IMPORTED
@@ -19,7 +18,7 @@ interface DocOption {
 }
 
 export default function DocsRoot({ paramURL }) {
-  const {isMobile} = useContext(PContext);
+  const {isMobile,setTitle} = useContext(PContext);
   const [showMenu,setShowMenu] = useState<boolean>(false);
 
   //In order ("num" property  not actually used, just so you know what index it is")
@@ -34,7 +33,7 @@ export default function DocsRoot({ paramURL }) {
     if (docOptions[i].url == paramURL) n = i;
   }
   const num = n;
-  updateTitle(
+  setTitle(
     `${docOptions[num].name} - Translationeer Documentation`
   );
   let text = ""

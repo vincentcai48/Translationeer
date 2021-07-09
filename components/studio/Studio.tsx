@@ -20,7 +20,6 @@ import TextAreaNew from "../TextAreaNew";
 import Definition from "../word/Definition";
 import WordList from "../word/WordList";
 import Popup from "../Popup";
-import updateTitle from "../../services/updateTitle";
 
 interface Settings {
   copyDivide?: string;
@@ -38,7 +37,7 @@ export default function Studio({ id, isTest }) {
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [saveError, setSaveError] = useState<boolean>(false);
-  const { isAuth, defaultName } = useContext(PContext);
+  const { isAuth, defaultName,setTitle } = useContext(PContext);
   const [name, setName] = useState<string>("");
   const [nameInput, setNameInput] = useState<string>(name);
   const [editName, setEditName] = useState<boolean>(false);
@@ -99,7 +98,7 @@ export default function Studio({ id, isTest }) {
   useEffect(autoSave, [name, texts, translations, settings]);
 
   //update title on name change
-  useEffect(()=>updateTitle(`${name} - Translationeer Document`),[name]);
+  useEffect(()=>setTitle(`${name} - Translationeer Document`),[name]);
 
   const getDoc = async (): Promise<void> => {
     try {

@@ -1,10 +1,12 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
-import updateTitle from "../services/updateTitle";
+import { useContext } from "react";
+import PContext from "../services/context";
 import Auth from "./Auth";
 
 export default function Home() {
+  const {setTitle} = useContext(PContext);
   const templates = [
     { title: "Blank Document", subtitle: "", imageURL: "", id: "blank" },
     {
@@ -39,7 +41,7 @@ export default function Home() {
     router.push(`/test/${id}`);
   };
 
-  updateTitle("Translationeer");
+  setTitle("Translationeer")
 
   return (
     <div id="home-container">
