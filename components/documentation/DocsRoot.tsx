@@ -31,6 +31,8 @@ export default function DocsRoot({ paramURL }) {
     { url: "/dashboard", name: "Dashboard", isPrimary: false, num: 5 },
     { url: "/document", name: "Document", isPrimary: false, num: 6 },
     { url: "/testmode", name: "Test Mode", isPrimary: false, num: 7 },
+    { url: "/troubleshooting", name: "Troubleshooting", isPrimary: true, num: 8 },
+    { url: "/migratingv1", name: "Migrating from V1", isPrimary: false, num: 9 },
   ];
 
   let n = 0;

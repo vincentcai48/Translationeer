@@ -10,11 +10,11 @@ On the top of your dashboard you will see the email address you used to create y
 
 Logout using the red "Logout" button
 
-Delete your account by clicking the text "Delete Account" at the bottom of the popup. You must type the text "confirm" to delete the account. Please read more about the consequences of deleting your account in the account reference: [/documentation/account](/documentation/account)
+Delete your account by clicking the text "Delete Account" at the bottom of the popup. You must type the text "confirm" to delete the account. Please read more about the consequences of deleting your account in the [account reference](/documentation/account)
 
 ## Managing Your Documents
 
-The large grey area below the top of the Dashboard is where you will see all your documents listed. Each Document will display it's name and the date it was last edited. (Please note that this date may not be accurate if migrating from version 1. Read more here: [/documentation/migratingv1](/documentation/migratingv1))
+The large grey area below the top of the Dashboard is where you will see all your documents listed. Each Document will display it's name and the date it was last edited. (Please note that this date may not be accurate if migrating from version 1. Read more about [migrating from version1](/documentation/migratingv1))
 
 The list will show the last ten documents modified. Click the "+ More Docs" Button to get the next ten documents. If the button is not there, all the documents have been retreived.
 

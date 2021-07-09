@@ -19,20 +19,20 @@ The privacy policy page and other legal pages will be at `/legal/[name]`.
 Please see the following pages to reference specific parts of the Translationeer platform:
 
 ### Account 
-How accounts on Translationeer work
-**Read More:** [/documentation/account](/documentation/account);
+How accounts on Translationeer work  
+**Read More:** [Account Reference](/documentation/account);
 
 ### Dashboard
-How to use the Translationeer Dashboard
-**Read More:** [/documentation/dashboard](/documentation/dashboard);
+How to use the Translationeer Dashboard  
+**Read More:** [Dashboard Reference](/documentation/dashboard);
 
 ### Document
-Reference for all the different tools that can be used in a Translationeer document
-**Read More:** [/documentation/document](/documentation/document);
+Reference for all the different tools that can be used in a Translationeer document  
+**Read More:** [Document Reference](/documentation/document);
 
 ### Test Mode
-How to try out Translationeer using test mode
-**Read More:** [/documentation/testmode](/documentation/testmode);
+How to try out Translationeer using test mode  
+**Read More:** [Test Mode Reference](/documentation/testmode);
 
 
 

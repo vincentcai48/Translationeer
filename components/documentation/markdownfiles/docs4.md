@@ -25,7 +25,7 @@ Click the "Google Login" button on the homepage to create a Translationeer accou
 
 You will see a page where you must accept Translationeer's policies to create an account. You may choose to accept and create an account or cancel the account creation. 
 
-If you have successfully created an account, you will be directed to your dashboard at the root URL `/`. Read more about the dashboard [/documentation/dashboard](/documentation/dashboard)
+If you have successfully created an account, you will be directed to your dashboard at the root URL `/`. Read more about the dashboard: [Dashboard Reference](/documentation/dashboard)
 
 ## Log In 
 
