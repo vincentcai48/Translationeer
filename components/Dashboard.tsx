@@ -135,7 +135,7 @@ export default function Dashboard() {
       console.error(e);
     }
   };
-  if (!pAuth.currentUser) return;
+  if (!pAuth.currentUser) return <div></div>;
   return (
     <div id="dashboard-container">
       <section id="top" className="center">
