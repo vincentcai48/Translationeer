@@ -45,8 +45,7 @@ export default function Home() {
           <section id="first-section">
             <h3>What is Translationeer?</h3>
             <p className="section-description">
-              Translationeer is an online platform that makes translating easier
-              and hassle-free!
+              Translationeer is an online platform that makes translating easier and more efficient! It is free and open source.
             </p>
             <ul className="horiz-blocks row">
               <li className="large-block">
