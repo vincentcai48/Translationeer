@@ -18,7 +18,7 @@ import PContext from "../services/context";
 
 export default function Dashboard() {
   const router = useRouter();
-  const { defaultName, batchSize } = useContext(PContext);
+  const { defaultName, batchSize, setTitle} = useContext(PContext);
   const [docs, setDocs] = useState([]);
   const [lastDoc, setLastDoc] = useState<any>(-1);
   const [addDocPopup, setAddDocPopup] = useState<boolean>(false);
@@ -33,6 +33,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     getDocs(false);
+    setTitle("Translationeer Dashboard")
   }, []);
 
   const getDocs = async (isRefresh: boolean): Promise<void> => {
@@ -42,7 +43,7 @@ export default function Dashboard() {
         .collection("users")
         .doc(pAuth.currentUser.uid)
         .collection("documents")
-        .limit(10)
+        .limit(batchSize)
         .orderBy("timestamp", "desc");
       if (lastDoc !== -1 && !isRefresh) query = query.startAfter(lastDoc);
       var res = await query.get();
@@ -135,7 +136,7 @@ export default function Dashboard() {
       console.error(e);
     }
   };
-  if (!pAuth.currentUser) return;
+  if (!pAuth.currentUser) return <div></div>;
   return (
     <div id="dashboard-container">
       <section id="top" className="center">

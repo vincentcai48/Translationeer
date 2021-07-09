@@ -5,6 +5,8 @@
         height: 120px;
         h3{
             margin: 0px;
+            word-break: break-all;
+            max-width: 80vw;
         }
         .top-center{
             position: relative;
@@ -67,7 +69,7 @@
                 //justify-content: space-between;
                 color: black;
                 position: relative;
-                
+                overflow: hidden;
                 border-right: 1px solid black;
                 .left{
                     @include row();
@@ -222,6 +224,7 @@
             display: grid;
             grid-template-columns: 100px 1fr 100px;
             .left{
+                @include center();
                 .save-area{
                     @include center();
                     .icon-check, .icon-spin, .icon-x{
@@ -240,6 +243,7 @@
             .middle{
                 .test-warning{
                     width: 100%;
+                    padding: 0px 10px;
                     overflow: hidden;
                     color: red;
                     font-weight: bold
@@ -425,4 +429,29 @@ ul.definitions-list{
         }
     }
 
+}
+
+#test-mode-popup{
+    position: fixed;
+    padding: 30px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: yellow;
+    box-shadow: 1px 1px 3px lightgrey;
+    max-width: 310px;
+    right: 0px;
+    z-index: 20;
+    bottom: 8vh;
+    button.tb{
+        border: none;
+        background-color: transparent;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    p{
+        margin: 0px;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
 }

@@ -33,17 +33,17 @@ export default function App({ Component, pageProps }) {
 
   useEffect(() => {
     componentDidMount();
+    if(window.outerWidth<576) setIsMobile(true);
   }, []);
 
   //when languageMapping first loads (the languages mapped to their apis, so now you can get the apis)
   useEffect(() => {
     if (languageMapping.current) {
-      console.log(language);
       if (language) updateLanguage(language);
       if (!language && languageOptions && languageOptions[1])
-        updateLanguage(languageOptions[1]); //the 2nd element is Latin to English
+        updateLanguage("Latin to English"); //the 2nd element is Latin to English
     }
-  }, [languageMapping.current]);
+  }, [languageMapping.current,languageOptions]);
 
   const componentDidMount = async () => {
     try {
@@ -61,7 +61,6 @@ export default function App({ Component, pageProps }) {
       setTc(newTCArr);
 
       pAuth.onAuthStateChanged(async (user) => {
-        console.log(user);
         if (user) {
           setIsAuth(true);
           const thisUserRef = pFirestore.collection("users").doc(user.uid);
@@ -71,7 +70,6 @@ export default function App({ Component, pageProps }) {
             if (!doc.exists) {
               setNewUser(user);
             } else {
-              console.log(doc.data().defaultLanguage);
               if (doc.data().defaultLanguage) {
                 updateLanguage(doc.data().defaultLanguage);
               }
@@ -89,8 +87,6 @@ export default function App({ Component, pageProps }) {
 
   //NOTE: different from setLanguage, this gets all apis, doesn't just set state.
   const updateLanguage = async (languageParam) => {
-    console.log(languageParam);
-    console.log(languageMapping.current);
     if (!languageMapping.current) return;
     //Step 1: set the language
     setLanguage(languageParam);

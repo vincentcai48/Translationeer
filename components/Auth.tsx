@@ -1,7 +1,9 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { googleAuthProvider, pAuth } from "../services/config";
+import PContext from "../services/context";
 
 export default function Auth(){
+    const {isMobile} = useContext(PContext);
     const [email,setEmail] = useState<string>("");
     const [password,setPassword] = useState<string>("");
     const [errorM,setErrorM] = useState<string|null>(null);
@@ -24,13 +26,14 @@ export default function Auth(){
 
     const googleLogin = async () => {
         try{
-            await pAuth.signInWithRedirect(googleAuthProvider);
+            if(isMobile) await pAuth.signInWithRedirect(googleAuthProvider);
+            else await pAuth.signInWithPopup(googleAuthProvider);
         }catch(e){
             console.error(e);
         }
       };
 
-    return <div>
+    return <div id="auth-container">
         <h4>Login</h4>
         <div className="ep-auth">
             <input 

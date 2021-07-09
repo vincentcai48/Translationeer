@@ -1,126 +1,185 @@
 @import "./basics.scss";
 
-#home-container{
+#home-container {
+}
+
+#home-main {
+  margin: 10vh 5vw;
+
+  #first-row {
     display: grid;
     grid-template-columns: 1fr auto;
+  }
+  section {
+    h3 {
+      font-size: 50px;
+      margin: 0px;
+      margin-bottom: 30px;
+    }
+    p.section-description {
+      margin: 0px;
+      margin-left: 20px;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    padding-bottom: 20vh;
+  }
+
+  #first-section {
+    height: 100vh;
+  }
+  #templates-section {
+    .horiz-blocks {
+      overflow-x: scroll;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+    }
+  }
+
+  .horiz-blocks {
+    margin: 10vh 0px;
+  }
+
+  .block-image {
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .large-block {
+    @include col();
+    margin-right: 4vw;
+    .block-image {
+      height: 12vw;
+      width: 12vw;
+      box-shadow: 3px 3px 8px black;
+      background-color: lightgrey;
+      &.clickdefinition {
+        background-image: url("/images/definition.jpg");
+      }
+      &.structure {
+        background-image: url("/images/structure.jpg");
+      }
+      &.sidebyside {
+        background-image: url("/images/sidebyside.jpg");
+      }
+    }
+    label {
+      width: 15vw;
+      font-size: 2vw;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
+    }
+  }
+
+  .small-block {
+    @include col();
+    margin-right: 40px;
+    .block-image {
+      @include hovererlighten();
+      height: 90px;
+      width: 90px;
+      box-shadow: 3px 3px 6px black;
+      border: none;
+      border-radius: 0px;
+      background-color: white;
+      .sib {
+        height: 30px;
+        font-weight: 100;
+      }
+    }
+    label,
+    p {
+      width: 120px;
+      text-align: center;
+    }
+    label {
+      font-size: 20px;
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    p {
+      font-size: 16px;
+      margin-top: 5px;
+      color: rgb(122, 122, 122);
+    }
+  }
 }
 
-
-#home-main{
-    margin: 10vh 5vw;
-    section{
-        h3{
-            font-size: 50px;
-            margin: 0px;
-            margin-bottom: 30px;
-        }
-        p.section-description{
-            margin: 0px;
-            margin-left: 20px;
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-        padding-bottom: 20vh;
-    }
-
-    .horiz-blocks{
-        margin: 10vh 0px;
-    }
-
-    .block-image{
-        background-size: cover;
-        background-repeat: no-repeat;
-    }
-
-    .large-block{
-        @include col();
-        margin-right: 50px;
-        .block-image{
-            height: 150px;
-            width: 150px;
-            box-shadow: 3px 3px 8px black;
-            background-color: lightgrey;
-            &.clickdefinition{
-                background-image: url("/images/definition.png");
+@media (max-width: 576px){
+    #home-main{ 
+        overflow: hidden;
+        margin: 10vh 8vw;
+        section{
+            h3{
+                font-size: 40px;
             }
-            &.structure{
-                background-image: url("/images/structure.png");
-            }
-            &.sidebyside{
-                background-image: url("/images/sidebyside.png");
+            p.section-description{
+                font-size: 16px;
             }
         }
-        label{
-            width: 200px;
-            font-size: 27px;
-            font-weight: bold;
-            text-align: center;
-            margin-top: 20px;
+        #first-row{
+            @include col();
+            flex-direction: column-reverse; //so that the auth section is first
         }
-    }
-
-    .small-block{
-        @include col();
-        margin-right: 40px;
-        .block-image{
-            @include hovererlighten();
-            height: 90px;
-            width: 90px;
-            box-shadow: 3px 3px 6px black;
-            border: none;
-            border-radius: 0px;
-        }
-        label, p{
-            width: 120px;
-            text-align: center;
-            
-        }
-        label{
-            font-size: 20px;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-        p{
-            font-size: 16px;
-            margin-top: 5px;
-            color: rgb(122, 122, 122);
+        #first-section{
+            height: auto;
+            .horiz-blocks{
+                flex-direction: column;
+                .large-block{
+                    .block-image{
+                        width: 200px;
+                        height: 200px;
+                    }
+                    label{
+                        width: 200px;
+                        font-size: 20px;
+                    }
+                    margin: 30px 0px;
+                }
+            }
         }
     }
 }
-
 
 #home-auth {
-    padding: 20vh 5vw;
-    @include center();
-    height: 100vh;
-    h4{
-        margin: 0px 0px 20px 0px;
-        font-size: 30px;
-    }
-    input{
-        background-color: transparent;
-        border: none;
-        border-bottom: 3px solid black;
-        font-size: 12px;
-        transition: all 0.3s;
-        display: block;
-        margin-bottom: 20px;
-        border-radius: 0px;
-        width: 250px;
-        padding: 5px;
-        height: 25px;
-        &:focus{
-            font-size: 16px;
-        }
-    }
-    .errorM{
-        font-size: 12px;
-        color:red;
-        margin-bottom: 20px;
+  @include center();
+  height: 100vh;
+  margin-left: 5vw;
+  #auth-container {
+      max-width: 200px;
+    transform: translateY(-20vh);
+  }
+  h4 {
+    margin: 0px 0px 20px 0px;
+    font-size: 30px;
+  }
+  input {
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid black;
+    font-size: 12px;
+    transition: all 0.3s;
+    display: block;
+    margin-bottom: 20px;
+    border-radius: 0px;
+    width: 200px;
+    padding: 5px;
+    height: 25px;
+    &:focus {
+      font-size: 16px;
     }
   }
-  
-  #google-login-area{
-      margin-top: 50px;
+  .errorM {
+    font-size: 12px;
+    color: red;
+    margin-bottom: 20px;
   }
-  
+}
+
+#google-login-area {
+  margin-top: 50px;
+}

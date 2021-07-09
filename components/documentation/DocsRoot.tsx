@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import ReactMarkdown from 'react-markdown'
 import Link from "next/link";
 import PContext from "../../services/context";
@@ -18,6 +18,9 @@ interface DocOption {
 }
 
 export default function DocsRoot({ paramURL }) {
+  const {isMobile,setTitle} = useContext(PContext);
+  const [showMenu,setShowMenu] = useState<boolean>(false);
+
   //In order ("num" property  not actually used, just so you know what index it is")
   const docOptions: DocOption[] = [
     { url: "/", name: "Overview", isPrimary: true, num: 0 },
@@ -30,7 +33,7 @@ export default function DocsRoot({ paramURL }) {
     if (docOptions[i].url == paramURL) n = i;
   }
   const num = n;
-  useContext(PContext).setTitle(
+  setTitle(
     `${docOptions[num].name} - Translationeer Documentation`
   );
   let text = ""
@@ -60,12 +63,16 @@ export default function DocsRoot({ paramURL }) {
   return (
     <div>
       <div className="docs-header-container">
+        {isMobile&&<button className="tb docs-menu-button" onClick={()=>setShowMenu(!showMenu)}>Menu</button>}
         <h1 className="docs-header">Translationeer Documentation</h1>
       </div>
       <div id="docs-container">
-        <div className="docs-col1">
+        {(!isMobile||showMenu)&&<div className="docs-col1">
+          {isMobile&&<div className="row menu-header"><h6>Menu</h6>
+            <span className="tb" onClick={()=>setShowMenu(false)}>Close</span>
+          </div>}
           <ul className="docs-options">{optionsArr}</ul>
-        </div>
+        </div>}
         <div className="docs-col2">
           <section id="docs-body"><ReactMarkdown>{text}</ReactMarkdown></section>
         </div>
