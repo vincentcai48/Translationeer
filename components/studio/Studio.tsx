@@ -8,6 +8,7 @@ import {
   faPen,
   faPlus,
   faPlusCircle,
+  faTimes,
   faTimesCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -49,6 +50,7 @@ export default function Studio({ id, isTest }) {
   const [settings, setSettings] = useState<object>({});
   const [showSettings, setShowSettings] = useState<boolean>(false);
   const [copyMessage, setCopyMessage] = useState<string>("Copy");
+  const [testModePopup, setTestModePopup] = useState<boolean>(true);
 
   //For auto-save
   const saves = useRef(-3); //-3 to start, set three values at start, 0 for each new save batch;
@@ -64,16 +66,16 @@ export default function Studio({ id, isTest }) {
   const templateNum = useRef(0);
 
   //set to save templates or not (if doing tmeplate dev)
-  const saveTemplates:boolean = false; //Make sure to also allow write in firestore rules
-  const setIndex:number|null = null;//if you want to set an index for template, not random.
+  const saveTemplates: boolean = false; //Make sure to also allow write in firestore rules
+  const setIndex: number | null = null; //if you want to set an index for template, not random.
 
   useEffect(() => {
     if (isAuth) getDoc();
     if (isTest) getTemplate(id);
-  }, [isAuth,id]);
+  }, [isAuth, id]);
 
   const autoSave = () => {
-    if((isTest||!isAuth)&&!saveTemplates) return;
+    if ((isTest || !isAuth) && !saveTemplates) return;
     setSaving(true);
     //Then check if beginning of a save batch;
     if (saves.current == 0) {
@@ -134,16 +136,20 @@ export default function Studio({ id, isTest }) {
     setStudioLoading(false);
   };
 
-  const getTemplate = async (tid):Promise<void> =>{
-    try{
-      const language:string = "latin"; //hard code this in for now.
-      var res = (await pFirestore.collection("templates").doc(language).get()).data();
-      var text:string, name:string;
-      if(!res[tid]||tid=="blank") {
+  const getTemplate = async (tid): Promise<void> => {
+    try {
+      const language: string = "latin"; //hard code this in for now.
+      var res = (
+        await pFirestore.collection("templates").doc(language).get()
+      ).data();
+      var text: string, name: string;
+      if (!res[tid] || tid == "blank") {
         text = "";
         name = "Test Document";
-      }else{
-        var index:number = setIndex?setIndex:Math.floor(Math.random()*res[tid].length);
+      } else {
+        var index: number = setIndex
+          ? setIndex
+          : Math.floor(Math.random() * res[tid].length);
         allTemplates.current = res[tid];
         templateNum.current = index;
         var doc = res[tid][index];
@@ -152,13 +158,13 @@ export default function Studio({ id, isTest }) {
       }
       setName(name);
       setTexts([text]);
-      setTranslations(['']);
+      setTranslations([""]);
       setSettings(defaultSettings);
-    }catch(e){
+    } catch (e) {
       console.error(e);
     }
     setStudioLoading(false);
-  }
+  };
 
   const renderSections = (): any[] => {
     if (!texts) return;
@@ -436,18 +442,21 @@ export default function Studio({ id, isTest }) {
   const save = async () => {
     setSaving(true);
     try {
-      if(isTest){
-        if(!saveTemplates) return;
+      if (isTest) {
+        if (!saveTemplates) return;
         const language = "latin";
         var newArr = [...allTemplates.current];
         newArr[templateNum.current] = {
           name: nameRef.current,
-          text: textsRef.current.reduce((a,n)=> a + " "+n),
-        }
-        await pFirestore.collection("templates").doc(language).update({
-          [id]: newArr,
-        })
-      }else{
+          text: textsRef.current.reduce((a, n) => a + " " + n),
+        };
+        await pFirestore
+          .collection("templates")
+          .doc(language)
+          .update({
+            [id]: newArr,
+          });
+      } else {
         await pFirestore
           .collection("users")
           .doc(pAuth.currentUser.uid)
@@ -562,10 +571,18 @@ export default function Studio({ id, isTest }) {
               )}
             </div>
           </div>
-          <div className="middle center">{isTest&&<div className="test-warning center">
-              <FontAwesomeIcon icon={faExclamationTriangle} className="sir mr5"></FontAwesomeIcon>
-              WARNING: In test mode, changes will NOT be saved. Create an account to save documents.
-          </div>}</div>
+          <div className="middle center">
+            {isTest && (
+              <div className="test-warning center">
+                <FontAwesomeIcon
+                  icon={faExclamationTriangle}
+                  className="sir mr5"
+                ></FontAwesomeIcon>
+                WARNING: In test mode, changes will NOT be saved. Create an
+                account to save documents.
+              </div>
+            )}
+          </div>
           <div className="right">
             <button
               className="settings-button tb"
@@ -650,6 +667,22 @@ export default function Studio({ id, isTest }) {
             </ul>
           </div>
         </Popup>
+      )}
+
+      {isTest && testModePopup && (
+        <div id="test-mode-popup">
+          <button onClick={() => setTestModePopup(false)}>
+            <FontAwesomeIcon className="sir" icon={faTimes}></FontAwesomeIcon>
+          </button>
+          <p>
+            You're in test mode, which means you're just testing it out and your
+            documents will not be saved. Read our "How To Guide" to learn how to
+            use Traslationeer! It's easy and simple!
+          </p>
+          <a href="/documentation/howto" target="_blank" className="sb">
+            Read the How To Guide
+          </a>
+        </div>
       )}
     </div>
   );
