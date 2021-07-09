@@ -5,13 +5,11 @@ export default function CustomHead(props) {
     <Head>
       <title>{props.title || "Translationeer"}</title>
 
-      <meta charset="utf-8" />
-
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="theme-color" content="#000000" />
       <meta
         name="description"
-        content="Comprehensive platform for online language translation with powerful web-based tools to enhance your translating experience"
+        content="Platform for language translation. Tools to help you translate better, faster, and more efficiently."
       />
       <link rel="apple-touch-icon" href="" />
       <link rel="manifest" href="" />
@@ -27,9 +25,9 @@ export default function CustomHead(props) {
 
       <link
         rel="icon"
-        type="image/png"
+        type="image/jpg"
         // path from "public directory"
-        href="favicon-nobg.PNG"
+        href="/images/favicon2.jpg"
       />
     </Head>
   );
