@@ -82,7 +82,6 @@ export default function Studio({ id, isTest }) {
         save();
       }, saveInterval * 1000);
     }
-    console.log(saves.current);
 
     //First set Refs
     nameRef.current = name;
@@ -109,7 +108,6 @@ export default function Studio({ id, isTest }) {
       setName(data["name"]);
       //Handle version 1:
       if (data["body"]) {
-        console.log(data["body"]);
         setTexts(data["body"].map((e) => e.text));
         setTranslations(data["body"].map((e) => e.translation));
         setTextsEditing(data["body"].map(() => false)); //all false
@@ -125,12 +123,10 @@ export default function Studio({ id, isTest }) {
       }
       //Set settings, to either saved value or the default
       var newSettings = data["settings"] || defaultSettings;
-      console.log(newSettings);
       Object.keys(defaultSettings).forEach((setting) => {
         if (!newSettings[setting])
           newSettings[setting] = defaultSettings[setting];
       });
-      console.log(newSettings)
       setSettings(newSettings);
     } catch (e) {
       console.error(e);
@@ -151,7 +147,6 @@ export default function Studio({ id, isTest }) {
         allTemplates.current = res[tid];
         templateNum.current = index;
         var doc = res[tid][index];
-        console.log(doc);
         text = doc["text"];
         name = doc["name"];
       }
@@ -286,7 +281,6 @@ export default function Studio({ id, isTest }) {
     var index = -1;
     for (let i = 0; i < texts.length; i++) {
       let thisText = texts[i].replace(/\n|\r/g, " ");
-      console.log(bText, thisText);
       if (thisText.includes(bText)) index = i;
 
       //check with spaces at end removed
