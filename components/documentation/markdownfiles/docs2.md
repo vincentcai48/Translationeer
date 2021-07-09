@@ -18,13 +18,11 @@ In a document, you will see the original text on the left side, and you will wri
 
 ### Click on Words
 
-On the left side of the document, click on any word to view it's definition. 
+On the left side of the document, click on any word to view it's definition. Use your mouse to drag it around.
 
 Make sure that in the page header, the language is correct and your desired translators are turned on. You can toggle what language and what translators to use in the page header, default language is "Latin to English".
 
-Use your mouse to drag the definition box around.
-
-Click the pen icon to edit the word to lookup. When editing, you can highlight text in the definition.
+Click the pen icon to edit the word to lookup. When editing, you can highlight text in the definition and you cannot drag.
 
 ### Select Text and Break Off Text
 
@@ -34,6 +32,31 @@ Select and break off sections of text to organize your translation into logical 
 
 ### Merge Sections
 
+Once you have broken up your document into separate sections, click the small button (with the two small arrows) in the middle of two of the sections to merge them together. 
+
+Merging will combine both text and translation of two adjacent sections. Merging cannot be undone.
+
+Click the small "+" button at the end of the translation to add on another section at the end.
+
 ### Edit Text
 
+For each section, click the green edit icon on the left side to edit the original text. Click "Done" to confirm the changes.
+
+### Settings and Display
+
+Near the top right corner of the page, click the gear icon. Here you can toggle document settings, like how you want your page to be displayed. 
+
+### Saving a document
+
+Your documents are all auto-saved. Near the top left corner of the page, there will be a small icon to show saving status. A spinner means the document is collecting changes to save or is in saving progress, and a checkmark means all changes have been saved. If an error has occured, an error icon will show.
+
 ## Step 4: Copy Your Translation!
+
+After you're done translating, it's time to copy your translation to your clipboard!
+
+Near the top right corner of the screen, right next to the settings icon, click the word "Copy". 
+
+Now go paste your translation wherever you want!
+
+## Read More
+
