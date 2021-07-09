@@ -6,5 +6,6 @@ export default function CustomHead(){
     const {title} = useContext(PContext);
     return <Head>
         <title>{title||"Translationeer"}</title>
+        <link rel="icon" href='/images/favicon.jpg'/>
     </Head>
 }
