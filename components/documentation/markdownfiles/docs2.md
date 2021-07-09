@@ -64,4 +64,4 @@ Now go paste your translation wherever you want!
 
 ## Read More
 
-Want a more in depth reference of the translationeer tools? Read more about it in our documentation!
+Want a more in depth reference of the translationeer tools? Read more about it in our [reference documentation](/documentation/reference).
