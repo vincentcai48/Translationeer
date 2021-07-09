@@ -10,3 +10,5 @@ Test Mode creates an example document for you to use and edit. Please see the re
 ## Accessing Test Mode
 
 Test Mode is accessible from the homepage. You have the option to pick a template to get started translating with. 
+
+The path for test mode is `/test/[template]`. If [template] is "blank", then a blank document will be generated. If it is a Translationeer template name like "aenied", a document based on that template will be generated.
