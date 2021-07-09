@@ -20,6 +20,10 @@ Contributions to Translationeer are welcome. Please review our contribution guid
 
 A hosted service of Translationeer is offered at [translationeer.com](https://translationeer.com) free of charge. You may choose to clone the repo onto your local system and use it in a web browser as well. Note that Translationeer is built using create-next-app and firebase, so follow the necessary steps to build and run your app and connect it to your own firestore database. Read more on this in the documentation.
 
+## License
+
+Translationeer is MIT Licensed
+
 ## Contact
 
 Translationeer is maintained by vincentcaitech. Please reach out with any questions.
