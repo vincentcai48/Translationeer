@@ -430,3 +430,28 @@ ul.definitions-list{
     }
 
 }
+
+#test-mode-popup{
+    position: fixed;
+    padding: 30px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    background-color: yellow;
+    box-shadow: 1px 1px 3px lightgrey;
+    max-width: 310px;
+    right: 0px;
+    z-index: 20;
+    bottom: 8vh;
+    button.tb{
+        border: none;
+        background-color: transparent;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+    }
+    p{
+        margin: 0px;
+        margin-bottom: 20px;
+        font-size: 16px;
+    }
+}

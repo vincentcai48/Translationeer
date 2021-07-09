@@ -671,13 +671,12 @@ export default function Studio({ id, isTest }) {
 
       {isTest && testModePopup && (
         <div id="test-mode-popup">
-          <button onClick={() => setTestModePopup(false)}>
+          <button className="tb" onClick={() => setTestModePopup(false)}>
             <FontAwesomeIcon className="sir" icon={faTimes}></FontAwesomeIcon>
           </button>
           <p>
-            You're in test mode, which means you're just testing it out and your
-            documents will not be saved. Read our "How To Guide" to learn how to
-            use Traslationeer! It's easy and simple!
+            Read our "How To Guide" to learn how to
+            use Traslationeer. It's easy and simple!
           </p>
           <a href="/documentation/howto" target="_blank" className="sb">
             Read the How To Guide
