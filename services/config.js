@@ -6,7 +6,7 @@ import "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCrnNBi1ptWYnqXA_cNZ9FXVBpZR1zn_54",
-  authDomain: "translationeer.com",
+  authDomain: "translationeer.web.app",
   databaseURL: "https://translationeer.firebaseio.com",
   projectId: "translationeer",
   storageBucket: "translationeer.appspot.com",

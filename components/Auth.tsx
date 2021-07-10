@@ -26,8 +26,7 @@ export default function Auth(){
 
     const googleLogin = async () => {
         try{
-            if(isMobile) await pAuth.signInWithRedirect(googleAuthProvider);
-            else await pAuth.signInWithPopup(googleAuthProvider);
+            await pAuth.signInWithPopup(googleAuthProvider);
         }catch(e){
             console.error(e);
         }
