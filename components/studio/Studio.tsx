@@ -102,6 +102,7 @@ export default function Studio({ id, isTest }) {
   useEffect(() => setTitle(`${name} - Translationeer Document`), [name]);
 
   const getDoc = async (): Promise<void> => {
+    console.log("LInebreak:"+linebreakCode);
     try {
       let query = pFirestore
         .collection("users")
@@ -112,6 +113,7 @@ export default function Studio({ id, isTest }) {
       let res = await query.get();
       let data = res.data();
       setName(data["name"]);
+      console.log(linebreakCode);
       //Handle version 1:
       if (data["body"]) {
         setTexts(
@@ -121,7 +123,7 @@ export default function Studio({ id, isTest }) {
         );
         setTranslations(
           data["body"].map((e) =>
-            String(e.text).replaceAll(linebreakCode, "\n")
+            String(e.translation).replaceAll(linebreakCode, "\n")
           )
         );
         setTextsEditing(data["body"].map(() => false)); //all false
