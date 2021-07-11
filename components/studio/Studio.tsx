@@ -38,7 +38,7 @@ export default function Studio({ id, isTest }) {
   const [studioLoading, setStudioLoading] = useState<boolean>(true);
   const [saving, setSaving] = useState<boolean>(false);
   const [saveError, setSaveError] = useState<boolean>(false);
-  const { isAuth, defaultName, setTitle } = useContext(PContext);
+  const { isAuth, defaultName, setTitle, linebreakCode } = useContext(PContext);
   const [name, setName] = useState<string>("");
   const [nameInput, setNameInput] = useState<string>(name);
   const [editName, setEditName] = useState<boolean>(false);
@@ -102,6 +102,7 @@ export default function Studio({ id, isTest }) {
   useEffect(() => setTitle(`${name} - Translationeer Document`), [name]);
 
   const getDoc = async (): Promise<void> => {
+    console.log("LInebreak:"+linebreakCode);
     try {
       let query = pFirestore
         .collection("users")
@@ -112,16 +113,34 @@ export default function Studio({ id, isTest }) {
       let res = await query.get();
       let data = res.data();
       setName(data["name"]);
+      console.log(linebreakCode);
       //Handle version 1:
       if (data["body"]) {
-        setTexts(data["body"].map((e) => e.text));
-        setTranslations(data["body"].map((e) => e.translation));
+        setTexts(
+          data["body"].map((e) =>
+            String(e.text).replaceAll(linebreakCode, "\n")
+          )
+        );
+        setTranslations(
+          data["body"].map((e) =>
+            String(e.translation).replaceAll(linebreakCode, "\n")
+          )
+        );
         setTextsEditing(data["body"].map(() => false)); //all false
-        await query.update({
-          body: fbFieldValue.delete(),
-          texts: data["body"].map((e) => e.text),
-          translations: data["body"].map((e) => e.translation),
-        });
+        try {
+          await query.update({
+            body: fbFieldValue.delete(),
+            texts: data["body"].map((e) =>
+              String(e.text).replaceAll(linebreakCode, "\n")
+            ),
+            translations: data["body"].map((e) =>
+              String(e.translation).replaceAll(linebreakCode, "\n")
+            ),
+            timestamp: data["timestamp"].toDate().getTime(),
+          });
+        } catch (e) {
+          console.error(e);
+        }
       } else {
         setTexts(data["texts"]);
         setTranslations(data["translations"]);
@@ -685,7 +704,7 @@ export default function Studio({ id, isTest }) {
           </p>
           <Link href="/documentation/howto">
             <a target="_blank" className="sb">
-            Read the How To Guide
+              Read the How To Guide
             </a>
           </Link>
         </div>
