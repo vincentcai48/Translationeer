@@ -294,6 +294,33 @@
     }
 }
 
+
+@media (max-width: 576px){
+    #studio #heading #first-row{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        .left{
+            grid-column: 1/2;
+            grid-row: 1/2;
+        }
+        .right{
+            grid-column: 2/3;
+            grid-row: 1/2;
+        }
+        .middle{
+            grid-column: 1/3;
+            grid-row: 2/3;
+            height: auto;
+            .test-warning{
+                padding: 10px;
+                .sir{
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
 .wordlist{
     font-size: var(--studio-font-size);
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import ReactMarkdown from 'react-markdown'
 import Link from "next/link";
 import PContext from "../../services/context";
@@ -49,6 +49,11 @@ export default function DocsRoot({ paramURL }) {
   }catch(e){
     text = "### Error!"
   }
+
+  useEffect(()=>{
+    setShowMenu(false);
+  },[n])
+
   //Set button options
   var optionsArr = [];
   for (var i = 0; i < docOptions.length; i++) {

@@ -860,6 +860,7 @@ ul.legal-list {
   #docs-container{
     display: block;
     .docs-col1{
+      box-sizing: border-box;
       .menu-header{
         margin: 20px 0px;
         h6{
@@ -879,12 +880,13 @@ ul.legal-list {
       background-color: white;
       padding: 5vh 8vw;
       padding-bottom: 100px; //to account for 50px cut off
-      width: 100%;
+      width: 100vw;
       height: 100vh;
       overflow-y: scroll;
     }
     .docs-col2{
       width: 100%;
+      overflow: hidden;
     }
   }
 }
